@@ -94,6 +94,7 @@ if not FileTest.directory?(target_dir)
   
   if !Dir["#{raw_archive_dir}/video/*"].empty?    
     BigBlueButton.process_multiple_videos(target_dir, temp_dir, meeting_id, presentation_props['video_output_width'], presentation_props['video_output_height'])
+    BigBlueButton.process_sign_language_videos(target_dir, temp_dir, meeting_id, presentation_props['video_output_width'], presentation_props['video_output_height'])
   else    
     BigBlueButton::AudioProcessor.process("#{temp_dir}/#{meeting_id}", "#{target_dir}/audio.ogg")
   end

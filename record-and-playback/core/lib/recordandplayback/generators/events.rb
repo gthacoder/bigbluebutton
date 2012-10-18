@@ -101,7 +101,51 @@ module BigBlueButton
       end
       stop_events
     end
-        
+    
+    # Get start video events for a specific user 
+    def self.get_start_video_events_user(events_xml, username)
+      BigBlueButton.logger.info("Task: Getting start video events")
+      start_events = []
+      doc = Nokogiri::XML(File.open(events_xml))
+      userId = []
+      doc.xpath("//event[@eventname='ParticipantJoinEvent']").each do |join_event|
+        if (join_event.xpath('name').text == username)
+          userId << join_event.xpath('userId').text
+        end
+      end
+      
+      if (!userId.empty?) # No users found with requested username
+        doc.xpath("//event[@eventname='StartWebcamShareEvent']").each do |start_event|
+          if (userId.include?(start_event.xpath('stream').text.split('-')[1]))
+            start_events << {:start_timestamp => start_event['timestamp'].to_i, :stream => start_event.xpath('stream').text}
+          end
+        end
+      end
+      start_events
+    end
+
+    # Get stop video events for a specific user
+    def self.get_stop_video_events_user(events_xml, username)
+      BigBlueButton.logger.info("Task: Getting stop video events")
+      stop_events = []
+      doc = Nokogiri::XML(File.open(events_xml))
+      userId = []
+      doc.xpath("//event[@eventname='ParticipantJoinEvent']").each do |join_event|
+        if (join_event.xpath('name').text == username)
+          userId << join_event.xpath('userId').text
+        end
+      end
+      
+      if (!userId.empty?) # No users found with requested username
+        doc.xpath("//event[@eventname='StopWebcamShareEvent']").each do |start_event|
+          if (userId.include?(start_event.xpath('stream').text.split('-')[1]))
+            start_events << {:stop_timestamp => start_event['timestamp'].to_i, :stream => start_event.xpath('stream').text}
+          end
+        end
+      end
+      stop_events
+    end
+
     # Determine if the start and stop event matched.
     def self.deskshare_event_matched?(stop_events, start)
       BigBlueButton.logger.info("Task: Determining if the start and stop DESKSHARE events matched")      

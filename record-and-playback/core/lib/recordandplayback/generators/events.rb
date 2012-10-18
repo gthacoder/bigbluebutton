@@ -139,7 +139,7 @@ module BigBlueButton
       if (!userId.empty?) # No users found with requested username
         doc.xpath("//event[@eventname='StopWebcamShareEvent']").each do |start_event|
           if (userId.include?(start_event.xpath('stream').text.split('-')[1]))
-            start_events << {:stop_timestamp => start_event['timestamp'].to_i, :stream => start_event.xpath('stream').text}
+            stop_events << {:stop_timestamp => start_event['timestamp'].to_i, :stream => start_event.xpath('stream').text}
           end
         end
       end

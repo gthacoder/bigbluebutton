@@ -687,6 +687,15 @@ if ($playback == "presentation")
 		  BigBlueButton.logger.info("Copied .webm file")
 		end
 
+		if File.exist?("#{$process_dir}/signlanguage.webm")
+  		  BigBlueButton.logger.info("Making video dir")
+  		  video_dir = "#{package_dir}/video"
+		  FileUtils.mkdir_p video_dir
+		  BigBlueButton.logger.info("Made video dir - copying: #{$process_dir}/signlanguage.webm to -> #{video_dir}")
+		  FileUtils.cp("#{$process_dir}/signlanguage.webm", video_dir)
+		  BigBlueButton.logger.info("Copied .webm file")
+		end
+
 		BigBlueButton.logger.info("Copying files to package dir")
 		FileUtils.cp_r("#{$process_dir}/presentation", package_dir)
 		BigBlueButton.logger.info("Copied files to package dir")

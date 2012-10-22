@@ -716,7 +716,7 @@ module BigBlueButton
     
     # removes audio stream
     matched_evts.each do |evt|
-      stripped_webcam = "#{temp_dir}/#{meeting_id}/stripped-#{evt[:stream]}.flv"
+      stripped_webcam = "#{temp_dir}/#{meeting_id}/sl_stripped-#{evt[:stream]}.flv"
       BigBlueButton.strip_audio_from_video("#{video_dir}/#{evt[:stream]}.flv", stripped_webcam)
     end
     
@@ -732,7 +732,7 @@ module BigBlueButton
       if event_duration == 0 then
         next
       elsif event[:webcams].empty?
-        blank_video = "#{temp_dir}/#{meeting_id}/video#{i}.flv"
+        blank_video = "#{temp_dir}/#{meeting_id}/sl_video#{i}.flv"
         webcams << blank_video
         BigBlueButton.create_blank_video_ms(event_duration, 1000, blank_canvas, blank_video)
       else
@@ -753,7 +753,7 @@ module BigBlueButton
           
           tmp_total_area = 0
           event[:webcams].each do |stream|
-            video_path = "#{temp_dir}/#{meeting_id}/stripped-#{stream}.flv"
+            video_path = "#{temp_dir}/#{meeting_id}/sl_stripped-#{stream}.flv"
             measurements = BigBlueButton.fit_to(BigBlueButton.get_video_width(video_path), BigBlueButton.get_video_height(video_path), max_width, max_height)
             tmp_total_area += measurements[:width] * measurements[:height]
           end
@@ -775,8 +775,8 @@ module BigBlueButton
         event[:webcams].each_with_index do |stream, index|
           stream_events = matched_evts.select{|s| s[:stream] == stream}[0]
           video_begin = event[:timestamp] - stream_events[:start_timestamp]
-          trimmed_video = "#{temp_dir}/#{meeting_id}/video#{i}-#{stream}.flv"
-          stripped_video = "#{temp_dir}/#{meeting_id}/stripped-#{stream}.flv"
+          trimmed_video = "#{temp_dir}/#{meeting_id}/sl_video#{i}-#{stream}.flv"
+          stripped_video = "#{temp_dir}/#{meeting_id}/sl_stripped-#{stream}.flv"
           BigBlueButton.trim_video(video_begin, event_duration, stripped_video, trimmed_video)
 
           # sometimes the duration is too small that ffmpeg cannot create a valid video file for it
@@ -789,7 +789,7 @@ module BigBlueButton
           width = frame_size[:width]
           height = frame_size[:height]
 
-          scaled_video = "#{temp_dir}/#{meeting_id}/scaled-video#{i}-#{stream}.flv"
+          scaled_video = "#{temp_dir}/#{meeting_id}/sl_scaled-video#{i}-#{stream}.flv"
           command = "ffmpeg -i #{trimmed_video} -loglevel fatal -v -10 -aspect 4:3 -r 1000 -sameq -vf scale=#{width}:#{height} #{scaled_video}" 
           BigBlueButton.execute(command)
 
@@ -802,15 +802,15 @@ module BigBlueButton
           video_filter << overlay
         end
         BigBlueButton.logger.info("videofilter: #{video_filter}")
-        blank_video = "#{temp_dir}/#{meeting_id}/video#{i}-blank.flv"
+        blank_video = "#{temp_dir}/#{meeting_id}/sl_video#{i}-blank.flv"
         BigBlueButton.create_blank_video_ms(event_duration, 1000, blank_canvas, blank_video)
-        webcam_video = "#{temp_dir}/#{meeting_id}/video#{i}.flv"
+        webcam_video = "#{temp_dir}/#{meeting_id}/sl_video#{i}.flv"
         webcams << webcam_video
         command = "ffmpeg -i #{blank_video} -loglevel fatal -r 1000 -sameq -v -10 -vf \"#{video_filter}\" #{webcam_video}"
         BigBlueButton.execute(command)
       end
     end
-    concat_vid = "#{target_dir}/video.flv"
+    concat_vid = "#{target_dir}/sl_video.flv"
     # if there's no video, it will create a single blank video
     if webcams.empty?
       BigBlueButton.create_blank_video(BigBlueButton.get_video_duration("#{target_dir}/audio.ogg"), 1000, blank_canvas, concat_vid)

@@ -238,9 +238,9 @@ function checkUrl(url)
 }
 
 load_video = function(){
-   console.log("Loading video")
+   console.log("Loading video");
    //document.getElementById("video").style.visibility = "hidden"  
-   var video = document.createElement("video")   
+   var video = document.createElement("video");
    video.setAttribute('src', RECORDINGS + '/video/webcams.webm');
    video.setAttribute('type','video/webm');
    video.setAttribute('class','webcam');  
@@ -253,14 +253,14 @@ load_video = function(){
 
    video.setAttribute('data-timeline-sources', SLIDES_XML);    
    //video.setAttribute('controls','');
-   video.setAttribute('autoplay','autoplay');
+   //video.setAttribute('autoplay','autoplay');
 
    document.getElementById("videoRecordingWrapper").appendChild(video);
 }  
 
 load_audio = function() { 
-   console.log("Loading audio")        
-   var audio = document.createElement("audio") ;    
+   console.log("Loading audio");      
+   var audio = document.createElement("audio");    
    audio.setAttribute('src', RECORDINGS + '/audio/audio.ogg');
    audio.setAttribute('type','audio/ogg');
    audio.setAttribute('id', 'video');
@@ -280,6 +280,28 @@ load_script = function(file){
   document.getElementsByTagName('body').item(0).appendChild(script);
 }
 
+switch_source = function() {
+  console.log('Switching video source');
+  var video = $('#video');
+  var p = Popcorn('#video');
+  p.pause();
+  var currTime = Math.floor(p.currentTime());
+  console.log(currTime);
+  if (video.attr('src') == RECORDINGS + '/video/webcams.webm') {
+    video.attr('src', RECORDINGS + '/video/signlanguage.webm');
+  } else {
+    video.attr('src', RECORDINGS + '/video/webcams.webm');
+  }
+  p = Popcorn('#video');
+  console.log('before load');
+  p.load();
+  console.log('before play');
+  console.log(currTime);
+  //p.pause();
+  //p.currentTime(currTime).play();
+  console.log('after play');
+}
+
 document.addEventListener( "DOMContentLoaded", function() {
   var appName = navigator.appName;
   var appVersion = navigator.appVersion;
@@ -290,8 +312,14 @@ document.addEventListener( "DOMContentLoaded", function() {
   }
 
   if (checkUrl(RECORDINGS + '/video/webcams.webm') == true){
-      videoContainer = document.getElementById("audioRecordingWrapper").style.display = "none";
-      load_video();
+    videoContainer = document.getElementById("audioRecordingWrapper").style.display = "none";
+    load_video();
+    if (checkUrl(RECORDINGS + '/video/signlanguage.webm') == true){
+      var button = document.createElement("button");
+      button.setAttribute('onclick', 'switch_source()');
+      button.innerHTML = 'Switch Source';
+      document.getElementById("videoRecordingWrapper").appendChild(button);
+    }
   }else{
       videoContainer = document.getElementById("videoRecordingWrapper").style.display = "none";       
       chat = document.getElementById("chat");

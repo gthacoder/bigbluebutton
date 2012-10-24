@@ -648,9 +648,8 @@ module BigBlueButton
 
   # Process a video so that it only contains videos from users name "Sign Language"
 
-  def BigBlueButton.process_sign_language_videos(target_dir, temp_dir, meeting_id, output_width, output_height)
+  def BigBlueButton.process_sign_language_videos(target_dir, temp_dir, meeting_id, output_width, output_height, user)
     BigBlueButton.logger.info("Processing webcam videos")
-
     # Process audio
     BigBlueButton::AudioProcessor.process("#{temp_dir}/#{meeting_id}", "#{target_dir}/audio.ogg")
 
@@ -664,8 +663,8 @@ module BigBlueButton
     first_timestamp = BigBlueButton::Events.first_event_timestamp(events_xml)
     last_timestamp = BigBlueButton::Events.last_event_timestamp(events_xml)
     # Get events for a specific user
-    start_evt = BigBlueButton::Events.get_start_video_events_user(events_xml, "Sign Language")
-    stop_evt = BigBlueButton::Events.get_stop_video_events_user(events_xml, "Sign Language")
+    start_evt = BigBlueButton::Events.get_start_video_events_user(events_xml, user)
+    stop_evt = BigBlueButton::Events.get_stop_video_events_user(events_xml, user)
     matched_evts = BigBlueButton::Events.match_start_and_stop_video_events(start_evt, stop_evt)
     BigBlueButton.logger.debug("First timestamp: #{first_timestamp}")
     BigBlueButton.logger.debug("Last timestamp: #{last_timestamp}")

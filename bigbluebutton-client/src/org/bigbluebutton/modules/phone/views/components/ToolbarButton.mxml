@@ -32,6 +32,8 @@
 
 	<mx:Script>
 		<![CDATA[
+			import flash.system.Security;
+			
 			import com.asfusion.mate.events.Dispatcher;
 			
 			import org.bigbluebutton.common.LogUtil;
@@ -80,8 +82,7 @@
 							var joinEvent:BBBEvent = new BBBEvent("JOIN_VOICE_CONFERENCE_EVENT");
 							joinEvent.payload['useMicrophone'] = false;
 							dispatcher.dispatchEvent(joinEvent);
-						} (mic.muted) {
-							if (mic.muted) {
+						} else if (mic.muted) {
 							// user has disallowed access to the mic
 							mic.addEventListener(StatusEvent.STATUS, micStatusEventHandler);
 							Security.showSettings();
@@ -90,7 +91,6 @@
 							var joinEvent:BBBEvent = new BBBEvent("JOIN_VOICE_CONFERENCE_EVENT");
 							joinEvent.payload['useMicrophone'] = true;
 							dispatcher.dispatchEvent(joinEvent);
-					}
 						}
 						
 					} else {

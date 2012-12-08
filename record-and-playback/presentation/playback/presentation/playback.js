@@ -292,6 +292,20 @@ document.addEventListener( "DOMContentLoaded", function() {
   if (checkUrl(RECORDINGS + '/video/webcams.webm') == true){
       videoContainer = document.getElementById("audioRecordingWrapper").style.display = "none";
       load_video();
+
+      if (checkUrl(RECORDINGS + '/sub.xml') == true) {
+          $.ajax({
+              type: "GET",
+              url: RECORDINGS + '/sub.xml',
+              dataType: 'xml',
+              success: function(xml) {
+                  $(xml).find('language').each(function(){
+                      var track = $(document.createElement("track")).attr("src", RECORDINGS + '/sub/' + $(this).attr('code') + '_subtitle.srt').attr("kind", "subtitles").attr('srclang', $(this).attr('code')).attr('label', $(this).attr('name'));
+                      $('#video').append(track);
+                  });
+              }
+          });
+      }
   }else{
       videoContainer = document.getElementById("videoRecordingWrapper").style.display = "none";       
       chat = document.getElementById("chat");

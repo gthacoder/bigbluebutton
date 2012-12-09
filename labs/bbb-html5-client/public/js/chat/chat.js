@@ -27,8 +27,8 @@ socket.on('connect', function () {
    * @return {undefined}
    */
   socket.on('msg', function (name, msg) {
-    msgbox.innerHTML += '<div>' + name + ': ' + msg + '</div>';
-    msgbox.scrollTop = msgbox.scrollHeight;
+    sendChatMessage(name + ": " + msg);
+    //msgbox.scrollTop = msgbox.scrollHeight;
   });
 
   /**
@@ -46,13 +46,68 @@ socket.on('connect', function () {
    * @return {undefined}
    */
   socket.on('user list change', function (names) {
-    var clickFunc = '$(\'.selected\').removeClass(\'selected\');$(this).addClass(\'selected\');';
+    var clickFunc = '$(\'.selected\').attr(\'aria-selected\', \'false\');$(\'.selected\').removeClass(\'selected\'); $(this).addClass(\'selected\'); $(this).attr(\'aria-selected\', \'true\');';
     var currusers = document.getElementById('current_users');
-    currusers.innerHTML = ''; //clear it first
-    for (var i = names.length - 1; i >= 0; i--) {
-      currusers.innerHTML += '<div class="user clickable" onclick="'+clickFunc+'" id= "'+names[i].id+'"><b>' + names[i].name + '</b></div>';
+    var users = currusers.childNodes;
+    
+    //should be split up into seperate events for add all, user join, user leave
+    
+    // remove users that left
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].nodeType == 1) { //if not text node
+        var removeuser = true;
+        for (var j = 0; j < names.length; j++) {
+          if (users[i].id == names[j].id) {
+            removeuser = false;
+            break;
+          }
+        }
+        if (removeuser) {
+          sendChatMessage(users[j].getAttribute('username') + " logged out!");
+          currusers.removeChild(users[j]);
+        }
+      }
+    }
+
+//currusers.innerHTML = ''; //clear it first
+
+    // add new user
+    for (var k = 0; k < names.length; k++) {
+      var adduser = true;
+      for (var l = 0; l < users.length; l++) {
+        if (users[l].nodeType == 1 && names[k].id === users[l].id) {
+          adduser = false;
+          break;
+        }
+      }
+      if (adduser) {
+        var newUser = document.createElement("li");
+        newUser.setAttribute("class", "user clickable");
+        newUser.id = names[k].id;
+        newUser.setAttribute("role", "button");
+        newUser.setAttribute("aria-selected", "false");
+        newUser.innerHTML = "<b>" + names[k].name + "</b>";
+        newUser.setAttribute("username", names[k].name);
+        newUser.onclick = function() {
+          $('.selected').attr('aria-selected', 'false');
+          $('.selected').removeClass('selected'); 
+          $(this).addClass('selected'); 
+          $(this).attr('aria-selected', 'true');
+        };
+        currusers.appendChild(newUser);
+        
+        sendChatMessage(names[k].name + " logged in!");
+        //currusers.innerHTML += '<li class="user clickable" onclick="'+clickFunc+'" id= "'+names[i].id+'" role="button" aria-selected="false"><b>' + names[i].name + '</b></li>';
+      }
     }
   });
+
+function sendChatMessage(msg) {
+    var newMessage = document.createElement("li");
+    newMessage.textContent = msg;
+    newMessage.innerText = msg;
+    msgbox.appendChild(newMessage);
+}
 
   /**
    * Received event to update all the messages in the chat box
@@ -62,9 +117,9 @@ socket.on('connect', function () {
   socket.on('all_messages', function (messages) {
     //msgbox.innerHTML = '';
     for (var i = messages.length - 1; i >= 0; i--){
-    msgbox.innerHTML += '<div>' + messages[i].username + ": " + messages[i].message + '</div>';
+      sendChatMessage(messages[i].username + ": " + messages[i].message);
     };
-    msgbox.scrollTop = msgbox.scrollHeight;
+    //msgbox.scrollTop = msgbox.scrollHeight;
   });
 
   /**

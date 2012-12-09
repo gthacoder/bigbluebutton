@@ -1,4 +1,4 @@
-var PRESENTATION_SERVER = "http://192.168.1.218/";
+var PRESENTATION_SERVER = "http://bbbdev1.googool.com/";
 
 //object references
 slide_obj = document.getElementById("slide");

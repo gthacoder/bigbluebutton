@@ -5,19 +5,19 @@ link(rel="stylesheet", href="css/layout.css")
 //-  form(id="logout")
 //-    input(type="submit", value="Logout", onclick="logout();return false;")
 //-p Welcome to BigBlueButton, #{user}!
-div(id="layout")
-  div(id="presentation")
+div(id="layout", role="main")
+  div(id="presentation", role="region", aria-label="Presentation Slide")
     div(id="slideAndControls")
       div(id="slide")
-  div(id="users")
+  div(id="users", role="region", aria-label="Users Area", aria-relevant="all")
     h3 Users
-    div(id="current_users")
+    ul(id="current_users", role="region", aria-multiselectable="false", aria-relevant="all", aria-atomic="false", aria-label="User List")
     form(id="switchPresenter")
       input(type="submit", value="Switch presenter", onclick="switchPresenter();return false;")
-  div(id="chat")
+  div(id="chat", role="region", aria-label="Chat Area")
     h3 Chat
-    div(id="chat_messages")
-      div You are now connected to MeetingID <b>#{meetingID}</b>
+    ul(id="chat_messages", role="log", aria-live="polite", aria-atomic="false", aria-label="Chat Messages")
+      li(aria-hidden="true") You are now connected to MeetingID <b>#{meetingID}</b>
     //- div(id="chat-text")
       //- p Chat messages go here
     div(id="chat-entry")

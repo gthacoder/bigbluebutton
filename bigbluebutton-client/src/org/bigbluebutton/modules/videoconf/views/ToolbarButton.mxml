@@ -26,7 +26,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		   mouseOver = "mouseOverHandler(event)"
 		   mouseOut = "mouseOutHandler(event)"
 		   toolTip="{this.selected ? ResourceUtil.getInstance().getString('bbb.toolbar.video.toolTip.stop') : ResourceUtil.getInstance().getString('bbb.toolbar.video.toolTip.start')}"
-		   visible="{isPresenter}"
+		   visible="{isVisible}"
 		   implements="org.bigbluebutton.common.IBbbToolbarComponent">
 
 	<mate:Listener type="{ShortcutEvent.SHARE_WEBCAM}" method="remoteClick" />
@@ -37,15 +37,21 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		<![CDATA[
 			import com.asfusion.mate.events.Dispatcher;
 			
+			import mx.binding.utils.BindingUtils;
+			
 			import org.bigbluebutton.common.Images;
+			import org.bigbluebutton.core.UsersUtil;
+			import org.bigbluebutton.core.managers.UserManager;
 			import org.bigbluebutton.main.events.BBBEvent;
 			import org.bigbluebutton.main.events.ShortcutEvent;
 			import org.bigbluebutton.main.views.MainToolbar;
 			import org.bigbluebutton.modules.videoconf.events.ClosePublishWindowEvent;
 			import org.bigbluebutton.modules.videoconf.events.ShareCameraRequestEvent;
+			import org.bigbluebutton.modules.videoconf.events.StopBroadcastEvent;
+			import org.bigbluebutton.modules.videoconf.model.VideoConfOptions;
 			import org.bigbluebutton.util.i18n.ResourceUtil;
 			
-			[Bindable] public var isPresenter:Boolean;
+			[Bindable] private var isVisible:Boolean;
 			
 			private var images:Images = new Images();
 			[Bindable] public var camIcon:Class = images.webcam;
@@ -58,6 +64,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 						
 			private var _currentState:Number = OFF_STATE;
 
+			private var options:VideoConfOptions = new VideoConfOptions();
 			
 			private var dispatcher:Dispatcher;
 			
@@ -68,11 +75,24 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				this.enabled = true;
 				this.selected = false;
 				_currentState = OFF_STATE;
+				
+				BindingUtils.bindSetter(updateVisible, UserManager.getInstance().getConference(), "voiceLocked");
+			}
+			
+			public function updateVisible(a:Boolean = false):void {
+				isVisible = (options.presenterShareOnly ? UsersUtil.amIPresenter() : true) 
+					&& !UserManager.getInstance().getConference().voiceLocked;
+				
+				if (!isVisible && UserManager.getInstance().getConference().amIPublishing().isPublishing) {
+					dispatchEvent(new StopBroadcastEvent(StopBroadcastEvent.STOP_BROADCASTING));
+				}
 			}
 			
 			public function remoteClick(e:ShortcutEvent):void{
-				openPublishWindow();
-				dispatchEvent(new ShortcutEvent(ShortcutEvent.REMOTE_FOCUS_WEBCAM));
+				if (this.visible) {
+					openPublishWindow();
+					dispatchEvent(new ShortcutEvent(ShortcutEvent.REMOTE_FOCUS_WEBCAM));
+				}
 			}
 			
 			public function publishingStatus(status:Number):void {

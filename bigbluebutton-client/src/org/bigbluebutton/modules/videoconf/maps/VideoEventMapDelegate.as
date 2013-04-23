@@ -117,7 +117,7 @@ package org.bigbluebutton.modules.videoconf.maps
     private function addToolbarButton():void{
       if (proxy.videoOptions.showButton) {
         button = new ToolbarButton();	  
-        button.isPresenter = !options.presenterShareOnly;
+        button.updateVisible();
         var event:ToolbarButtonEvent = new ToolbarButtonEvent(ToolbarButtonEvent.ADD);
         event.button = button;
 		event.module="Webcam";
@@ -348,9 +348,7 @@ package org.bigbluebutton.modules.videoconf.maps
       
       if (!_ready) return;
            
-      if (options.presenterShareOnly){
-        button.isPresenter = true;
-      }
+      button.updateVisible();
     }
     
     public function switchToViewer(event:MadePresenterEvent):void{
@@ -358,12 +356,7 @@ package org.bigbluebutton.modules.videoconf.maps
       
       if (!_ready) return;
             
-      if (options.presenterShareOnly){
-        button.isPresenter = false;
-        if (_isPublishing) {
-          stopBroadcasting();
-        }
-      }
+      button.updateVisible();
     }
     
     public function connectedToVideoApp():void{

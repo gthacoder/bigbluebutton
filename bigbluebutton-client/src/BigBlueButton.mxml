@@ -67,7 +67,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
       setupAPI();
       EventBroadcaster.getInstance().addEventListener("configLoadedEvent", configLoadedEventHandler);
       BBB.initConfigManager();
-	  modifier = ExternalInterface.call("determineModifier");
+	  modifier = ExternalInterface.call("determineGlobalModifier");
     }
 
     private function configLoadedEventHandler(e:Event):void {

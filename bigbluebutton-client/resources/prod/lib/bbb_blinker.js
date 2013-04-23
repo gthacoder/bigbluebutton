@@ -50,6 +50,28 @@ function determineModifier()
 	var browser = determineBrowser();
 	var modifier;
 	if (browser == "Firefox"){
+		modifier = "control+shift+";
+	}
+	else if (browser == "Chrome"){
+		modifier = "control+shift+";
+	}
+	else if (browser == "Microsoft Internet Explorer"){
+		modifier = "control+alt+";
+	}
+	/*else if (browser == "Safari"){
+		modifier = "control+shift+";
+	}*/
+	else{
+		modifier = "control+alt+";
+	}
+	return modifier;
+}
+
+function determineGlobalModifier()
+{
+	var browser = determineBrowser();
+	var modifier;
+	if (browser == "Firefox"){
 		modifier = "control+";
 	}
 	else if (browser == "Chrome"){

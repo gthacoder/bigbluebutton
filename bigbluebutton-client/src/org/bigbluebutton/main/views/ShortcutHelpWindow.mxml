@@ -52,18 +52,18 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 											 'bbb.shortcutkey.share.microphone', 'bbb.shortcutkey.share.webcam', 'bbb.shortcutkey.shortcutWindow', 
 											 'bbb.shortcutkey.logout', 'bbb.shortcutkey.raiseHand', 'bbb.shortcutkey.users.muteme'];
 											 
-			private var presResource:Array = ['bbb.shortcutkey.focus.presentation', 'bbb.shortcutkey.present.focusslide', 'bbb.shortcutkey.whiteboard.undo', 
+			private var presResource:Array = ['bbb.shortcutkey.present.focusslide', 'bbb.shortcutkey.whiteboard.undo', 
 											  'bbb.shortcutkey.present.upload', 'bbb.shortcutkey.present.previous', 'bbb.shortcutkey.present.select',	
 											  'bbb.shortcutkey.present.next', 'bbb.shortcutkey.present.fitWidth', 'bbb.shortcutkey.present.fitPage'];
 			
-			private var chatResource:Array = ['bbb.shortcutkey.focus.chat', 'bbb.shortcutkey.chat.chatinput', 'bbb.shortcutkey.chat.focusTabs', 
+			private var chatResource:Array = ['bbb.shortcutkey.chat.chatinput', 'bbb.shortcutkey.chat.focusTabs', 
 											  'bbb.shortcutkey.chat.focusBox', 'bbb.shortcutkey.chat.changeColour', 'bbb.shortcutkey.chat.sendMessage',
 											  'bbb.shortcutkey.chat.explanation',
 											  'bbb.shortcutkey.chat.chatbox.gofirst', 'bbb.shortcutkey.chat.chatbox.goback', 'bbb.shortcutkey.chat.chatbox.repeat', 
 											  'bbb.shortcutkey.chat.chatbox.advance', 'bbb.shortcutkey.chat.chatbox.golatest',  'bbb.shortcutkey.chat.chatbox.goread'];
 			
-			private var userResource:Array = ['bbb.shortcutkey.focus.users', 'bbb.shortcutkey.users.focusUsers', 'bbb.shortcutkey.users.makePresenter', 'bbb.shortcutkey.users.mute', 
-													  'bbb.shortcutkey.users.kick', 'bbb.shortcutkey.users.muteall'];
+			private var userResource:Array = ['bbb.shortcutkey.users.focusUsers', 'bbb.shortcutkey.users.makePresenter', 'bbb.shortcutkey.users.mute', 
+											  'bbb.shortcutkey.users.kick', 'bbb.shortcutkey.users.muteall'];
 			
 			[Bindable]
 			private var shownKeys:ArrayCollection;
@@ -86,7 +86,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			}
 			
 			private function reloadKeys():void {
-				genKeys = loadKeys(genResource);
+				genKeys = loadKeys(genResource, true);
 				presKeys = loadKeys(presResource);
 				chatKeys = loadKeys(chatResource);
 				userKeys = loadKeys(userResource);
@@ -112,14 +112,17 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				}
 			}
 			
-			private function loadKeys(resource:Array):ArrayList {
+			private function loadKeys(resource:Array, global:Boolean = false):ArrayList {
 				var keyList:ArrayList = new ArrayList();
 				var keyCombo:String;
 				var modifier:String;
 				for (var i:int = 0; i < resource.length; i++) {
 					
 					// Find the modifier key(s) for the user's browser
-					modifier = ExternalInterface.call("determineModifier");
+					if (!global)
+						modifier = ExternalInterface.call("determineModifier");
+					else
+						modifier = ExternalInterface.call("determineGlobalModifier");
 					keyCombo = ResourceUtil.getInstance().getString(resource[i]);
 					var key:int = int(keyCombo);
 					var convKey:String;

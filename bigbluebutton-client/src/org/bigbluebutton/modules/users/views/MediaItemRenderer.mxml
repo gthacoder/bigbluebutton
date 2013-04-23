@@ -159,15 +159,14 @@
 					} else {
 						muteImg.visible = !rolledOver;
 						muteImg.includeInLayout = !rolledOver;
+						muteBtn.visible = rolledOver;
+						muteBtn.includeInLayout = rolledOver;
 						
 						if(data.talking && !rolledOver){
 							muteImg.filters = [new GlowFilter(0x898989)];
 						}else{
 							muteImg.filters = [];
 						}
-						
-						muteBtn.visible = rolledOver;
-						muteBtn.includeInLayout = rolledOver;
 					}
 					
 					if ((data.role == Role.MODERATOR) || !data.voiceJoined) {
@@ -192,6 +191,8 @@
 							lockImg.source = images.locked_20;
 						else if (moderator)
 							lockImg.source = images.unlocked_20;
+						else
+							lockImg.source = null;
 					} else {
 						if (data.voiceMuted == rolledOverMute)
 							muteBtn.setStyle("icon", images.audio);

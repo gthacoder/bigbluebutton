@@ -72,7 +72,7 @@
 	        private var genThumbDots:String = ".";
 	        
 	        private var fileToUpload:FileReference = new FileReference();
-
+			//
 	        private function initData():void {
     	        presentationNamesAC = new ArrayCollection(presentationNames);
     	        if (presentationNames.length <= 0) {

@@ -93,7 +93,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				this.addChild(videoHolder);
 				videoHolder.percentWidth = 100;
 				videoHolder.percentHeight = 100;
-				addEventListener(MDIWindowEvent.RESIZE_END, onResizeEndEvent);				
+				//addEventListener(MDIWindowEvent.RESIZE_END, onResizeEndEvent);	
 				fitToActualSize();				
 				cursor = new Shape();
 				cursor.graphics.lineStyle(6, 0xFF0000, 0.6);
@@ -190,7 +190,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			 */
 			private function fitToWindow():void{
 				if (videoIsSmallerThanWindow()) {
-					fitWindowToVideo();
+					//fitWindowToVideo();
 				}
 				
 				// Ignore if we are displaying the actual size of the video
@@ -289,6 +289,13 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				resourcesChanged();
 			}
 			
+			private function toggleFullscreen():void {
+				if (stage.displayState == StageDisplayState.NORMAL)
+					stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+				else
+					stage.displayState = StageDisplayState.NORMAL;
+			}
+			
 		]]>
 	</mx:Script>
 	<mx:Move id="cursorMove" target="{cursorImg}"/>
@@ -303,5 +310,6 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				   label="{btnActualSize.selected ? ResourceUtil.getInstance().getString('bbb.desktopView.fitToWindow') : ResourceUtil.getInstance().getString('bbb.desktopView.actualSize')}" 
 				   toolTip="{btnActualSize.selected ? ResourceUtil.getInstance().getString('bbb.desktopView.fitToWindow') : ResourceUtil.getInstance().getString('bbb.desktopView.actualSize')}" 
 				   tabIndex="{baseIndex+4}"/>
+		<mx:Button id="toggleFullscreenBtn" click="toggleFullscreen()" label="Fullscreen" tabIndex="{baseIndex+5}" />
 	</mx:ControlBar>
 </MDIWindow>

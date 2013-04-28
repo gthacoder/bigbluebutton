@@ -86,7 +86,6 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			import org.bigbluebutton.util.logging.Logger;
 	
 			private var globalDispatcher:Dispatcher;			
-			private var dispState:String; //full-screen?
 			private var images:Images = new Images();
 			private var stoppedModules:ArrayCollection;			
 			private var logs:Logger = new Logger();
@@ -140,7 +139,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
           footerHeight = 0;
         }
 			
-        
+		//attach the listener after the config has loaded
+		initFullScreen();
       }
 			
 			protected function initializeShell():void {	
@@ -150,7 +150,6 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			protected function initFullScreen():void {				
 				/* Set up full screen handler. */
 				stage.addEventListener(FullScreenEvent.FULL_SCREEN, fullScreenHandler);
-				dispState = stage.displayState;
 			}					
 			
 			private var sendStartModulesEvent:Boolean = true;
@@ -184,14 +183,13 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			}
 			
 			private function fullScreenHandler(evt:FullScreenEvent):void {
-				dispState = stage.displayState + " (fullScreen=" + evt.fullScreen.toString() + ")";
-				if (evt.fullScreen) {
-					LogUtil.debug("Switching to full screen");
-					/* Do something specific here if we switched to full screen mode. */
-				
+				LogUtil.debug("CHAD: FULLSCREEN HIT");
+				if (stage.displayState == StageDisplayState.NORMAL) {
+					showToolbarOpt = layoutOptions.showToolbar;
+					showFooterOpt = layoutOptions.showFooter;
 				} else {
-					LogUtil.debug("Switching to normal screen");
-					/* Do something specific here if we switched to normal mode. */
+					showToolbarOpt = false;
+					showFooterOpt = false;
 				}
 			}			
 			
@@ -224,26 +222,6 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				
 				scWindow.focusCategories();
 			}
-			
-			private function toggleFullScreen():void{
-	   			LogUtil.debug("Toggling fullscreen");
-	   			try {
-					switch (stage.displayState) {
-						case StageDisplayState.FULL_SCREEN:
-							LogUtil.debug("full screen mode");
-							// If already in full screen mode, switch to normal mode.
-							stage.displayState = StageDisplayState.NORMAL;
-							break;
-						default:
-							LogUtil.debug("Normal screen mode");
-							// If not in full screen mode, switch to full screen mode.
-							stage.displayState = StageDisplayState.FULL_SCREEN;
-							break;
-					}
-				} catch (err:SecurityError) {
-					// ignore
-				}
-	   		}	
 	   		
 	   		private function handleOpenWindowEvent(event:OpenWindowEvent):void {
           isTunneling = BBB.initConnectionManager().isTunnelling;
@@ -399,6 +377,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 					   width="100%" 
 					   height="{toolbarHeight}" 
 					   visible="{showToolbarOpt}" 
+					   includeInLayout="{showToolbarOpt}"
 					   verticalAlign="middle" 
 					   toolbarOptions="{layoutOptions}" 
 					   paddingTop="{toolbarPaddingTop}"/>
@@ -413,7 +392,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		<views:BrandingLogo x="{this.width - 300}" y="{this.height - 300}" />
 	</views:MainCanvas>	
 	
-	<mx:ControlBar width="100%" height="{footerHeight}" paddingTop="0">		
+	<mx:ControlBar width="100%" height="{footerHeight}" includeInLayout="{showFooterOpt}" visible="{showFooterOpt}" paddingTop="0">		
 	  <mx:Label text="{ResourceUtil.getInstance().getString('bbb.mainshell.copyrightLabel2',[appVersion])}" id="copyrightLabel2"/>
 	 	<mx:Spacer width="20"/>
 		<mx:Spacer width="100%"/> 

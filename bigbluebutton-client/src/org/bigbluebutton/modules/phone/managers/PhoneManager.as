@@ -118,6 +118,8 @@ package org.bigbluebutton.modules.phone.managers {
 			setupMic(autoJoin);
 			var uid:String = String(Math.floor(new Date().getTime()));
 			var uname:String = encodeURIComponent(UsersUtil.getMyExternalUserID() + "-" + attributes.username);
+			var dispatcher:Dispatcher = new Dispatcher();
+			dispatcher.dispatchEvent(new BBBEvent(BBBEvent.JOIN_VOICE_FOCUS_HEAD));
 			connectionManager.connect(uid, attributes.internalUserID, uname , attributes.room, attributes.uri);
 		}		
 		

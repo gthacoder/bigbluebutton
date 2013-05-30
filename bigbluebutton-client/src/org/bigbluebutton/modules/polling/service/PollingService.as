@@ -18,37 +18,27 @@
 */
 package org.bigbluebutton.modules.polling.service
 {
-	import com.asfusion.mate.events.Dispatcher;  
-	import flash.events.AsyncErrorEvent;
-	import flash.events.IEventDispatcher;
-	import flash.events.NetStatusEvent;
-	import flash.events.SyncEvent;
-
-	import flash.net.NetConnection;
-	import flash.net.SharedObject;
-	import flash.net.Responder;
-	import mx.collections.ArrayCollection;
-    
-	import mx.controls.Alert;
-	import org.bigbluebutton.core.managers.UserManager;
+	import com.asfusion.mate.events.Dispatcher;
 	
 	import org.bigbluebutton.common.LogUtil;
-	import org.bigbluebutton.modules.polling.events.PollingViewWindowEvent;
-	import org.bigbluebutton.modules.polling.events.PollingStatsWindowEvent;
-	import org.bigbluebutton.modules.polling.events.PollRefreshEvent;
-	import org.bigbluebutton.modules.polling.events.PollGetTitlesEvent;
-	import org.bigbluebutton.modules.polling.events.PollReturnTitlesEvent;
-	import org.bigbluebutton.modules.polling.events.PollGetPollEvent;
+	import org.bigbluebutton.core.managers.UserManager;
 	import org.bigbluebutton.modules.polling.events.GenerateWebKeyEvent;
-	
-	import org.bigbluebutton.modules.polling.views.PollingViewWindow;
-	import org.bigbluebutton.modules.polling.views.PollingInstructionsWindow;
-	
+	import org.bigbluebutton.modules.polling.events.PollGetPollEvent;
+	import org.bigbluebutton.modules.polling.events.PollGetTitlesEvent;
+	import org.bigbluebutton.modules.polling.events.PollRefreshEvent;
+	import org.bigbluebutton.modules.polling.events.PollReturnTitlesEvent;
+	import org.bigbluebutton.modules.polling.events.PollingStatsWindowEvent;
+	import org.bigbluebutton.modules.polling.events.PollingViewWindowEvent;
 	import org.bigbluebutton.modules.polling.managers.PollingWindowManager;
-	import org.bigbluebutton.common.events.OpenWindowEvent;
-	import org.bigbluebutton.common.IBbbModuleWindow;
-	
 	import org.bigbluebutton.modules.polling.model.PollObject;
+	import org.bigbluebutton.modules.polling.views.PollingViewWindow;
+	import flash.utils.Timer;
+	import flash.net.NetConnection;
+	import flash.net.Responder;
+	import flash.net.SharedObject;
+	import flash.events.NetStatusEvent;
+	import flash.events.SyncEvent;
+	
 
 	public class PollingService
 	{	
@@ -109,6 +99,7 @@ package org.bigbluebutton.modules.polling.service
         public function openPollingWindow(serverPoll:Array):void{
 			var username:String = module.username;
 	        var poll:PollObject = extractPoll(serverPoll, serverPoll[1]+"-"+serverPoll[0]);
+			//LogUtil.debug("Is user moderator? " + UserManager.getInstance().getConference().amIModerator());
 	        if (!UserManager.getInstance().getConference().amIModerator()){
 				var e:PollingViewWindowEvent = new PollingViewWindowEvent(PollingViewWindowEvent.OPEN);
 			    e.poll = poll;
@@ -198,6 +189,7 @@ package org.bigbluebutton.modules.polling.service
 			//--------------------------------------//
 			// Responder functions
 			function success(obj:Object):void{
+				LogUtil.error("Success in GETPOLL NC.CALL");
 				var itemArray:Array = obj as Array;
 				extractPoll(itemArray, pollKey, option);
 			}
@@ -314,6 +306,7 @@ package org.bigbluebutton.modules.polling.service
 					var pollInitialize:PollGetPollEvent = new PollGetPollEvent(PollGetPollEvent.INIT);
 			    	pollInitialize.poll = poll;
 			    	pollInitialize.pollKey = pollKey;
+					LogUtil.debug("PollingService.extractPoll, dispatching PollGetPollEvent.INIT"); 
 		    		dispatcher.dispatchEvent(pollInitialize);
 					break;
 				case "extract":
@@ -337,7 +330,7 @@ package org.bigbluebutton.modules.polling.service
 			//--------------------------------------//
 			// Responder functions
 			function titleSuccess(obj:Object):void{
-				LogUtil.debug("LISTINIT: Entering NC CALL SUCCESS section");
+				LogUtil.debug("POLL_MENU_INIT: Entering NC CALL SUCCESS section");
 				var event:PollReturnTitlesEvent = new PollReturnTitlesEvent(PollReturnTitlesEvent.UPDATE);
 				event.titleList = obj as Array;
 				// Append roomID to each item in titleList, call getPoll on that key, add the result to pollList back in ToolBarButton
@@ -346,6 +339,7 @@ package org.bigbluebutton.modules.polling.service
 					getPoll(pollKey, "initialize");
 				}
 				// This dispatch populates the titleList back in the Menu; the pollList is populated one item at a time in the for-loop
+				LogUtil.debug("PollingService.initializePollingMenu, dispatching PollReturnTitlesEvent.UPDATE");
 				dispatcher.dispatchEvent(event);
 			}
 			function titleFailure(obj:Object):void{
@@ -354,8 +348,33 @@ package org.bigbluebutton.modules.polling.service
 			}
 			//--------------------------------------//
 		 }
+		
+		public function initializePollingMenuRemotely(roomID:String):void{
+			nc.call("poll.titleList", new Responder(titleSuccess, titleFailure));
+			//--------------------------------------//
+			// Responder functions
+			function titleSuccess(obj:Object):void{
+				LogUtil.debug("REMOTE_POLL_MENU_INIT: Entering NC CALL SUCCESS section");
+				var event:PollReturnTitlesEvent = new PollReturnTitlesEvent(PollReturnTitlesEvent.REMOTE_RETURN);
+				event.titleList = obj as Array;
+				// Append roomID to each item in titleList, call getPoll on that key, add the result to pollList back in ToolBarButton
+				for (var i:int = 0; i < event.titleList.length; i++){
+					var pollKey:String = roomID +"-"+ event.titleList[i];
+					getPoll(pollKey, "initialize");
+				}
+				// This dispatch populates the titleList back in the Menu; the pollList is populated one item at a time in the for-loop
+				LogUtil.debug("PollingService.initializePollingMenuRemotely, dispatching PollReturnTitlesEvent.REMOTE_RETURN");
+				dispatcher.dispatchEvent(event);
+			}
+			function titleFailure(obj:Object):void{
+				LogUtil.error(LOGNAME+"Responder object failure in INITALIZE POLLING MENU NC.CALL");
+				LogUtil.error("Failure object tostring is: " + obj.toString()); 
+			}
+			//--------------------------------------//
+		}
 		 
 		 public function updateTitles():void{
+			 LogUtil.debug("PollingService.updateTitles()");
 		 	nc.call("poll.titleList", new Responder(success, failure));
 		 	//--------------------------------------//
 			// Responder functions
@@ -372,6 +391,7 @@ package org.bigbluebutton.modules.polling.service
 		 
 		 
 		 public function checkTitles():void{
+			 LogUtil.debug("PollingService.checkTitles()");
 		 	nc.call("poll.titleList", new Responder(success, failure));
 		 	//--------------------------------------//
 			// Responder functions

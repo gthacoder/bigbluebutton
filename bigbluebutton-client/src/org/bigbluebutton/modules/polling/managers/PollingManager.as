@@ -20,7 +20,10 @@ package org.bigbluebutton.modules.polling.managers
 	import org.bigbluebutton.main.model.users.Conference 
 	import org.bigbluebutton.main.model.users.BBBUser;
 	import org.bigbluebutton.common.Role;
+	import org.bigbluebutton.main.events.ShortcutEvent;
 
+	import flash.utils.Timer;
+	import flash.events.TimerEvent;
 			
 	public class PollingManager
 	{	
@@ -35,8 +38,9 @@ package org.bigbluebutton.modules.polling.managers
 		private var isPolling:Boolean = false;
 		public var pollKey:String;
 		public var participants:int;
-		private var conference:Conference;
+		private var conference:Conference = UserManager.getInstance().getConference();
 
+		private var synchTimer:Timer;
 		
 		
 		public function PollingManager()
@@ -82,9 +86,12 @@ package org.bigbluebutton.modules.polling.managers
 	   public function  handleClosePollingInstructionsWindowEvent(e:PollingInstructionsWindowEvent):void {
 		   viewWindowManager.handleClosePollingInstructionsWindow(e);
 		   toolbarButtonManager.enableToolbarButton();
+		   toolbarButtonManager.focusToolbarButton();
 	   }		
 		//Opening Instructions Window    
 	  	public function handleOpenPollingInstructionsWindowEvent(e:PollingInstructionsWindowEvent):void {
+			if (toolbarButtonManager.appFM == null)
+				LogUtil.debug("WATERFALL In Polling Manager, TBM's appFM is null");
 			viewWindowManager.appFM = toolbarButtonManager.appFM;
 		    viewWindowManager.handleOpenPollingInstructionsWindow(e);
 		}
@@ -98,6 +105,7 @@ package org.bigbluebutton.modules.polling.managers
 	  // Opening PollingViewWindow
 	  public function handleOpenPollingViewWindow(e:PollingViewWindowEvent):void{
 		   if(isPolling) return; 	
+		   LogUtil.debug("WATERFALL: PollingManager sending voting signal");
 	       viewWindowManager.handleOpenPollingViewWindow(e);
 	       toolbarButtonManager.disableToolbarButton();
 		}  	
@@ -194,8 +202,17 @@ package org.bigbluebutton.modules.polling.managers
 
 		  // Make a call to the service to update the list of titles and statuses for the Polling Menu
 		  public function handleInitializePollMenuEvent(e:PollGetTitlesEvent):void{
-			  toolbarButtonManager.button.roomID = module.getRoom();
-			  service.initializePollingMenu(module.getRoom());
+			  if (module != null && module.getRoom() != null){
+				  toolbarButtonManager.button.roomID = module.getRoom();
+				  service.initializePollingMenu(module.getRoom());
+			  }
+		  }
+		  
+		  public function handleRemoteInitializePollMenuEvent(e:PollGetTitlesEvent):void{
+			  if (module != null && module.getRoom() != null){
+				  toolbarButtonManager.button.roomID = module.getRoom();
+				  service.initializePollingMenuRemotely(module.getRoom());
+			  }
 		  }
 		  
 		  public function handleUpdateTitlesEvent(e:PollGetTitlesEvent):void{
@@ -206,12 +223,29 @@ package org.bigbluebutton.modules.polling.managers
 		  public function handleReturnTitlesEvent(e:PollReturnTitlesEvent):void{
 			  toolbarButtonManager.button.titleList = e.titleList;
 		  }
+		  
+		  public function handleRemoteReturnTitlesEvent(e:PollReturnTitlesEvent):void{
+			  toolbarButtonManager.button.titleList = e.titleList;
+			  // This timer gives the earlier NetConnection.call time to finish and deliver what it was sent out to get.
+			  synchTimer = new Timer((1000*0.01));
+			  synchTimer.addEventListener(TimerEvent.TIMER, remoteOpen);
+			  synchTimer.start();
+		  }
+		  
+		private function remoteOpen(e:TimerEvent):void{
+			if (synchTimer != null){
+				synchTimer.removeEventListener(TimerEvent.TIMER, remoteOpen);
+				synchTimer = null;
+				toolbarButtonManager.button.remoteOpenPollingMenu();
+			}
+		}
 
 		  public function handleGetPollEvent(e:PollGetPollEvent):void{
 			  service.getPoll(e.pollKey, "menu");
 		  }
 		  
 		  public function handlePopulateMenuEvent(e:PollGetPollEvent):void{
+			  //LogUtil.debug("PollingManager.handlePopulateMenuEvent(), adding item to pollList");
 			  toolbarButtonManager.button.pollList.addItem(e.poll);
 		  }
 		  
@@ -228,6 +262,7 @@ package org.bigbluebutton.modules.polling.managers
 				  } // _for-loop
 			  } // _if pollList is null
 			  if (unique){
+				  //LogUtil.debug("PollingManager.handleReturnPollEvent(), adding item to pollList");
 				  toolbarButtonManager.button.pollList.addItem(e.poll);
 			  }
 		  }
@@ -250,5 +285,16 @@ package org.bigbluebutton.modules.polling.managers
 			  viewWindowManager.handleReviewResultsEvent(e);
 		  }
 		//##################################################################################
+		  
+		  public function handleGlobalPollHotkey(e:ShortcutEvent):void{
+			  if (conference.amIPresenter)
+				  toolbarButtonManager.openMenuRemotely();
+			  //if (conference.amIPresenter() && toolbarButtonManager.openMenuRemotely()){
+				  // Business as usual
+			  //}
+			  //else{
+				  // Check if Instructions, Stats, or Voting window is open instead; focus to that
+			  //}
+		  }
    }
 }

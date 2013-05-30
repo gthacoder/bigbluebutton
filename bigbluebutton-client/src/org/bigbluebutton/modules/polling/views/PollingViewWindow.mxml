@@ -23,12 +23,17 @@
 <MDIWindow xmlns="flexlib.mdi.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="410" height="150" 
 	xmlns:mate="http://mate.asfusion.com/" 
-	implements="org.bigbluebutton.common.IBbbModuleWindow" 
+	implements="org.bigbluebutton.common.IBbbModuleWindow"
+	initialize="init()"
 	creationComplete="onCreationComplete()"
 	label="{ResourceUtil.getInstance().getString('bbb.polling.toolbar.toolTip')}"  
 	title="{ResourceUtil.getInstance().getString('bbb.polling.toolbar.toolTip')}"
 	layout="absolute">
-
+	
+	<mate:Listener type="{ShortcutEvent.FOCUS_VOTING_WINDOW}" method="focusWindow" />
+	<mate:Listener type="{ShortcutEvent.REMOTE_CAST_VOTE}" method="remoteVote" />
+	<mate:Listener type="{ShortcutEvent.FOCUS_VOTE_QUESTION}" method="focusQuestion" />
+	
 	<mx:Script>
 		<![CDATA[
 			import flexlib.mdi.events.MDIWindowEvent;
@@ -40,9 +45,10 @@
 			import org.bigbluebutton.modules.polling.events.PollingViewWindowEvent;
 			import org.bigbluebutton.modules.polling.managers.PollingManager;
 			import org.bigbluebutton.modules.polling.events.VoteEvent;
-			
+			import org.bigbluebutton.modules.polling.model.PollOptions;
 			import org.bigbluebutton.main.model.users.Conference;
-			
+			import org.bigbluebutton.main.events.ShortcutEvent;
+
 			import mx.validators.Validator;	
 			import mx.utils.ObjectUtil;
 			import org.bigbluebutton.util.i18n.ResourceUtil;
@@ -66,6 +72,24 @@
 			private var window:PollingViewWindow;	
 			private var submissionAllowed:Boolean=false;		
 			public var cbSelected:Array = new Array(); // variable that receives either CheckBox or RadioButton info and sends it to VoteEvent
+			[Bindable] private var pollOptions:PollOptions;
+			[Bindable] private var baseIndex:int;
+			private var keyCombos:Object;
+			
+			
+			private function init():void{
+				pollOptions = new PollOptions();
+				baseIndex = pollOptions.getBaseIndex();
+				
+				// Send an alert to visually-impaired users that a voting window has opened.
+				var hotkeyString:String;
+				// Use External calls to put together the actual hotkey to focus the voting window
+				// Temporary value:
+				hotkeyString = "VOTE_FOCUS";
+				
+				var message:String = ResourceUtil.getInstance().getString('bbb.polling.vote.alerts.windowOpen', [hotkeyString]);
+				ExternalInterface.call("addAlert", message);
+			}
 			
 			public function getPrefferedPosition():String{
 				return MainCanvas.POPUP;
@@ -76,20 +100,66 @@
 			}
  			 
 			private function onCreationComplete():void{
+				questionText.text = question;
+				if (isMultiple)
+					questionText.text += " " + ResourceUtil.getInstance().getString('bbb.polling.pollPreview.checkAll');
+				
+				hotkeyCapture();
+				titleBarOverlay.tabIndex = baseIndex;			
+				minimizeBtn.tabIndex = baseIndex+1;
+				maximizeRestoreBtn.tabIndex = baseIndex+2;
+				closeBtn.tabIndex = baseIndex+3;
+				//accInfoText.tabIndex = baseIndex+4
+				questionText.tabIndex = baseIndex+4
+				
+				btnAcceptPoll.tabIndex = baseIndex+16;
+				
+				baseIndex = baseIndex+5;
+				
 				if (isMultiple)
 					errorMessage.text = ResourceUtil.getInstance().getString('bbb.polling.vote.error.check');
 				else
 					errorMessage.text = ResourceUtil.getInstance().getString('bbb.polling.vote.error.radio');
-				checkInstructions.visible = isMultiple;
+				ExternalInterface.call("addAlert", errorMessage.text);
+				//checkInstructions.visible = isMultiple;
+				
 				createButtons(answers.length,answers);
 				invalidateDisplayList();
 				validateNow(); 
+				
+				/*var lines:int = (question.length / 28) + 1;
+				for(var s:String in answers){
+					lines = lines + ((s.length / 28) + 1);	
+				}				 	            	
+				height = height + (lines * 50);*/
+				
+				
 				var lines:int = (question.length / 28) + 1;
 				for(var s:String in answers){
 					lines = lines + ((s.length / 28) + 1);	
 				}				 	            	
-				height = height + (lines * 50);
-				//questionBox.
+				height = height + ((lines+1) * 45);
+			}
+			
+			private function hotkeyCapture():void{
+				this.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
+			}
+			
+			private function handleKeyDown(e:KeyboardEvent) :void {
+				var modifier:String = ExternalInterface.call("determineModifier");
+				loadKeyCombos(modifier);             
+				var keyPress:String = (e.ctrlKey  ? "control+" : "") +
+					(e.shiftKey ? "shift+"   : "") +
+					(e.altKey   ? "alt+"     : "") + e.keyCode;                                     
+				if (keyCombos[keyPress]) {
+					dispatchEvent(new ShortcutEvent(keyCombos[keyPress]));
+				}
+			}
+			
+			private function loadKeyCombos(modifier:String):void {
+				keyCombos = new Object(); // always start with a fresh array
+				keyCombos[modifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.polling.vote') as String)] = ShortcutEvent.REMOTE_CAST_VOTE;
+				keyCombos[modifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.polling.focusQuestion') as String)] = ShortcutEvent.FOCUS_VOTE_QUESTION;
 			}
 						
 			// This function will receive information and generate radiobuttons on fly
@@ -100,14 +170,16 @@
 				var _tx: Text;
 				var _hb: HBox; 
 				var  _rb_group:RadioButtonGroup = new RadioButtonGroup();
+				var totalOptions:int = content.length;
 				// creating buttons one by one
-			    for (var i:int = 0; i < amount; i++) {
+			    for (var i:int = 0; i < amount; i++) {					
+					var indicator:String = ResourceUtil.getInstance().getString('bbb.polling.vote.indicator', [i+1, totalOptions])
 					_tx = new Text();
 					_hb = new HBox();
 					_tx.name = "option" +i;
 					_tx.width = 200;
 					// assigning array element to text field
-					_tx.text =content[i].toString(); 
+					_tx.text = content[i].toString();
 				 	answerBox.addChild(_hb);
 					 
 					// if global var isMultiple is true it means user wants checkboxes, 
@@ -115,9 +187,11 @@
 					if(isMultiple){
 				 		_cb= new CheckBox();
 				    	_cb.id = "answers"+i;
+						_cb.accessibilityName = indicator + content[i].toString();
 				    	_cb.addEventListener(MouseEvent.CLICK, checkBoxClick);
 				    	// gap between the buttons
  				    	_cb.y=i*20;
+						_cb.tabIndex = baseIndex++;
  				    	// adding buttons to the Horizontal Box
  				      	_hb.addChild(_cb);
  				 	}else{
@@ -126,6 +200,8 @@
 				 		_rb.name = content[i].toString(); // giving button a name of array elelment to process it easier later
 				 		_rb.id = "answers"+i;
 						_rb.addEventListener(MouseEvent.CLICK, radioClick);
+						_rb.accessibilityName = indicator + content[i].toString();
+						_rb.tabIndex = baseIndex++;
 				 		_hb.addChild(_rb);
 			 		}    
 			 		_hb.addChild(_tx); // adding text near button			 
@@ -149,8 +225,10 @@
 					dispatchEvent(voteEvent);				
 					closeWindow();
 				}
-				else
+				else{
 					errorMessage.visible = true;
+					ExternalInterface.call("addAlert", errorMessage.text);
+				}
 			} // _vote
 						
 			// As the user clicks CheckBoxes, this function keeps a running tally of which boxes are and are not selected
@@ -177,42 +255,78 @@
 			public function radioClick(e:Event):void{
 				submissionAllowed = true;
 			}
+			
+			private function focusWindow(e:Event):void{
+				focusManager.setFocus(titleBarOverlay);
+			}
+			
+			private function focusQuestion(e:ShortcutEvent):void{
+				focusManager.setFocus(questionText);
+			}
+			
+			private function remoteVote(e:ShortcutEvent):void{
+				Vote();
+			}
 		]]>
 	</mx:Script>
 
 	<mx:RadioButtonGroup id="answersGroup"/>
  	<!-- Prototype of Polling Module Design -->
-    <mx:VBox accessibilityDescription="The question will go into the V BOX" 
-    		 width="100%" 
-    		 height="75%" 
+	<mx:VBox id="votingBox"
+			 width="90%" 
+			 height="90%">
+		<mx:Panel id="titleShow" 
+				  width="90%" >
+			<mx:VBox paddingTop="10"
+					 paddingLeft="40" 
+					 paddingBottom="40"
+					 horizontalAlign="center"
+					 >
+				<mx:TextArea id="questionText"
+							 width="90%" 
+							 fontWeight="bold" 
+							 textAlign="center"
+							 editable="false"
+							 borderSkin="{null}"
+							 />
+				<mx:Box id="answerBox" />
+				<mx:Text id="errorMessage"
+						 color="red"
+						 visible="false"/>
+			</mx:VBox>
+		</mx:Panel>
+	</mx:VBox>
+	
+	<!--mx:VBox id="votingBox"
+			 width="90%" 
+    		 height="90%" 
     		 horizontalAlign="center" 
-    		 paddingLeft="10" 
+    		 paddingTop="20"
+			 paddingLeft="10" 
     		 paddingRight="10"
-    		 focusEnabled="true">
-    	<mx:HBox accessibilityDescription="The question will go into the H BOX"/>
-    	<mx:Text width="200" 
-        		 paddingTop="30" 
-        		 paddingBottom="10" 
-        		 fontWeight="bold" 
-        		 textAlign="center"
-       			 text="{question}"
-       			 accessibilityDescription="The question will go into the m x TEXT"
-       			 />
-       	<mx:Text id="checkInstructions" 
-       			 text="{ResourceUtil.getInstance().getString('bbb.polling.pollPreview.checkAll')}"/>
-     	<mx:Box id="answerBox"  
+    		 focusEnabled="true"
+			 backgroundColor="#CCCCCC">
+    	<mx:TextArea id="questionText"
+					 width="200" 
+	        		 fontWeight="bold" 
+	        		 textAlign="center"
+					 editable="false"
+       			 	 />
+       	<mx:Box id="answerBox"  
      			width="90%" 
      			height="90%" />
 		<mx:Text id="errorMessage"
 				 color="red"
 				 visible="false"/>
-	</mx:VBox>
+	</mx:VBox-->
+	
     <mx:ControlBar width="100%" 
     			   horizontalAlign="center">
     	<mx:Button id="btnAcceptPoll" 
     			   label="{ResourceUtil.getInstance().getString('bbb.polling.pollView.vote')}" 
     			   click="Vote()"  
     			   width="100" 
-    			   height="30"/>
+    			   height="30"
+				   />
     </mx:ControlBar> 	 
 </MDIWindow>

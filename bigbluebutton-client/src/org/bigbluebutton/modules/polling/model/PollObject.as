@@ -1,13 +1,18 @@
 package org.bigbluebutton.modules.polling.model
 {
+	import com.asfusion.mate.events.InternalResponseEvent;
+	
 	import mx.collections.ArrayCollection;
+	
 	import org.bigbluebutton.common.LogUtil;
+	import org.bigbluebutton.util.i18n.ResourceUtil;
 	import org.bigbluebutton.modules.polling.model.PollStatLineObject;
+
 	
 	/*
-	 *  This class has been setted his attributes to public, for serialize with the model of the bigbluebutton-apps, in order
-	 *  to enable the communication. This class is used for send public and private.
-	 **/
+	*  This class has been setted his attributes to public, for serialize with the model of the bigbluebutton-apps, in order
+	*  to enable the communication. This class is used for send public and private.
+	**/
 	[Bindable]
 	[RemoteClass(alias="org.bigbluebutton.conference.service.poll.Poll")]
 	public class PollObject
@@ -15,14 +20,14 @@ package org.bigbluebutton.modules.polling.model
 		public static const LOGNAME:String = "[PollingObject] ";
 		
 		/* 
-		 ########################################################################################
-		 # KEY PLACES TO UPDATE, WHEN ADDING NEW FIELDS TO THE HASH:							#
-		 # PollingService.as, buildServerPoll()													#
-		 # PollingService.as, extractPoll()														#
-		 # PollingInstructionsWindow.mxml, buildPoll()											#
-		 # - Only necessary when the new field is involved with poll creation					#
-		 # Don't forget to update the server side as well (key locations found in Poll.java)	#
-		 ########################################################################################
+		########################################################################################
+		# KEY PLACES TO UPDATE, WHEN ADDING NEW FIELDS TO THE HASH:							#
+		# PollingService.as, buildServerPoll()													#
+		# PollingService.as, extractPoll()														#
+		# PollingInstructionsWindow.mxml, buildPoll()											#
+		# - Only necessary when the new field is involved with poll creation					#
+		# Don't forget to update the server side as well (key locations found in Poll.java)	#
+		########################################################################################
 		*/
 		
 		public var title:String;
@@ -37,6 +42,10 @@ package org.bigbluebutton.modules.polling.model
 		public var didNotVote:int;
 		public var publishToWeb:Boolean;
 		public var webKey:String = new String;
+		
+		public var answerT:String = "TEST1";
+		public var votesT:String = "TEST2";
+		public var percentT:String = "TEST3";
 		
 		// For developer use, this method outputs all fields of a poll into the debug log for examination.
 		// Please remember to add lines for any new fields that may be added.
@@ -61,12 +70,11 @@ package org.bigbluebutton.modules.polling.model
 		}
 		
 		public function generateStats():ArrayCollection{
-			var returnCollection:ArrayCollection = new ArrayCollection;
+			var returnCollection:ArrayCollection = new ArrayCollection();
 			for (var i:int = 0; i < answers.length; i++){
 				var pso:PollStatLineObject = new PollStatLineObject;
 				pso.answer = answers[i].toString();
 				pso.votes = votes[i].toString();
-				//pso.percentage =
 				if (totalVotes == 0){
 					pso.percentage = "";
 				}
@@ -77,33 +85,6 @@ package org.bigbluebutton.modules.polling.model
 			}
 			return returnCollection;
 		}
-		
-		public function generateTestStats():ArrayCollection{
-			var ds:String = "TEST STATS: ";
-			var returnCollection:ArrayCollection = new ArrayCollection;
-			for (var i:int = 0; i < 6; i++){
-				var pso:PollStatLineObject = new PollStatLineObject;
-				pso.answer = "Test answer " + i;
-				pso.votes = "Test votes " + i;
-				pso.percentage = "Test percent " + i;
-				returnCollection.addItem(pso);
-				LogUtil.debug(ds + pso.debug());
-			}
-			return returnCollection;
-		}
-		
-		public function generateOneLine():ArrayCollection{
-			var ds:String = "TEST LINE: ";
-			var returnCollection:ArrayCollection = new ArrayCollection;
-			
-				var pso:PollStatLineObject = new PollStatLineObject;
-				pso.answer = "ANSWER CELL";
-				pso.votes = "VOTEs CELL";
-				pso.percentage = "PERCENTAGE CELL";
-				returnCollection.addItem(pso);
-				LogUtil.debug(ds + pso.debug());
-			
-			return returnCollection;
-		}
+				
 	}
 }

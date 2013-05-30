@@ -130,6 +130,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		keyCombos[globalModifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.logout') as String)] = ShortcutEvent.LOGOUT;
 		keyCombos[globalModifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.raiseHand') as String)] = ShortcutEvent.RAISE_HAND;
 		keyCombos[globalModifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.users.muteAllButPres') as String)] = ShortcutEvent.MUTE_ALL_BUT_PRES;
+		
+		keyCombos[globalModifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.polling.buttonClick') as String)] = ShortcutEvent.POLL_BUTTON_CLICK;
 	}
 	
     public function hotkeyCapture():void{

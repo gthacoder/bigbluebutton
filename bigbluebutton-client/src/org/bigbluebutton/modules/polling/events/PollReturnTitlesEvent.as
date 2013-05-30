@@ -23,6 +23,8 @@ package org.bigbluebutton.modules.polling.events
 	public class PollReturnTitlesEvent extends Event
 	{
 		public static const UPDATE:String = "UPDATE_RETURN_TITLES";
+		public static const REMOTE_RETURN:String = "GET_TITLES_REMOTE_RETURN";
+		//public static const REMOTE_DISPLAY:String = "GET_TITLES_REMOTE_DISPLAY";
 		public var titleList:Array;		
 		
 		public function PollReturnTitlesEvent(type:String, bubbles:Boolean=true, cancelable:Boolean=false)

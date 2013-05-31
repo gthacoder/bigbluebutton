@@ -159,7 +159,7 @@
 			private function loadKeyCombos(modifier:String):void {
 				keyCombos = new Object(); // always start with a fresh array
 				keyCombos[modifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.polling.vote') as String)] = ShortcutEvent.REMOTE_CAST_VOTE;
-				keyCombos[modifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.polling.focusQuestion') as String)] = ShortcutEvent.FOCUS_VOTE_QUESTION;
+				keyCombos[modifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.polling.focusVoteQuestion') as String)] = ShortcutEvent.FOCUS_VOTE_QUESTION;
 			}
 						
 			// This function will receive information and generate radiobuttons on fly
@@ -257,14 +257,17 @@
 			}
 			
 			private function focusWindow(e:Event):void{
+				LogUtil.debug("Received Vote Window Focus");
 				focusManager.setFocus(titleBarOverlay);
 			}
 			
 			private function focusQuestion(e:ShortcutEvent):void{
+				LogUtil.debug("Received Vote Question Focus");
 				focusManager.setFocus(questionText);
 			}
 			
 			private function remoteVote(e:ShortcutEvent):void{
+				LogUtil.debug("Received Vote Command");
 				Vote();
 			}
 		]]>

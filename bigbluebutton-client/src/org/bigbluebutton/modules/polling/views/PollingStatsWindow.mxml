@@ -34,6 +34,7 @@
 
 	<mate:Listener type="{ShortcutEvent.FOCUS_WEBPOLL_ADDRESS}" method="focusWebPollBox" />
 	<mate:Listener type="{ShortcutEvent.FOCUS_POLL_DATA}" method="focusDataGrid" />
+	<mate:Listener type="{ShortcutEvent.FOCUS_POLLING_WINDOW_STATS}" method="focusWindow" />
 	<mate:Listener type="{ShortcutEvent.SC_REFRESH_POLL}" method="remoteRefresh" />
 	<mate:Listener type="{ShortcutEvent.SC_STOP_POLL}" method="remoteStop" />
 	
@@ -363,6 +364,10 @@
 					ExternalInterface.call("addAlert", message);
 					closeButtonClick(e);
 				}
+			}
+			
+			private function focusWindow(e:ShortcutEvent):void{
+				LogUtil.debug("Caught Focus Event in Stats Window");
 			}
 			
 	]]>

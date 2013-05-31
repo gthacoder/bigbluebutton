@@ -116,6 +116,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		keyCombos[globalModifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.users.muteme') as String)] = ShortcutEvent.MUTE_ME_EVENT;
 		keyCombos[globalModifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.chat.chatinput') as String)] = ShortcutEvent.FOCUS_CHAT_INPUT;
 		keyCombos[globalModifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.focus.voting') as String)] = ShortcutEvent.FOCUS_VOTING_WINDOW;
+		keyCombos[globalModifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.focus.pollingCreate') as String)] = ShortcutEvent.FOCUS_POLLING_WINDOW_CREATE;
+		keyCombos[globalModifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.focus.pollingStats') as String)] = ShortcutEvent.FOCUS_POLLING_WINDOW_STATS;
 		
 		// General hotKeys (usable from anywhere in the application)
 		keyCombos[globalModifier+(ResourceUtil.getInstance().getString('bbb.shortcutkey.focus.users') as String)] = ShortcutEvent.FOCUS_USERS_WINDOW;

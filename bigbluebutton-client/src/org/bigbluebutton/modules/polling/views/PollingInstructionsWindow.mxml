@@ -35,6 +35,7 @@ Notes.mxml is the main view of the SharedNotes application
 	<mate:Listener type="{ShortcutEvent.FOCUS_POLL_ANSWERS}" method="focusAnswers" />
 	<mate:Listener type="{ShortcutEvent.FOCUS_MULT_CHECK}" method="focusMultiple" />
 	<mate:Listener type="{ShortcutEvent.FOCUS_WEBPOLL_CHECK}" method="focusWebpoll" />
+	<mate:Listener type="{ShortcutEvent.FOCUS_POLLING_WINDOW_CREATE}" method="focusWindow" />
 	
 	<mate:Listener type="{ShortcutEvent.POLL_PREVIEW}" method="previewClick" />
 	<mate:Listener type="{ShortcutEvent.POLL_CANCEL}" method="cancelClick" />
@@ -605,6 +606,10 @@ Notes.mxml is the main view of the SharedNotes application
 				if (SavePoll.enabled && SavePoll.visible){
 					savePoll();
 				}
+			}
+			
+			private function focusWindow(e:ShortcutEvent):void{
+				LogUtil.debug("Caught Focus Event in Instructions Window");
 			}
 		]]>
 	</mx:Script>

@@ -79,6 +79,8 @@ package org.bigbluebutton.main.events {
 		public static const FOCUS_POLL_DATA:String = 'FOCUS_POLL_DATA';
 		public static const FOCUS_POLL_TITLE:String = 'FOCUS_POLL_TITLE';
 		public static const FOCUS_POLL_QUESTION:String = 'FOCUS_POLL_QUESTION';
+		public static const FOCUS_POLLING_WINDOW_CREATE:String = 'FOCUS_POLLING_WINDOW_CREATE';
+		public static const FOCUS_POLLING_WINDOW_STATS:String = 'FOCUS_POLLING_WINDOW_STATS';
 		public static const FOCUS_VOTE_QUESTION:String = 'FOCUS_VOTE_QUESTION';
 		public static const FOCUS_VOTING_WINDOW:String = 'FOCUS_VOTING_WINDOW';
 		public static const FOCUS_WEBPOLL_ADDRESS:String = 'FOCUS_WEBPOLL_ADDRESS';

@@ -53,10 +53,11 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			
 			private var genResource:Array = ['bbb.shortcutkey.general.minimize', 'bbb.shortcutkey.general.maximize', 'bbb.shortcutkey.flash.exit', 
 											 'bbb.shortcutkey.focus.users', 'bbb.shortcutkey.focus.video', 'bbb.shortcutkey.focus.presentation',  
-											 'bbb.shortcutkey.focus.chat', 'bbb.shortcutkey.chat.chatinput', 'bbb.shortcutkey.share.desktop', 
-											 'bbb.shortcutkey.share.microphone', 'bbb.shortcutkey.share.webcam', 'bbb.shortcutkey.shortcutWindow', 
-											 'bbb.shortcutkey.logout', 'bbb.shortcutkey.raiseHand', 'bbb.shortcutkey.users.muteme',
-											 'bbb.shortcutkey.users.muteAllButPres', 'bbb.shortcutkey.polling.buttonClick', 'bbb.shortcutkey.focus.voting'];
+											 'bbb.shortcutkey.focus.chat', 'bbb.shortcutkey.focus.polling', 'bbb.shortcutkey.focus.voting', 
+											 'bbb.shortcutkey.share.microphone', 'bbb.shortcutkey.share.desktop', 'bbb.shortcutkey.share.webcam',
+											 'bbb.shortcutkey.polling.buttonClick', 'bbb.shortcutkey.shortcutWindow', 'bbb.shortcutkey.logout', 
+											 'bbb.shortcutkey.raiseHand', 'bbb.shortcutkey.users.muteme', 'bbb.shortcutkey.users.muteAllButPres', 
+											 'bbb.shortcutkey.chat.chatinput'];
 											 
 			private var presResource:Array = ['bbb.shortcutkey.present.focusslide', /*'bbb.shortcutkey.whiteboard.undo',*/ 'bbb.shortcutkey.present.upload',  
 											  'bbb.shortcutkey.present.previous', 'bbb.shortcutkey.present.select', 'bbb.shortcutkey.present.next', 	

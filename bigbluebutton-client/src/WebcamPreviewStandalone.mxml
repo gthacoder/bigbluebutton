@@ -195,11 +195,19 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
         
       }
 
+      private function resetVideoHolder():void {        
+        loader.width = _videoHolder.width = this.width;
+        loader.height = _videoHolder.height = this.height;
+        _videoHolder.x = _videoHolder.y = 0;
+      }
       
       public function displayCamera(camIndex:String, camWidth:int, camHeight:int, camKeyFrameInterval:int, 
                                                                                   camModeFps:Number, camQualityBandwidth:int, 
                                                                                                      camQualityPicture:int):void {
         trace('WebcamPreviewSA::displayCamera');
+        // Rest the videoHolder's dimensions
+        resetVideoHolder();
+        
         stopCamera();
         
         if (Camera.names.length == 0) {
@@ -246,6 +254,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
       }
               
       private function stopCamera():void {
+        resetVideoHolder();
         _camera = null;
         if (_video != null) {
           _videoHolder.removeChild(_video);

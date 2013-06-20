@@ -62,6 +62,8 @@
       <button type="button" onclick="unmuteMe()">Unmute Me</button>
       <button type="button" onclick="muteAll()">Mute All</button>
       <button type="button" onclick="unmuteAll()">Unmute All</button>
+      <button type="button" onclick="raiseHand(true)">Raise Hand</button>
+      <button type="button" onclick="raiseHand(false)">Lower Hand</button>
       <button type="button" onclick="switchLayout('S2SVideoChat')">Switch Video Layout</button>
       <button type="button" onclick="switchLayout('S2SPresentation')">Switch Present Layout</button>
       <button type="button" onclick="lockLayout(true)">Lock Layout</button>
@@ -72,6 +74,9 @@
       <button type="button" onclick="amIPresenterAsync()">Am I Presenter Async</button>
 	  <button type="button" onclick="getMyUserInfoAsynch()">User Info Async</button>
       <button type="button" onclick="getMyUserInfoSynch()">UserInfo Sync</button>
+      <button type="button" onclick="queryListOfPresentations()">Query Presentations</button>
+      <button type="button" onclick="displayPresentation('presentation3')">Display Presentation</button>
+      <button type="button" onclick="deletePresentation('presentation3')">Delete Presentation</button>
       <form id="formUpload" name="formUpload" enctype="multipart/form-data">
         <input type="file" name="fileUpload" id="fileUpload" />
         <button type="button" onclick="uploadPresentation()">Upload Presentation</button>

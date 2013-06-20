@@ -72,7 +72,22 @@
         }
       }
     }
-    
+
+    /**
+     * Raise user's hand.
+     *
+     * Param:
+     *   raiseHand - [true/false]
+     * 
+     */
+    BBB.raiseHand = function(raiseHand) {
+      var swfObj = getSwfObj();
+      if (swfObj) {
+        console.log("Request to raise hand [" + raiseHand + "]");
+        swfObj.raiseHandRequest(raiseHand);
+      }    
+    }
+        
     /**
      * Issue a switch presenter command.
      *
@@ -368,7 +383,39 @@
         swfObj.sendPrivateChatRequest(fontColor, localeLang, message, toUserID);
       }    
     }
-        
+
+    /**
+    * Request to display a presentation.
+    *  presentationID - the presentation to display
+    */     
+    BBB.displayPresentation = function(presentationID) {
+      var swfObj = getSwfObj();
+      if (swfObj) {
+        swfObj.displayPresentationRequest(presentationID);
+      }     
+    }
+    
+   /**
+    * Query the list of uploaded presentations.
+    */     
+    BBB.queryListOfPresentations = function() {
+      var swfObj = getSwfObj();
+      if (swfObj) {
+        swfObj.queryListsOfPresentationsRequest();
+      }     
+    }
+
+    /**
+    * Request to delete a presentation.
+    *  presentationID - the presentation to delete
+    */      
+    BBB.deletePresentation = function(presentationID) {
+      var swfObj = getSwfObj();
+      if (swfObj) {
+        swfObj.deletePresentationRequest(presentationID);
+      }     
+    }
+            
     // Third-party JS apps should use this to query if the BBB SWF file is ready to handle calls.
     BBB.isSwfClientReady = function() {
       return swfReady;
@@ -500,6 +547,7 @@
     var REMOTE_UNLOCKED_LAYOUT      = 'RemoteUnlockedLayoutEvent';
     var USER_JOINED_VOICE           = 'UserJoinedVoiceEvent';
     var USER_LEFT_VOICE             = 'UserLeftVoiceEvent';
+    var USER_KICKED_OUT             = 'UserKickedOutEvent';
     var USER_MUTED_VOICE            = 'UserVoiceMutedEvent';
     var USER_TALKING                = 'UserTalkingEvent';
     var USER_LOCKED_VOICE           = 'UserLockedVoiceEvent';

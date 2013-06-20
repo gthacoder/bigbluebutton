@@ -3,6 +3,15 @@ var presenterUserID = "";
 
 var registerListeners = function() {
   console.log("Listening for events.");
+  BBB.listen("QueryPresentationsReplyEvent", function(bbbEvent) {   
+    console.log("Number of presentations [" + bbbEvent.presentations.length + "]. First presentation [" + bbbEvent.presentations[0] + "].");
+  });
+  BBB.listen("OpenExternalFileUploadWindowEvent", function(bbbEvent) {
+    console.log("Open file upload dialog. Max file size is [" + bbbEvent.maxFileSize + "].");
+  });
+  BBB.listen("UserKickedOutEvent", function(bbbEvent) {
+    console.log("User has been kicked [" + bbbEvent.userID + "].");
+  });
   BBB.listen("SwitchedLayoutEvent", function(bbbEvent) {
     console.log("New Layout [" + bbbEvent.layoutID + "].");
   });
@@ -31,9 +40,9 @@ var registerListeners = function() {
 						+ ",camQualityPicture=" + bbbEvent3.camQualityPicture						
 						+ "]");
 			if (bbbEvent3.isPublishing) {	
-				CAM_PREVIEW.stopPreviewCamera();
+				CAM_PREVIEW.stopPreviewCamera(bbbEvent3.avatarURL);
 				CAM_PREVIEW.previewCamera(bbbEvent3.camIndex, bbbEvent3.camWidth, bbbEvent3.camHeight, bbbEvent3.camKeyFrameInterval,
-										  bbbEvent3.camModeFps, bbbEvent3.camQualityBandwidth, bbbEvent3.camQualityPicture);
+										  bbbEvent3.camModeFps, bbbEvent3.camQualityBandwidth, bbbEvent3.camQualityPicture, bbbEvent3.avatarURL);
 			}
 		});
 	} else {
@@ -49,11 +58,11 @@ var registerListeners = function() {
 						+ ",uri=" + bbbEvent5.uri 
 						+ ",streamName=" + bbbEvent5.streamName + "]");
 			if (presenterUserID == bbbEvent.userID) {
-				CAM_VIEW.stopViewWebcamStream();
-				CAM_VIEW.viewWebcamStream(bbbEvent.uri, bbbEvent.streamName);
+				CAM_VIEW.stopViewWebcamStream(bbbEvent.avatarURL);
+				CAM_VIEW.viewWebcamStream(bbbEvent.uri, bbbEvent.streamName, bbbEvent5.avatarURL);
 			}
 		});	
-		CAM_PREVIEW.stopPreviewCamera();
+		CAM_PREVIEW.stopPreviewCamera(bbbEvent.avatarURL);
 	}
   });
   BBB.listen("UserLeftEvent", function(bbbEvent) {
@@ -83,21 +92,21 @@ var registerListeners = function() {
   BBB.listen("CamStreamSharedEvent", function(bbbEvent) {
     console.log("User CamStreamSharedEvent [" + bbbEvent.uri + "," + bbbEvent.streamName + "]");
 	if (presenterUserID == bbbEvent.userID) {
-	    CAM_VIEW.stopViewWebcamStream();
-		CAM_VIEW.viewWebcamStream(bbbEvent.uri, bbbEvent.streamName);
+	    CAM_VIEW.stopViewWebcamStream(bbbEvent.avatarURL);
+		  CAM_VIEW.viewWebcamStream(bbbEvent.uri, bbbEvent.streamName, bbbEvent.avatarURL);
 	}
   });
   BBB.listen("BroadcastingCameraStartedEvent", function(bbbEvent) {
     console.log("User BroadcastingCameraStartedEvent [" + bbbEvent.camIndex + "] [" + bbbEvent.camWidth + "]");
 	if (bbbEvent.isPresenter) {	
-		CAM_PREVIEW.stopPreviewCamera();
+		CAM_PREVIEW.stopPreviewCamera(bbbEvent.avatarURL);
 		CAM_PREVIEW.previewCamera(bbbEvent.camIndex, bbbEvent.camWidth, bbbEvent.camHeight, bbbEvent.camKeyFrameInterval,
-								  bbbEvent.camModeFps, bbbEvent.camQualityBandwidth, bbbEvent.camQualityPicture);
+								  bbbEvent.camModeFps, bbbEvent.camQualityBandwidth, bbbEvent.camQualityPicture, bbbEvent.avatarURL);
 	}
   });
   BBB.listen("BroadcastingCameraStoppedEvent", function(bbbEvent) {
     console.log("User BroadcastingCameraStoppedEvent ]");
-    CAM_PREVIEW.stopPreviewCamera();
+    CAM_PREVIEW.stopPreviewCamera(bbbEvent.avatarURL);
   });
 
   console.log("Listen Presentation Updates");
@@ -216,6 +225,10 @@ var getMeetingID = function() {
   });
 }
 
+var raiseHand = function(raiseHand) {
+  BBB.raiseHand(raiseHand);
+}
+
 var muteMe = function() {
   BBB.muteMe();
 }
@@ -240,6 +253,17 @@ var lockLayout = function(lock) {
   BBB.lockLayout(lock);
 }
 
+var queryListOfPresentations = function() {
+  BBB.queryListOfPresentations();
+}
+
+var displayPresentation = function(presentationID) {
+  BBB.displayPresentation(presentationID);
+}
+
+var deletePresentation = function(presentationID) {
+  BBB.deletePresentation(presentationID);
+}
 
 var sendPublicChat = function () {
   var message = "Hello from the Javascript API";

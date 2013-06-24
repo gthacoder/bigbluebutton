@@ -28,6 +28,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		   creationComplete="onCreationComplete()" 
 		   implements="org.bigbluebutton.common.IBbbModuleWindow"
 		   title="{ResourceUtil.getInstance().getString('bbb.videodock.title')}"
+		   accessibilityDescription="{ResourceUtil.getInstance().getString('bbb.videodock.title')}"
 		   xmlns:mate="http://mate.asfusion.com/" styleNameFocus="videoDockStyleFocus"
 		   layout="absolute" visible="false" styleNameNoFocus="videoDockStyleNoFocus"
 		   horizontalAlign="center" 

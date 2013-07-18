@@ -110,7 +110,10 @@ package org.bigbluebutton.util.i18n
 						
 			for each(locale in list){
 				localeCodes.push(locale.@code);
-				localeNames.push(locale.@name);
+				if (locale.@localName != null)
+					localeNames.push(locale.@localName);
+				else
+					localeNames.push(locale.@name);
 			}							
 		}
 		

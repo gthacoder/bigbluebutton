@@ -1,52 +1,54 @@
 <?xml version="1.0" ?>
+<!-- (most) LocalName values - such as how 'French' is spelled in French - are sourced from here: http://www.omniglot.com/language/names.htm -->
+<!-- Simplified and Traditional Chinese, Farsi sourced from their respective Wikipedia pages -->
 <locales>
-	<locale code="ar_SY" name="Arabic (Syria)"/>
-	<locale code="az_AZ" name="Azerbaijani"/>
-	<locale code="eu_EU" name="Basque" />
-	<locale code="bn_BN" name="Bengali" />
-	<locale code="bg_BG" name="Bulgarian" />
-	<locale code="ca_ES" name="Catalan" />
-	<locale code="zh_CN" name="Chinese (Simplified)"/>
-	<locale code="zh_TW" name="Chinese (Traditional)"/>
-	<locale code="hr_HR" name="Croatian" />
-	<locale code="cs_CZ" name="Czech" />
-	<locale code="da_DK" name="Danish" />
-	<locale code="nl_NL" name="Dutch" />
-	<locale code="en_US" name="English"/>
-	<locale code="et_EE" name="Estonian"/>
-	<locale code="fa_IR" name="Farsi" />
-	<locale code="fi_FI" name="Finnish"/>
-	<locale code="fr_FR" name="French"/>
-	<locale code="fr_CA" name="French (Canadian)"/>
-	<locale code="ff_SN" name="Fulah"/>
-	<locale code="de_DE" name="German"/>
-	<locale code="el_GR" name="Greek"/>
-	<locale code="he_IL" name="Hebrew"/>  
-	<locale code="hu_HU" name="Hungarian"/>
-	<locale code="id_ID" name="Indonesian"/>
-	<locale code="it_IT" name="Italian"/>
-	<locale code="ja_JP" name="Japanese"/>
-	<locale code="ko_KR" name="Korean"/>
-	<locale code="lv_LV" name="Latvian"/>
-	<locale code="lt_LT" name="Lithuania"/>
-	<locale code="mn_MN" name="Mongolian"/>
-	<locale code="ne_NE" name="Nepali"/>
-	<locale code="no_NO" name="Norwegian"/>
-	<locale code="pl_PL" name="Polish"/>
-	<locale code="pt_BR" name="Portuguese (Brazilian)"/>
-	<locale code="pt_PT" name="Portuguese"/>
-	<locale code="ro_RO" name="Romanian"/>
-	<locale code="ru_RU" name="Russian"/>
-	<locale code="sr_SR" name="Serbian (Cyrillic)"/>
-	<locale code="sr_RS" name="Serbian (Latin)"/>
-	<locale code="si_LK" name="Sinhala"/>
-	<locale code="sk_SK" name="Slovak"/>
-	<locale code="sl_SL" name="Slovenian"/>
-	<locale code="es_ES" name="Spanish"/>
-	<locale code="es_LA" name="Spanish (Latin American)"/>		
-	<locale code="sv_SE" name="Swedish"/>
-	<locale code="th_TH" name="Thai"/>
-	<locale code="tr_TR" name="Turkish"/>
-	<locale code="uk_UA" name="Ukrainian"/>
-	<locale code="vi_VN" name="Vietnamese"/>
+	<locale code="ar_SY" name="Arabic (Syria)" localName="العربية"/>
+	<locale code="az_AZ" name="Azerbaijani" localName="آذربايجانجا ديلي"/>
+	<locale code="eu_EU" name="Basque" localName="Euskara"/>
+	<locale code="bn_BN" name="Bengali" localName="বাংলা"/>
+	<locale code="bg_BG" name="Bulgarian" localName="български"/>
+	<locale code="ca_ES" name="Catalan" localName="Català"/>
+	<locale code="zh_CN" name="Chinese (Simplified)" localName="简体字"/>
+	<locale code="zh_TW" name="Chinese (Traditional)" localName="正體字/繁體字"/>
+	<locale code="hr_HR" name="Croatian" localName="Hrvatski"/>
+	<locale code="cs_CZ" name="Czech" localName="čeština"/>
+	<locale code="da_DK" name="Danish" localName="Dansk"/>
+	<locale code="nl_NL" name="Dutch" localName="Nederlands"/>
+	<locale code="en_US" name="English" localName="English"/>
+	<locale code="et_EE" name="Estonian" localName="Eesti keel"/>
+	<locale code="fa_IR" name="Farsi" localName="فارسی"/>
+	<locale code="fi_FI" name="Finnish" localName="Suomi"/>
+	<locale code="fr_FR" name="French" localName="Français"/>
+	<locale code="fr_CA" name="French (Canadian)" localName="Français (Canadien)"/>
+	<locale code="ff_SN" name="Fulah" localName="Fulfulde"/>
+	<locale code="de_DE" name="German" localName="Deutsch"/>
+	<locale code="el_GR" name="Greek" localName="ελληνικά"/>
+	<locale code="he_IL" name="Hebrew" localName="עִבְרִית"/> 
+	<locale code="hu_HU" name="Hungarian" localName="Magyar"/>
+	<locale code="id_ID" name="Indonesian" localName="Bahasa Indonesia"/>
+	<locale code="it_IT" name="Italian" localName="Italiano"/>
+	<locale code="ja_JP" name="Japanese" localName="日本語"/>
+	<locale code="ko_KR" name="Korean" localName="한국어"/>
+	<locale code="lv_LV" name="Latvian" localName="Latviešu valoda"/>
+	<locale code="lt_LT" name="Lithuania" localName="Lietuvių kalba"/>
+	<locale code="mn_MN" name="Mongolian" localName="монгол"/>
+	<locale code="ne_NE" name="Nepali" localName="नेपाली"/>
+	<locale code="no_NO" name="Norwegian" localName="Norsk"/>
+	<locale code="pl_PL" name="Polish" localName="Polski"/>
+	<locale code="pt_BR" name="Portuguese (Brazilian)" localName="Português (Brasileiro)"/>
+	<locale code="pt_PT" name="Portuguese" localName="Português"/>
+	<locale code="ro_RO" name="Romanian" localName="Român"/>
+	<locale code="ru_RU" name="Russian" localName="Русский язык"/>
+	<locale code="sr_SR" name="Serbian (Cyrillic)" localName="српски"/>
+	<locale code="sr_RS" name="Serbian (Latin)" localName="Srpski"/>
+	<locale code="si_LK" name="Sinhala" localName="සිංහල"/>
+	<locale code="sk_SK" name="Slovak" localName="Slovenčina"/>
+	<locale code="sl_SL" name="Slovenian" localName="Slovenščina"/>
+	<locale code="es_ES" name="Spanish" localName="Español"/>
+	<locale code="es_LA" name="Spanish (Latin American)" localName="Español (Latin American)"/>		
+	<locale code="sv_SE" name="Swedish" localName="Svenska"/>
+	<locale code="th_TH" name="Thai" localName="ภาษาไทย"/>
+	<locale code="tr_TR" name="Turkish" localName="Türkçe"/>
+	<locale code="uk_UA" name="Ukrainian" localName="Українська"/>
+	<locale code="vi_VN" name="Vietnamese" localName="㗂越"/>
 </locales>

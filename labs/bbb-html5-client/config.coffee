@@ -22,7 +22,7 @@ config.app.server = null # the express server, created by `app.coffee`
 # coffee> crypto = require 'crypto'
 # coffee> crypto.randomBytes(32).toString('base64')
 config.app.sessionSecret = "J7XSu96KC/B/UPyeGub3J6w6QFXWoUNABVgi9Q1LskE="
-
+config.clients = {}
 # Configs for redis
 config.redis = {}
 config.redis.host = "127.0.0.1"
@@ -30,5 +30,4 @@ config.redis.post = "6379"
 
 # Global instance of Modules, created by `app.coffee`
 config.modules = null
-
 module.exports = config

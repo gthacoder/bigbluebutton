@@ -190,6 +190,18 @@ module.exports = class RedisPublisher
     @pub.publish "bigbluebutton:bridge", JSON.stringify([meetingID, "msg", username, msg, pubID])
     callback?(null, true)
 
+
+  # Publishes a private chat message.
+  #
+  # @param meetingID [string] the ID of the meeting
+  # @param username [string] the username of the user that sent the message
+  # @param msg [string] the text message
+  # @param pubID [string] the public ID of the user sending the message
+  # @param callback(err, succeeded) [Function] callback to call when finished
+  publishPrivateChatMessage: (meetingID, privateChatMessageJson, callback) ->
+    @pub.publish "bigbluebutton:bridge", JSON.stringify([meetingID, "privateMsg",privateChatMessageJson])
+    callback?(null, true)
+
   # Publishes a logout message to a user.
   #
   # @param sessionID [string] the ID of the user

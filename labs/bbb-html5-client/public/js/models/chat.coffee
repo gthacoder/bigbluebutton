@@ -27,4 +27,7 @@ define [
       globals.events.on "connection:all_messages", (messages) =>
         globals.events.trigger("chat:all_messages", messages)
 
+      globals.events.on "connection:privateMsg", (message) =>
+        globals.events.trigger("chat:privateMsg", message)
   ChatModel
+

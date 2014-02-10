@@ -49,6 +49,11 @@
 	bottom:0;
 }
 
+.input-private-chat {
+	position:absolute;
+	bottom:0;
+}
+
 #chat-user-list {
 	padding:5px;
 	li {
@@ -78,4 +83,42 @@
   position: relative;
   padding: 10px;
   word-break: break-all;
+}
+
+.chat-private-box{
+  background: yellow;
+}
+
+.message-alert{
+ background: #DBB84D;
+}
+
+.message-alert
+{
+  background:#B88A00;
+  animation:privateMessage 10s;
+  -webkit-animation:privateMessage 10s; /* Safari and Chrome */
+}
+
+@keyframes privateMessage
+{
+  0%   {background:#B88A00;}
+  25%  {background:#D1A319;}
+  50%  {background:#DBB84D;}
+  100% {background:#E6CC80;}
+}
+
+@-webkit-keyframes privateMessage /* Safari and Chrome */
+{
+  0%   {background:#B88A00;}
+  25%  {background:#D1A319;}
+  50%  {background:#DBB84D;}
+  100% {background:#E6CC80;}
+}
+
+.showMsgBox{
+  display: block;
+}
+.hideMsgBox{
+  display: none;
 }

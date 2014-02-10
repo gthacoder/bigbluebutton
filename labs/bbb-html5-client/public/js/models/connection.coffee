@@ -12,6 +12,7 @@ define [
       @socket = null
       @host = window.location.protocol + "//" + window.location.host
 
+
     disconnect: ->
       if @socket?
         console.log "disconnecting from", @host
@@ -23,6 +24,8 @@ define [
       unless @socket?
         console.log "connecting to the server", @host
         @socket = io.connect(@host)
+        console.log @socket.handshake
+        console.log "line 28"
         @_registerEvents()
       else
         console.log "tried to connect but it's already connected"
@@ -217,6 +220,16 @@ define [
         console.log "socket on: msg"
         globals.events.trigger("connection:msg", name, msg)
 
+      # Received event for a new private chat message
+      # @param  {string} name name of user
+      # @param  {string} msg  message to be displayed
+      @socket.on "privateMsg", (message) =>
+        console.log "socket on: privateMsg"
+        globals.events.trigger("connection:privateMsg", message)
+
+
+        
+
       # Received event to update all the messages in the chat box
       # @param  {Array} messages Array of messages in public chat box
       @socket.on "all_messages", (messages) =>
@@ -242,6 +255,15 @@ define [
     # @param  {string} the message
     emitMsg: (msg) ->
       @socket.emit "msg", msg
+
+    # Emit a private message to the server
+    # @param  {string} privateMsg the message
+    # @param  {string} toUsername the private message receiver name
+    # @param  {string} toUserId the private message receiver id
+    emitPrivateMsg: (privateChatMessageJson) ->   
+      console.log "from connection.coffee 261"
+      console.log JSON.stringify(privateChatMessageJson)  
+      @socket.emit "privateMsg", privateChatMessageJson
 
     # Emit the finish of a text shape
     emitTextDone: ->

@@ -30,6 +30,7 @@ module.exports = class RedisWebsocketBridge
       @_redis_registerListeners()
       @_socket_registerListeners()
 
+
   # Registers listeners to all socket IO events that can be emitted by the clients.
   # The events will always pass content to the server and the server will usually
   # treat this content and generate new events on redis.
@@ -40,6 +41,7 @@ module.exports = class RedisWebsocketBridge
       socket.on "user connect", () => @_socket_onUserConnected(socket)
       socket.on "disconnect", () => @_socket_onUserDisconnected(socket)
       socket.on "msg", (msg) => @_socket_onChatMessage(socket, msg)
+      socket.on "privateMsg", (privateChatMessageJson) => @_socket_onPrivateChatMessage(socket, privateChatMessageJson)
       socket.on "logout", () => @_socket_onLogout(socket)
       socket.on "all_shapes", () => @_socket_onAllShapes(socket)
 
@@ -53,7 +55,6 @@ module.exports = class RedisWebsocketBridge
     @sub.on "pmessage", (pattern, channel, message) =>
       attributes = JSON.parse(message)
       Logger.info "message from redis on channel:#{channel}, data:#{message}"
-
       if channel is "bigbluebutton:bridge"
         @_redis_onBigbluebuttonBridge(attributes)
 
@@ -73,7 +74,6 @@ module.exports = class RedisWebsocketBridge
   # @private
   _redis_onBigbluebuttonBridge: (attributes) ->
     meetingID = attributes[0]
-
     emit = =>
       # apply the parameters to the socket event, and emit it on the channels
       attributes.splice(0, 1) # remove the meeting id from the params
@@ -88,7 +88,7 @@ module.exports = class RedisWebsocketBridge
     # When presenter in flex side sends the 'clrPaper' event, remove everything from Redis
     else if attributes[1] is "clrPaper"
       @redisAction.onClearPaper meetingID, (err, reply) => emit()
-
+   
     else
       emit()
 
@@ -105,8 +105,15 @@ module.exports = class RedisWebsocketBridge
   #
   # @private
   _emitToClients: (channel, message) ->
-    channelViewers = @io.sockets.in(channel)
-    channelViewers.emit.apply(channelViewers, message)
+    if(message[0]=="privateMsg")
+      praivateReceiver = message[1].payload.chat_message.to.id
+      config.clients[praivateReceiver].emit.apply(config.clients[praivateReceiver],message)
+    else
+      channelViewers = @io.sockets.in(channel)
+      channelViewers.emit.apply(channelViewers, message)
+
+ 
+
 
   # When a user connected to the web socket.
   # Several methods have callbacks but we don't need to wait for them all to run, they
@@ -117,16 +124,18 @@ module.exports = class RedisWebsocketBridge
   _socket_onUserConnected: (socket) ->
     sessionID = fromSocket(socket, "sessionID")
     meetingID = fromSocket(socket, "meetingID")
+    userID = fromSocket(socket, "pubID")
+    config.clients[userID] = socket
     @redisAction.isValidSession meetingID, sessionID, (err, reply) =>
       if !reply
         Logger.error "got invalid session for meeting #{meetingID}, session #{sessionID}"
       else
         username = fromSocket(socket, "username")
-        socketID = socket.id
+        socket.join userID  # join the socket room with value of the userID
         socket.join meetingID # join the socket room with value of the meetingID
         socket.join sessionID # join the socket room with value of the sessionID
 
-        Logger.info "got a valid session for meeting #{meetingID}, session #{sessionID}, username is '#{username}'"
+        Logger.info "got a valid session for meeting #{meetingID}, session #{sessionID}, userId is #{userID}, username is '#{username}'"
 
         # add socket to list of sockets
         @redisAction.getUserProperties meetingID, sessionID, (err, properties) =>
@@ -207,6 +216,46 @@ module.exports = class RedisWebsocketBridge
             messageID = rack() # get a randomly generated id for the message
             @redisStore.rpush RedisKeys.getMessagesString(meetingID, null, null), messageID #store the messageID in the list of messages
             @redisStore.hmset RedisKeys.getMessageString(meetingID, null, null, messageID), "message", msg, "username", username, "userID", properties.pubID
+
+  # When a user sends a private chat message
+  #
+  # @param socket [Object] the socket that generated the event
+  # @param msg [string] the message received
+  # @private
+  _socket_onPrivateChatMessage: (socket, privateChatMessageJson) ->
+    sessionID = fromSocket(socket, "sessionID")
+    meetingID = fromSocket(socket, "meetingID")
+    fromUsername = fromSocket(socket, "username")
+    fromUserID = fromSocket(socket, "pubID")
+    currentTime = new Date
+    headerMsg = 
+      destination:
+        to: "apps_channel"
+
+      name: "private_chat_message_event"
+      timestamp: currentTime
+      source: "bbb-apps"
+    fromUserJson =
+      id: fromUserID,
+      name: fromUsername
+
+    correlationID = fromUserID + "-" + privateChatMessageJson.payload.chat_message["message"]["text"]
+    privateChatMessageJson.header = headerMsg
+    privateChatMessageJson.payload.chat_message.from = fromUserJson
+    privateChatMessageJson.payload.chat_message.timestamp = currentTime
+    privateChatMessageJson.payload.chat_message.correlation_id = correlationID
+
+    @redisAction.isValidSession meetingID, sessionID, (err, reply) =>
+      if reply
+        if privateChatMessageJson.payload.chat_message.message.text.length > config.maxChatLength
+          @redisPublisher.publishChatMessageTooLong(meetingID, sessionID)
+        else
+          @redisAction.getUserProperties meetingID, sessionID, (err, properties) =>
+            @redisPublisher.publishPrivateChatMessage(meetingID, privateChatMessageJson)
+            #messageID = rack() 
+            #@redisStore.rpush RedisKeys.getMessagesString(meetingID, null, null), messageID #store the messageID in the list of messages
+            #@redisStore.hmset RedisKeys.getMessageString(meetingID, null, null, messageID), "message", msg, "username", username, "userID", properties.pubID
+
 
   # When a user logs out
   #

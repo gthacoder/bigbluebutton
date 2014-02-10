@@ -81,6 +81,7 @@ io.configure ->
           handshakeData.sessionID = sessionID
           handshakeData.username = properties.username
           handshakeData.meetingID = properties.meetingID
+          handshakeData.pubID = properties.pubID
           callback(null, true) # good authorization
 
 # Bridge used to interact between redis and socket clients

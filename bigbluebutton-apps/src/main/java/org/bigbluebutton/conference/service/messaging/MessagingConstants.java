@@ -36,4 +36,5 @@ public class MessagingConstants {
 	public static final String USER_STATUS_CHANGE_EVENT = "UserStatusChangeEvent";
 
 	public static final String BIGBLUEBUTTON_BRIDGE = "bigbluebutton:bridge";
+	public static final String BIGBLUEBUTTON_BRIDGE_PRIVATE = "bigbluebutton_bridge:privateMsg";
 }

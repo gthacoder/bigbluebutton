@@ -54,6 +54,9 @@ module.exports = class RedisAction
       #     @setPresenter meetingID, sessionID, publicID
 
       @createUser meetingID, sessionID, (err, reply) =>
+        console.log "meeting id is: " + meetingID
+        console.log "session id is: " + sessionID
+        console.log "userID is " + publicID
         failed or= err?
         @setIDs meetingID, sessionID, publicID, (err, reply) =>
           failed or= err?

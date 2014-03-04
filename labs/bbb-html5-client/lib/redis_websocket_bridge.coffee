@@ -53,14 +53,25 @@ module.exports = class RedisWebsocketBridge
   # @private
   _redis_registerListeners: ->
     @sub.on "pmessage", (pattern, channel, message) =>
-      attributes = JSON.parse(message)
+      #attributes = JSON.parse(message)
       Logger.info "message from redis on channel:#{channel}, data:#{message}"
       if channel is "bigbluebutton:bridge"
-        @_redis_onBigbluebuttonBridge(attributes)
+        @_redis_onBigbluebuttonBridge(JSON.parse(message))
 
       else if channel is "bigbluebutton:meeting:presentation"
-        @_redis_onBigbluebuttonMeetingPresentation(attributes)
+        @_redis_onBigbluebuttonMeetingPresentation(JSON.parse(message))
 
+      else if channel is "bigbluebutton_bridge:privateMsg"
+         privateMsg = JSON.parse(message)
+         Logger.info  privateMsg
+         Logger.info "get private message"+ privateMsg.payload.chat_message.to.id
+         Logger.info "get private message"+ privateMsg.payload.chat_message.meeting.id
+         privateReceiver = privateMsg.payload.chat_message.to.id
+         privateSender = privateMsg.payload.chat_message.from.id
+         if(config.clients[privateSender])
+            config.clients[privateSender].emit("privateMsg-sender",privateMsg)
+         if(config.clients[privateReceiver])
+            config.clients[privateReceiver].emit("privateMsg-receiver",privateMsg)
       else
         # value of pub channel is used as the name of the SocketIO room to send to
         # apply the parameters to the socket event, and emit it on the channels
@@ -126,6 +137,7 @@ module.exports = class RedisWebsocketBridge
     meetingID = fromSocket(socket, "meetingID")
     userID = fromSocket(socket, "pubID")
     config.clients[userID] = socket
+    Logger.info config.clients[userID]
     @redisAction.isValidSession meetingID, sessionID, (err, reply) =>
       if !reply
         Logger.error "got invalid session for meeting #{meetingID}, session #{sessionID}"
@@ -227,6 +239,7 @@ module.exports = class RedisWebsocketBridge
     meetingID = fromSocket(socket, "meetingID")
     fromUsername = fromSocket(socket, "username")
     fromUserID = fromSocket(socket, "pubID")
+
     currentTime = new Date
     headerMsg = 
       destination:
@@ -235,16 +248,22 @@ module.exports = class RedisWebsocketBridge
       name: "private_chat_message_event"
       timestamp: currentTime
       source: "bbb-apps"
+    
     fromUserJson =
       id: fromUserID,
       name: fromUsername
+    
+    meetingJson =
+        id:meetingID
+
 
     correlationID = fromUserID + "-" + privateChatMessageJson.payload.chat_message["message"]["text"]
     privateChatMessageJson.header = headerMsg
+    privateChatMessageJson.payload.chat_message.meeting = meetingJson
+    privateChatMessageJson.payload.chat_message.session = sessionID
     privateChatMessageJson.payload.chat_message.from = fromUserJson
     privateChatMessageJson.payload.chat_message.timestamp = currentTime
     privateChatMessageJson.payload.chat_message.correlation_id = correlationID
-
     @redisAction.isValidSession meetingID, sessionID, (err, reply) =>
       if reply
         if privateChatMessageJson.payload.chat_message.message.text.length > config.maxChatLength

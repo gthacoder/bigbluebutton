@@ -9,6 +9,8 @@ import org.bigbluebutton.conference.service.messaging.MessagingService;
 import redis.clients.jedis.Jedis;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 
 public class ChatBridge {
 	
@@ -21,9 +23,30 @@ public class ChatBridge {
 		updates.add(chat.fromUsername);
 		updates.add(chat.message);
 		updates.add(chat.fromUserID);
+		updates.add(chat.chatType);
+		updates.add(chat.toUsername);
+		updates.add(chat.toUserID);
 		Gson gson = new Gson();
 
 		messagingService.send(MessagingConstants.BIGBLUEBUTTON_BRIDGE, gson.toJson(updates));
+	}
+	
+	public void sendPrivateMsg(String meetingID, ChatMessageVO chat){
+		/*
+		ArrayList<Object> updates = new ArrayList<Object>();
+		updates.add(meetingID);
+		updates.add("privateMsg");
+		updates.add(chat.fromUsername);
+		updates.add(chat.message);
+		updates.add(chat.fromUserID);
+		updates.add(chat.chatType);
+		updates.add(chat.toUsername);
+		updates.add(chat.toUserID);
+		 */
+		//Gson gson = new Gson();		
+	//	messagingService.send(MessagingConstants.BIGBLUEBUTTON_BRIDGE,PrivateChatMessageEventJson.toString());
+		messagingService.send("bigbluebutton_bridge:privateMsg",chat.toJsonObj().toString());
+
 	}
 	
 	public MessagingService getMessagingService() {
@@ -41,8 +64,11 @@ public class ChatBridge {
 		long messageid = System.currentTimeMillis();
 		
 		map.put("message", chatobj.message);
-		map.put("username", chatobj.fromUsername);
-		map.put("userID", chatobj.fromUserID);
+		map.put("fromUsername", chatobj.fromUsername);
+		map.put("fromUserID", chatobj.fromUserID);
+		map.put("toUsername",chatobj.toUsername);
+		map.put("toUserID",chatobj.toUserID);
+		map.put("chatType",chatobj.chatType);
 		jedis.hmset("meeting-"+meetingID+"-message-"+messageid, map);
 		jedis.rpush("meeting-"+meetingID+"-messages", Long.toString(messageid));
 		

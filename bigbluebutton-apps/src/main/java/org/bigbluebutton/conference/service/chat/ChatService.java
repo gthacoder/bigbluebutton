@@ -20,7 +20,8 @@ package org.bigbluebutton.conference.service.chat;
 
 import java.util.Map;
 import org.slf4j.Logger;
-import org.red5.logging.Red5LoggerFactory;import org.red5.server.api.Red5;
+import org.red5.logging.Red5LoggerFactory;
+import org.red5.server.api.Red5;
 
 public class ChatService {
 	
@@ -63,19 +64,23 @@ public class ChatService {
 	}
 	
 	public void sendPrivateMessage(Map<String, Object> msg){
+		String meetingID = Red5.getConnectionLocal().getScope().getName();
 		ChatMessageVO chatObj = new ChatMessageVO();
-		chatObj.chatType = msg.get("chatType").toString();  
+		chatObj.chatType = msg.get("chatType").toString();
 		chatObj.fromUserID = msg.get("fromUserID").toString();
 		chatObj.fromUsername = msg.get("fromUsername").toString();
 		chatObj.fromColor = msg.get("fromColor").toString();
-		chatObj.fromTime = Double.valueOf(msg.get("fromTime").toString());   
-		chatObj.fromTimezoneOffset = Long.valueOf(msg.get("fromTimezoneOffset").toString()); 
-		chatObj.fromLang = msg.get("fromLang").toString(); 	  
+		chatObj.fromTime = Double.valueOf(msg.get("fromTime").toString());
+		chatObj.fromTimezoneOffset = Long.valueOf(msg.get("fromTimezoneOffset").toString());
+		chatObj.fromLang = msg.get("fromLang").toString();
 		chatObj.toUserID = msg.get("toUserID").toString();
 		chatObj.toUsername = msg.get("toUsername").toString();
 		chatObj.message = msg.get("message").toString();
+		chatObj.meetingID = meetingID;
 	
+		//chatBridge.storeMsg(meetingID,chatObj);
+		chatBridge.sendPrivateMsg(meetingID, chatObj);
 		application.sendPrivateMessage(chatObj);
-
+		
 	}
 }

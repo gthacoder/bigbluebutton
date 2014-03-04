@@ -30,6 +30,7 @@ import java.util.concurrent.Executors;
 import org.bigbluebutton.conference.User;
 import org.bigbluebutton.conference.service.chat.ChatApplication;
 import org.bigbluebutton.conference.service.chat.ChatMessageVO;
+import org.bigbluebutton.conference.service.chat.ChatPrivateMessage;
 import org.bigbluebutton.conference.service.participants.ParticipantsApplication;
 import org.bigbluebutton.conference.service.presentation.PresentationApplication;
 import org.red5.logging.Red5LoggerFactory;
@@ -39,6 +40,7 @@ import org.slf4j.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
@@ -46,6 +48,8 @@ import com.google.gson.reflect.TypeToken;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPubSub;
+
+
 
 public class RedisMessagingService implements MessagingService{
 
@@ -60,6 +64,7 @@ public class RedisMessagingService implements MessagingService{
 	private ParticipantsApplication participantsApplication;
 	private ChatApplication chatApplication;
 	private PresentationApplication presentationApplication;
+
 
 
 	@Override
@@ -91,8 +96,12 @@ public class RedisMessagingService implements MessagingService{
 	@Override
 	public void send(String channel, String message) {
 		Jedis jedis = redisPool.getResource();
+		log.warn(message);
+		log.warn(channel);
+		log.warn("redis message service");
 		try {
 			jedis.publish(channel, message);
+				
 		} catch(Exception e){
 			log.warn("Cannot publish the message to redis", e);
 		}finally{
@@ -144,8 +153,9 @@ public class RedisMessagingService implements MessagingService{
 		@Override
 		public void onPMessage(String pattern, String channel, String message) {
 			log.debug("Message Received in channel: " + channel);
+			log.debug("Message Received in channel: " + message);
+			log.debug("Message Received in channel:====================RedisMessagingService ");
 			Gson gson = new Gson();
-			
 			if(channel.equalsIgnoreCase(MessagingConstants.SYSTEM_CHANNEL)){
 				HashMap<String,String> map = gson.fromJson(message, new TypeToken<Map<String, String>>() {}.getType());
 				String meetingId = map.get("meetingId");
@@ -164,6 +174,39 @@ public class RedisMessagingService implements MessagingService{
 				for (MessageListener listener : listeners) {
 					listener.presentationUpdates(map);
 				}
+			}else if (channel.equalsIgnoreCase(MessagingConstants.BIGBLUEBUTTON_BRIDGE_PRIVATE)){
+				//JsonParser parser = new JsonParser();
+				//JsonArray array = parser.parse(message).getAsJsonArray();
+				//log.debug("====="+array.toString()+"++++++++++++++");
+				/*
+				 * 					chatObj.chatType = "PUBLIC"; 
+					chatObj.fromUserID = userid;
+					chatObj.fromUsername = username;
+					chatObj.fromColor = "0";
+					chatObj.fromTime = 0.0;   
+					chatObj.fromTimezoneOffset = (long)0;
+					chatObj.fromLang = "en"; 	 
+					chatObj.toUserID = "";
+					chatObj.toUsername = "";
+					chatObj.message = message_text;
+				 * */
+				log.debug("====="+message+"++++++++++++++");
+		        ChatPrivateMessage messageContent = new Gson().fromJson(message, ChatPrivateMessage.class);
+		        System.out.println(messageContent.getHeader().getSource());
+		        System.out.println(messageContent.getPayload().getChat_message().getFrom().getId());
+		        ChatMessageVO privateChatObj = new ChatMessageVO();
+		        privateChatObj.chatType="DIRECT";
+		        privateChatObj.fromUserID = messageContent.getPayload().getChat_message().getFrom().getId();
+		        privateChatObj.fromUsername =messageContent.getPayload().getChat_message().getFrom().getName();
+		        privateChatObj.meetingID = messageContent.getPayload().getChat_message().getMeeting().getId();
+		        privateChatObj.fromColor = "0";
+		        privateChatObj.fromTime = 0.0;   
+		        privateChatObj.fromTimezoneOffset = (long)0;
+		        privateChatObj.fromLang = "en"; 
+		        privateChatObj.toUserID=messageContent.getPayload().getChat_message().getTo().getId();
+		        privateChatObj.toUsername=messageContent.getPayload().getChat_message().getTo().getName();
+		        privateChatObj.message=messageContent.getPayload().getChat_message().getMessage().getText();
+				chatApplication.sendPrivateMessage(privateChatObj);
 			}
 			else if(channel.equalsIgnoreCase(MessagingConstants.BIGBLUEBUTTON_BRIDGE)){
 				JsonParser parser = new JsonParser();

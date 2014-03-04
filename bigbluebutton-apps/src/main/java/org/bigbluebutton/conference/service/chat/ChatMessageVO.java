@@ -20,6 +20,7 @@ package org.bigbluebutton.conference.service.chat;
 
 import java.util.HashMap;
 import java.util.Map;
+import com.google.gson.JsonObject;
 
 public class ChatMessageVO {
     // The type of chat (PUBLIC or PRIVATE)
@@ -43,6 +44,7 @@ public class ChatMessageVO {
     public String toUsername = "";
     
 	public String message;
+	public String meetingID;
 
 			
 	public Map<String, Object> toMap() {
@@ -60,5 +62,44 @@ public class ChatMessageVO {
 		msg.put("toUsername", toUsername);
 		
 		return msg;
+	}
+	
+	public JsonObject toJsonObj(){
+		JsonObject meeting = new JsonObject();
+		meeting.addProperty("id", meetingID);
+		JsonObject from = new JsonObject();
+		from.addProperty("id", fromUserID);
+		from.addProperty("name", fromUsername);
+		JsonObject to = new JsonObject();
+		to.addProperty("id", toUserID);
+		to.addProperty("name", toUsername);
+		JsonObject messageDetail = new JsonObject();
+		messageDetail.addProperty("text", message);
+		messageDetail.addProperty("lang", fromLang);
+		JsonObject font = new JsonObject();
+		font.addProperty("color", fromColor);
+		font.addProperty("size", 14);
+		font.addProperty("font_type", "Arial");
+		JsonObject chatMessage = new JsonObject();
+		chatMessage.add("to", to);
+		chatMessage.add("from", from);
+		chatMessage.add("meeting", meeting);
+		chatMessage.add("font", font);
+		chatMessage.add("message", messageDetail);
+		chatMessage.addProperty("correlation_id", "user1-msg1");
+		chatMessage.addProperty("timestamp", fromTime);
+		JsonObject payload = new JsonObject();
+		payload.add("chat_message", chatMessage);
+		JsonObject destination = new JsonObject();
+		destination.addProperty( "to", "apps_channel");
+		JsonObject header = new JsonObject();
+		header.add( "destination", destination);
+		header.addProperty("name", chatType);
+		header.addProperty("source", "bbb-apps");
+		header.addProperty("timestamp", fromTime);
+		JsonObject PrivateChatMessageEventJson   = new JsonObject();
+		PrivateChatMessageEventJson.add("header", header);
+		PrivateChatMessageEventJson.add("payload", payload);
+		return PrivateChatMessageEventJson;
 	}
 }

@@ -26,7 +26,10 @@ define [
       "click #chat-general-btn":"_selectPublicChat"
       "click .chat-private-btn":"_selectPrivateChat"
       "click .sendPrivateChatMsg": "_sendPrivateMessage"
-
+      "keyup .keysupActivate" : "_privateInputKeyPressed"
+      "mouseenter  .chat-private-btn" : "_toggleDeleteSymbol"
+      "mouseleave  .chat-private-btn" : "_toggleDeleteSymbol"
+      "click #faIcon" : "_terminatePrivateChat"
 
     initialize: ->
       # save a few IDs for easier access
@@ -61,7 +64,7 @@ define [
         @_scrollToBottom()
 
       #Todo: display the private chat message to user
-
+      ###
       globals.events.on "chat:privateMsg", (message) =>
         fromUser = message.payload.chat_message.from.name
         messageText = message.payload.chat_message.message.text
@@ -69,6 +72,22 @@ define [
         console.log JSON.stringify(message)
         @_receivePrivateMessage(message)
         window.alert(fromUser + "   " + messageText)
+      ###
+      globals.events.on "chat:privateMsg-sender", (message) =>
+        fromUser = message.payload.chat_message.from.name
+        messageText = message.payload.chat_message.message.text
+        console.log message
+        console.log JSON.stringify(message)
+        @_receiveSelfPrivateMessage(message)
+
+      globals.events.on "chat:privateMsg-receiver", (message) =>
+        fromUser = message.payload.chat_message.from.name
+        messageText = message.payload.chat_message.message.text
+        console.log message
+        console.log JSON.stringify(message)
+        @_receivePrivateMessage(message)
+
+
 
       globals.events.on "chat:all_messages", (messages) =>
         unless messages == null
@@ -109,6 +128,18 @@ define [
       compiledTemplate = _.template(chatMessageTemplate, data)
       @$(@publicBoxID).append compiledTemplate
 
+    # terminate private chat 
+    _terminatePrivateChat:(e)->
+      $target = $(e.target)
+      userId = $target.attr("data-userid")
+      console.log "========="+ $target
+      e.stopPropagation()
+      $("#chat-input-message-wrapper-"+ userId).remove()
+      $("#chat-private-message-"+ userId).remove()
+      $("#chat-private-btn-"+ userId).remove()
+      $("#chat-general-btn").click()
+
+      
     # Add a private chat message to the screen and scroll the chat area to bottom
     _addPrivateChatMessage: (userinfo, message) ->
       data =
@@ -127,6 +158,21 @@ define [
         $("#chat-private-message-"+userinfo.userid).hide()
         $("#chat-private-btn-" + userinfo.userid).addClass("message-alert")
 
+    #show a remove symbol when hover
+    _addDeleteSymbol:(e)->
+      $target = $(e.target)
+      userId = $target.attr("data-userid") 
+      $("#chat-private-btn-"+ userId).append('<div id="faIcon" data-userid="userId" ><i class="fa fa-times"  style="color:red;margin-right:15px"></i></div>')
+
+    _toggleDeleteSymbol:(e)->
+      $target = $(e.target)
+      userId = $target.attr("data-userid") 
+      $("#chat-private-btn-"+ userId + " span").toggle()
+
+
+    _removeDeleteSymbol:->
+      $("#faIcon").remove()
+
     # Scrolls the chat area to bottom to show the last messages
     _scrollToBottom: ->
       $msgBox = @$(@publicBoxID)
@@ -136,6 +182,12 @@ define [
     _inputKeyPressed: (e) ->
       # Send message when the enter key is pressed
       @_sendMessage() if e.keyCode is 13
+
+    # A key was pressed in the private chat input box
+    _privateInputKeyPressed: (e) ->
+      # Send message when the enter key is pressed
+      $(".sendPrivateChatMsg").click() if e.keyCode is 13
+
 
     # Send a chat message
     _sendMessage: ->
@@ -153,10 +205,6 @@ define [
       toUsername = $target.attr("data-username")
       privateMsg = $("#private-chat-input-box-" + toUserId).val()
       console.log privateMsg
-      data =
-        username: "You"
-        message: privateMsg
-      
       privateChatMessageJson =
         payload:
           chat_message:
@@ -177,8 +225,8 @@ define [
         globals.connection.emitPrivateMsg privateChatMessageJson
       $("#private-chat-input-box-"+toUserId).val("")
       $("#private-chat-input-box-"+toUserId).focus()
-      compiledTemplate = _.template(chatMessageTemplate, data)
-      $("#chat-private-message-"+toUserId).append compiledTemplate
+      #compiledTemplate = _.template(chatMessageTemplate, data)
+      #$("#chat-private-message-"+toUserId).append compiledTemplate
 
 
     # Adds a user to the list of users in the chat, used to start private chats
@@ -221,6 +269,7 @@ define [
     # Selects the private chat
     _selectPublicChat: ->
       # set all private tabs and chat boxes as inactive
+
       @_inactivatePrivateChats()
 
       # set the public chat button and box as active
@@ -238,6 +287,7 @@ define [
     # @param e [event] the click event that generated this call
     _selectPrivateChat: (e) ->
       $target = $(e.target)
+      console.log "++++++++"+$target
       userid = $target.attr("data-userid")
       params =
         username: $target.attr("data-username")
@@ -302,6 +352,18 @@ define [
         userid: fromUserId
       messageText = message.payload.chat_message.message.text
       unless $("#chat-private-btn-#{fromUserId}").length >0
+        tab =_.template(privateChatTab, params)
+        $(@privateTabsIDs).prepend(tab)
+      @_addPrivateChatMessage(params,messageText)
+
+    _receiveSelfPrivateMessage:(message)->
+      fromUser = message.payload.chat_message.from.name
+      Id = message.payload.chat_message.to.id
+      params =
+        username: fromUser
+        userid: Id
+      messageText = message.payload.chat_message.message.text
+      unless $("#chat-private-btn-#{Id}").length >0
         tab =_.template(privateChatTab, params)
         $(@privateTabsIDs).prepend(tab)
       @_addPrivateChatMessage(params,messageText)

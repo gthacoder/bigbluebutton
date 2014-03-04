@@ -219,16 +219,32 @@ define [
       @socket.on "msg", (name, msg) =>
         console.log "socket on: msg"
         globals.events.trigger("connection:msg", name, msg)
-
+      
+      ###
       # Received event for a new private chat message
       # @param  {string} name name of user
       # @param  {string} msg  message to be displayed
-      @socket.on "privateMsg", (message) =>
+        @socket.on "privateMsg", (message) =>
         console.log "socket on: privateMsg"
         globals.events.trigger("connection:privateMsg", message)
+      ###
+      # Private message send back to sender
+      # @param  {string} name name of user
+      # @param  {string} msg  message to be displayed
+
+      @socket.on "privateMsg-sender", (message) =>
+        console.log "socket on: privateMsg send back to sender"
+        globals.events.trigger("connection:privateMsg-sender", message)
 
 
-        
+      # Private message send to receiver
+      # @param  {string} name name of user
+      # @param  {string} msg  message to be displayed
+      @socket.on "privateMsg-receiver", (message) =>
+        console.log "socket on: privateMsg send to receiver"
+        globals.events.trigger("connection:privateMsg-receiver", message)
+
+
 
       # Received event to update all the messages in the chat box
       # @param  {Array} messages Array of messages in public chat box
@@ -260,9 +276,7 @@ define [
     # @param  {string} privateMsg the message
     # @param  {string} toUsername the private message receiver name
     # @param  {string} toUserId the private message receiver id
-    emitPrivateMsg: (privateChatMessageJson) ->   
-      console.log "from connection.coffee 261"
-      console.log JSON.stringify(privateChatMessageJson)  
+    emitPrivateMsg: (privateChatMessageJson) ->
       @socket.emit "privateMsg", privateChatMessageJson
 
     # Emit the finish of a text shape

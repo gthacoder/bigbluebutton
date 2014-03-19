@@ -22,6 +22,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:mate="http://mate.asfusion.com/"	 
     creationComplete="init()" visible="false" mouseOver="setCursor(toolType)" mouseOut="removeCursor()" implements="org.bigbluebutton.common.IBbbCanvas">
+    <mate:Listener type="{WhiteboardButtonEvent.WHITEBOARD_BUTTON_PRESSED}" method="WhiteboardButtonPressed"/>
+
 	<mx:Script>
 		<![CDATA[		
             import com.asfusion.mate.events.Dispatcher;
@@ -70,6 +72,12 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
                 registerForMouseEvents();
 			}
             
+            public function WhiteboardButtonPressed(e:WhiteboardButtonEvent):void {
+                if(e.graphicType != "text") { // This check ensures that the currently selected tool's button is pressed twice, it does not remove the object
+					displayModel.doMouseDown(0, 0);
+				}
+			}
+
             public function queryForAnnotationHistory():void {
                 var dispatcher:Dispatcher = new Dispatcher();
                 dispatcher.dispatchEvent(new WhiteboardDrawEvent(WhiteboardDrawEvent.GET_ANNOTATION_HISTORY));

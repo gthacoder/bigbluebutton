@@ -60,6 +60,7 @@ define [
       params =
         "username": @$("#user-name").val()
         "meetingID": @$("#meeting-id").val()
+        "meetingName": @$("#meeting-id option:selected").text()
       @model.save params,
         success: (model, response, options) =>
           if @model.get("loginAccepted")

@@ -11,7 +11,7 @@
 	height:94vh;
 
 	h3 { 
-		background:#f7f7f7;  	
+	  background:#f7f7f7;  	
 	  font-size: 1em;
 	  line-height: 2em;
 	  font-weight: bold;
@@ -22,7 +22,6 @@
 	}
 
 }
-
 #chat-options-bar {
   width:100%;
   position:relative;
@@ -54,12 +53,13 @@
 	bottom:0;
 }
 
-#chat-user-list {
+#chat-user-list{
 	padding:5px;
 	li {
 		cursor: pointer;
 	}
 }
+
 
 .chat-message-wrapper {
 	margin-bottom: 10px;
@@ -75,6 +75,9 @@
 	font-weight:bold;
 	color:#333;
 }
+.chat-time {
+	float:right;
+}
 
 #chat-messages {
   clear: both;
@@ -87,10 +90,6 @@
 
 .chat-private-box{
   background: #D8E0E5;
-}
-
-.message-alert{
- background: #DBB84D;
 }
 
 .message-alert
@@ -124,4 +123,24 @@
 }
 .keysupActivate{
   
+}
+.chat-user-list-item:hover{
+	background:#80CCE6;
+}
+
+#chat-private-tabs{
+	
+}
+
+.activeChat{
+	position: relative;
+	float:right;
+}
+
+#active-chat-user-list li{
+	cursor: pointer;
+	z-index: 9;
+}
+#active-chat-user-list li:hover{
+	background:#80CCE6;
 }

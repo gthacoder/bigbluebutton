@@ -26,13 +26,18 @@ define [
       globals.events.on "connection:user_list_change", (users) =>
         globals.events.trigger("users:user_list_change", users)
 
+      
       globals.events.on "connection:load_users", (users) =>
+        
         for userBlock in users
-          @add [
-            id : userBlock.id
-            userid: userBlock.id
-            username: userBlock.name
-          ]
+          currentUser = globals.currentAuth.get("userID")
+          if currentUser isnt userBlock.id
+            @add [
+              id : userBlock.id
+              userid: userBlock.id
+              username: userBlock.name
+            ]
+
         globals.events.trigger("users:load_users", users)
 
       globals.events.on "connection:user_join", (userid, username) =>

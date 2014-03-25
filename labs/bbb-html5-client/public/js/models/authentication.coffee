@@ -8,6 +8,8 @@ define [
     defaults:
       username: null
       meetingID: null
+      meetingName:null
+      userID: null
       loginAccepted: false
 
   AuthenticationModel

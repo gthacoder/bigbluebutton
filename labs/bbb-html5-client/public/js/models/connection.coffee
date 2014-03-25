@@ -24,8 +24,6 @@ define [
       unless @socket?
         console.log "connecting to the server", @host
         @socket = io.connect(@host)
-        console.log @socket.handshake
-        console.log "line 28"
         @_registerEvents()
       else
         console.log "tried to connect but it's already connected"
@@ -43,6 +41,10 @@ define [
         console.log "socket on: connect"
         globals.events.trigger("connection:connected")
         @socket.emit "user connect" # tell the server we have a new user
+
+      @socket.on "chat_room",(data)=>     
+        globals.currentAuth.set("userID" , data.userid)
+
 
       # Received event to logout yourself
       @socket.on "logout", ->
@@ -89,7 +91,6 @@ define [
       # @param  {Array} shapes Array of shapes to be drawn
       @socket.on "all_shapes", (shapes) =>
         console.log "socket on: all_shapes"
-        console.log shapes
         globals.events.trigger("connection:all_shapes", shapes)
 
       # Received event to update a shape being created

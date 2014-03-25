@@ -63,9 +63,6 @@ module.exports = class RedisWebsocketBridge
 
       else if channel is "bigbluebutton_bridge:privateMsg"
          privateMsg = JSON.parse(message)
-         Logger.info  privateMsg
-         Logger.info "get private message"+ privateMsg.payload.chat_message.to.id
-         Logger.info "get private message"+ privateMsg.payload.chat_message.meeting.id
          privateReceiver = privateMsg.payload.chat_message.to.id
          privateSender = privateMsg.payload.chat_message.from.id
          if(config.clients[privateSender])
@@ -137,7 +134,8 @@ module.exports = class RedisWebsocketBridge
     meetingID = fromSocket(socket, "meetingID")
     userID = fromSocket(socket, "pubID")
     config.clients[userID] = socket
-    Logger.info config.clients[userID]
+    #config.clients[sessionID] = socket
+    Logger.info config.clients[sessionID]
     @redisAction.isValidSession meetingID, sessionID, (err, reply) =>
       if !reply
         Logger.error "got invalid session for meeting #{meetingID}, session #{sessionID}"
@@ -146,6 +144,13 @@ module.exports = class RedisWebsocketBridge
         socket.join userID  # join the socket room with value of the userID
         socket.join meetingID # join the socket room with value of the meetingID
         socket.join sessionID # join the socket room with value of the sessionID
+        data =
+          userid : userID
+          meetingid : meetingID
+          sessionid : sessionID
+
+        socket.emit('chat_room', data)
+
 
         Logger.info "got a valid session for meeting #{meetingID}, session #{sessionID}, userId is #{userID}, username is '#{username}'"
 

@@ -45,7 +45,10 @@ define [
       globals.events.on "users:load_users", (users) =>
         @_removeAllUsers()
         for userBlock in users
-          @_addUser(userBlock.id, userBlock.name)
+          if globals.currentAuth.get("userID") isnt userBlock.id
+            @_addUser(userBlock.id, userBlock.name)
+          else
+            @_addUser(userBlock.id, userBlock.name+" (you)")
 
       globals.events.on "users:user_join", (userid, username) =>
         @_addUser(userid, username)

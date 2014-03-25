@@ -32,6 +32,7 @@ define [
     globals.router.showLogin()
     Backbone.history.start({silent: true})
 
+
   return {
     initialize: initialize
   }

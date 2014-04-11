@@ -11,9 +11,10 @@ define [
   'text!templates/private_chat_message.html',
   'text!templates/chat_private_tab.html',
   'text!templates/chat_private_box.html',
-  'text!templates/chat_private_input_wrapper.html'
+  'text!templates/chat_private_input_wrapper.html',
+  'i18n!nls/messagestring'
 ], ($, _, Backbone, globals,ChatModel,sessionChatTemplate, chatUserListItem,chatActiveList,
-  chatMessageTemplate, privateChatMessage, privateChatTab, privateChatBox,privateChatInputWrapper) ->
+  chatMessageTemplate, privateChatMessage, privateChatTab, privateChatBox,privateChatInputWrapper,messagestring) ->
 
   # The chat panel in a session
   # The contents are rendered by SessionView, this class is Used to
@@ -41,8 +42,6 @@ define [
       @privateTabsIDs = "#chat-private-tabs"
       @messageBoxesContainerID = "#chat-messages"
       @privateBoxID = "#chat-private-box"
-
-
       @model.start()
 
       # Bind to the event triggered when the client connects to the server
@@ -56,7 +55,13 @@ define [
           @_addWelcomeMessage()
 
     render: ->
-      compiledTemplate = _.template(sessionChatTemplate)
+      data =
+        General:messagestring.General
+        Chat:messagestring.Chat
+        Options:messagestring.Options
+        Post: messagestring.Post,
+        publicPlaceholder: messagestring.publicPlaceholder
+      compiledTemplate = _.template(sessionChatTemplate,data)
       @$el.html compiledTemplate
 
 
@@ -142,6 +147,7 @@ define [
         username: userinfo.username
         userid: userinfo.userid
         time: userinfo.time
+        Private: messagestring.Private
       compiledTemplate = _.template(privateChatMessage, data)
       if $("#chat-private-message-"+userinfo.userid).length > 0        
          $("#chat-private-message-"+userinfo.userid).append compiledTemplate
@@ -256,6 +262,7 @@ define [
         params =
           username: $target.attr("data-username")
           userid: userid
+          Private: messagestring.Private
 
         # add a new tab and chat box for the private chat, only if needed
         console.log $("#chat-private-tabs div").length
@@ -313,7 +320,9 @@ define [
       userid = $target.attr("data-userid")
       params =
         username: $target.attr("data-username")
-        userid: userid
+        userid: userid,
+        Post: messagestring.Post,
+        privateplaceholder: messagestring.privateplaceholder
       
       $("[id^='chat-input-message-wrapper-']").hide()
       #$("#chat-private-message-#{userid}").hide()

@@ -2,9 +2,9 @@
 
 <img id="bbb-logo" height="50px" alt="" src="images/bbb_logo.png">
   <p id="bbb-title" >BigBlueButton</p>
-  <h1>HTML5 Client</h1>
+  <h1>HTML5 <%= Client %></h1>
   <p id="welcomeMsg">
-    Please type a username and meeting ID below and click Sign in to start your BigBlueButton session.
+    <%= welcomeMsg %>
   </p>
 
   <form id="login-form">
@@ -16,7 +16,6 @@
         </option>
       <% }); %>
     </select>
-    <input id="login-button" type="submit" class="submit_btn" value="Join"/>
+    <input id="login-button" type="submit" class="submit_btn" value="<%= Join %>"/>
   </form>
-
 </div>

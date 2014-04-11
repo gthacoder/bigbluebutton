@@ -5,8 +5,9 @@ define [
   'globals',
   'cs!collections/users',
   'text!templates/session_users.html',
-  'text!templates/user.html'
-], ($, _, Backbone, globals, UserCollection, sessionUsersTemplate, userTemplate) ->
+  'text!templates/user.html',
+  'i18n!nls/messagestring'
+], ($, _, Backbone, globals, UserCollection, sessionUsersTemplate, userTemplate,messagestring) ->
 
   # The users panel in a session
   # The contents are rendered by SessionView, this class is Used to
@@ -30,7 +31,7 @@ define [
           @_registerEvents()
 
     render: ->
-      compiledTemplate = _.template(sessionUsersTemplate)
+      compiledTemplate = _.template(sessionUsersTemplate,{userlist: messagestring.userlist})
       @$el.html compiledTemplate
 
     # Registers listeners for events in the event bus.
@@ -48,7 +49,7 @@ define [
           if globals.currentAuth.get("userID") isnt userBlock.id
             @_addUser(userBlock.id, userBlock.name)
           else
-            @_addUser(userBlock.id, userBlock.name+" (you)")
+            @_addUser(userBlock.id, userBlock.name+" (" + messagestring.you + ")")
 
       globals.events.on "users:user_join", (userid, username) =>
         @_addUser(userid, username)

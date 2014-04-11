@@ -7,7 +7,8 @@ define [
   'cs!collections/meetings',
   'text!templates/login.html',
   'text!templates/login_loading.html',
-], ($, _, Backbone, globals, AuthenticationModel, MeetingsCollection, loginTemplate, loginLoadingTemplate) ->
+  'i18n!nls/messagestring'
+], ($, _, Backbone, globals, AuthenticationModel, MeetingsCollection, loginTemplate, loginLoadingTemplate,messagestring) ->
 
   LoginView = Backbone.View.extend
     id: 'login-view'
@@ -36,7 +37,11 @@ define [
         collection = new MeetingsCollection()
         collection.fetch()
 
-      data = { meetings: collection.models }
+      data =
+        meetings: collection.models
+        Client: messagestring.Client
+        welcomeMsg: messagestring.welcomeMsg
+        Join: messagestring.Join
       compiledTemplate = _.template(loginTemplate, data)
       @$el.html compiledTemplate
 

@@ -10,8 +10,28 @@ requirejs.config({
     },
     'underscore': {
       exports: "_"
+    },
+    'i18n': {
+      exports: "i18n"
     }
   },
+  i18n: {
+      //locale: navigator.language || 'en-us'
+      locale: function(){
+          var ca = document.cookie.split(';');
+          var cookieToFind = "language=";
+          for(var i=0; i<ca.length; i++)
+          {
+              var c = ca[i].trim();
+              if (c.indexOf(cookieToFind)==0){
+                  return c.substring(cookieToFind.length,c.length);
+              }
+
+          }
+          return 'en-us'
+      }()
+  },
+
   paths: {
     // jQuery is being loaded in the html before this because it is necessary
     // in production (see build.js). It's kept here so the scripts can require
@@ -38,6 +58,8 @@ requirejs.config({
     'cs': 'lib/require/cs',
     'text': 'lib/require/text',
     'templates': '../templates',
+    'i18n': 'lib/i18n',
+    'nls': 'nls'
   }
 });
 

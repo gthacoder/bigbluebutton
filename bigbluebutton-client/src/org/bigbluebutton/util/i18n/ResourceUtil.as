@@ -1,21 +1,21 @@
 /**
-* BigBlueButton open source conferencing system - http://www.bigbluebutton.org/
-* 
-* Copyright (c) 2012 BigBlueButton Inc. and by respective authors (see below).
-*
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License as published by the Free Software
-* Foundation; either version 3.0 of the License, or (at your option) any later
-* version.
-* 
-* BigBlueButton is distributed in the hope that it will be useful, but WITHOUT ANY
-* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-* PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public License along
-* with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
-*
-*/
+ * BigBlueButton open source conferencing system - http://www.bigbluebutton.org/
+ * 
+ * Copyright (c) 2012 BigBlueButton Inc. and by respective authors (see below).
+ *
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free Software
+ * Foundation; either version 3.0 of the License, or (at your option) any later
+ * version.
+ * 
+ * BigBlueButton is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along
+ * with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package org.bigbluebutton.util.i18n
 {
 	import com.adobe.utils.StringUtil;
@@ -28,6 +28,7 @@ package org.bigbluebutton.util.i18n
 	import flash.external.ExternalInterface;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.system.Capabilities;
 	import flash.utils.Dictionary;
 	
 	import mx.controls.Alert;
@@ -42,12 +43,11 @@ package org.bigbluebutton.util.i18n
 	import org.bigbluebutton.common.LogUtil;
 	import org.bigbluebutton.common.events.LocaleChangeEvent;
 	import org.bigbluebutton.main.events.AppVersionEvent;
-
+	
 	public class ResourceUtil extends EventDispatcher {
 		private static var instance:ResourceUtil = null;
-		public static const LOCALES_FILE:String = "client/conf/locales.xml";
 		public static const VERSION:String = "0.8";
-    
+		
 		private var inited:Boolean = false;
 		
 		private static var BBB_RESOURCE_BUNDLE:String = 'bbbResources';
@@ -80,22 +80,28 @@ package org.bigbluebutton.util.i18n
 			
 			var _urlLoader:URLLoader = new URLLoader();     
 			_urlLoader.addEventListener(Event.COMPLETE, handleComplete);
-      
-      var localeReqURL:String = buildRequestURL() + LOCALES_FILE + "?a=" + date.time;
-      LogUtil.debug("Loading " + localeReqURL);
+			
+			var localeReqURL:String = buildRequestURL() + "conf/locales.xml" + "?a=" + date.time;
+			LogUtil.debug("Loading " + localeReqURL);
 			_urlLoader.load(new URLRequest(localeReqURL));
 		}
 		
-    private function buildRequestURL():String {
-      var swfURL:String = FlexGlobals.topLevelApplication.url;
-      var protocol:String = URLUtil.getProtocol(swfURL);
-      var serverName:String = URLUtil.getServerNameWithPort(swfURL);        
-      return protocol + "://" + serverName + "/";
-    }
-    
+		private function buildRequestURL():String {
+			var swfURL:String = FlexGlobals.topLevelApplication.url;
+			
+			if (Capabilities.isDebugger) {
+				return swfURL.substr(0, swfURL.lastIndexOf("BigBlueButton.swf"));
+			} else {
+				var protocol:String = URLUtil.getProtocol(swfURL);
+				var serverName:String = URLUtil.getServerNameWithPort(swfURL);
+				return protocol + "://" + serverName + "/client/";
+			}
+			
+		}
+		
 		private function handleComplete(e:Event):void{
 			parse(new XML(e.target.data));		
-									
+			
 			preferredLocale = getDefaultLocale();
 			if (preferredLocale != MASTER_LOCALE) {
 				loadMasterLocale(MASTER_LOCALE);
@@ -107,7 +113,7 @@ package org.bigbluebutton.util.i18n
 			var list:XMLList = xml.locale;
 			LogUtil.debug("--- Supported locales --- \n" + xml.toString() + "\n --- \n");
 			var locale:XML;
-						
+			
 			for each(locale in list){
 				localeCodes.push(locale.@code);
 				localeNames.push(locale.@name);
@@ -165,7 +171,7 @@ package org.bigbluebutton.util.i18n
 			// Add a random string on the query so that we don't get a cached version.
 			
 			var date:Date = new Date();
-			var localeURI:String = buildRequestURL() + 'client/locale/' + language + '_resources.swf?a=' + date.time;
+			var localeURI:String = buildRequestURL() + 'locale/' + language + '_resources.swf?a=' + date.time;
 			LogUtil.debug("Loading locale at [ " + localeURI + " ]");
 			return resourceManager.loadResourceModule( localeURI, false);
 		}		
@@ -176,8 +182,8 @@ package org.bigbluebutton.util.i18n
 				instance = new ResourceUtil(new SingletonEnforcer);
 			} 
 			return instance;
-        }
-        
+		}
+		
 		public function changeLocale(locale:String):void{        	
 			eventDispatcher = loadResource(locale);
 			eventDispatcher.addEventListener(ResourceEvent.COMPLETE, localeChangeComplete);
@@ -245,7 +251,7 @@ package org.bigbluebutton.util.i18n
 		public function getCurrentLanguageCode():String{
 			return preferredLocale;
 		}
-				
+		
 		public function getLocaleCodeForIndex(index:int):String {
 			return localeCodes[index];
 		}

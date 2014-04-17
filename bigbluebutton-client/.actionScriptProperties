@@ -1,12 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties analytics="false" mainApplicationPath="DeskshareStandalone.mxml" projectUUID="46ab2f52-8f0c-49e5-974f-da039e9919f4" version="10">
-  <compiler additionalCompilerArguments="-locale en_US" autoRSLOrdering="true" copyDependentFiles="true" flex3CompatMode="true" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="11.2.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
-    <compilerSourcePath/>
+<actionScriptProperties analytics="false" mainApplicationPath="BigBlueButton.mxml" projectUUID="46ab2f52-8f0c-49e5-974f-da039e9919f4" version="10">
+  <compiler additionalCompilerArguments="-locale en_US&#13;&#10;-theme=${flexlib}/themes/Halo/halo.swc&#13;&#10;-swf-version=13" autoRSLOrdering="true" copyDependentFiles="true" flex3CompatMode="true" flexSDK="Flex 4.5" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="11.2.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+    <compilerSourcePath>
+      <compilerSourcePathEntry kind="1" linkType="1" path="resources/prod"/>
+    </compilerSourcePath>
     <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">
         <excludedEntries>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/flex.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry applicationDomain="default" forceLoad="false" index="4" kind="3" linkType="4" path="${PROJECT_FRAMEWORKS}/libs/sparkskins.swc" useDefaultLinkType="true">
+            <crossDomainRsls>
+              <crossDomainRslEntry autoExtract="true" policyFileUrl="http://fpdownload.adobe.com/pub/swz/crossdomain.xml" rslUrl="http://fpdownload.adobe.com/pub/swz/flex/4.6.0.23201/sparkskins_4.6.0.23201.swz"/>
+              <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="sparkskins_4.6.0.23201.swz"/>
+            </crossDomainRsls>
+          </libraryPathEntry>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/core.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry applicationDomain="default" forceLoad="false" index="7" kind="3" linkType="4" path="${PROJECT_FRAMEWORKS}/libs/spark_dmv.swc" useDefaultLinkType="true">
+            <crossDomainRsls>
+              <crossDomainRslEntry autoExtract="true" policyFileUrl="http://fpdownload.adobe.com/pub/swz/crossdomain.xml" rslUrl="http://fpdownload.adobe.com/pub/swz/flex/4.6.0.23201/spark_dmv_4.6.0.23201.swz"/>
+              <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="spark_dmv_4.6.0.23201.swz"/>
+            </crossDomainRsls>
+          </libraryPathEntry>
+          <libraryPathEntry applicationDomain="default" forceLoad="false" index="3" kind="3" linkType="4" path="${PROJECT_FRAMEWORKS}/libs/spark.swc" useDefaultLinkType="true">
+            <crossDomainRsls>
+              <crossDomainRslEntry autoExtract="true" policyFileUrl="http://fpdownload.adobe.com/pub/swz/crossdomain.xml" rslUrl="http://fpdownload.adobe.com/pub/swz/flex/4.6.0.23201/spark_4.6.0.23201.swz"/>
+              <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="spark_4.6.0.23201.swz"/>
+            </crossDomainRsls>
+          </libraryPathEntry>
         </excludedEntries>
       </libraryPathEntry>
       <libraryPathEntry kind="1" linkType="1" path="libs"/>
@@ -17,7 +37,18 @@
     <application path="BigBlueButton.mxml"/>
     <application path="DeskshareStandalone.mxml"/>
   </applications>
-  <modules/>
+  <modules>
+    <module application="src/BigBlueButton.mxml" destPath="ChatModule.swf" optimize="true" sourcePath="src/ChatModule.mxml"/>
+    <module application="src/BigBlueButton.mxml" destPath="LayoutModule.swf" optimize="true" sourcePath="src/LayoutModule.mxml"/>
+    <module application="src/BigBlueButton.mxml" destPath="DeskShareModule.swf" optimize="true" sourcePath="src/DeskShareModule.mxml"/>
+    <module application="src/BigBlueButton.mxml" destPath="PhoneModule.swf" optimize="true" sourcePath="src/PhoneModule.mxml"/>
+    <module application="src/BigBlueButton.mxml" destPath="PresentModule.swf" optimize="true" sourcePath="src/PresentModule.mxml"/>
+    <module application="src/BigBlueButton.mxml" destPath="PollingModule.swf" optimize="true" sourcePath="src/PollingModule.mxml"/>
+    <module application="src/BigBlueButton.mxml" destPath="VideoconfModule.swf" optimize="true" sourcePath="src/VideoconfModule.mxml"/>
+    <module application="src/BigBlueButton.mxml" destPath="UsersModule.swf" optimize="true" sourcePath="src/UsersModule.mxml"/>
+    <module application="src/BigBlueButton.mxml" destPath="WhiteboardModule.swf" optimize="true" sourcePath="src/WhiteboardModule.mxml"/>
+    <module application="src/BigBlueButton.mxml" destPath="VideodockModule.swf" optimize="true" sourcePath="src/VideodockModule.mxml"/>
+  </modules>
   <buildCSSFiles/>
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
 </actionScriptProperties>

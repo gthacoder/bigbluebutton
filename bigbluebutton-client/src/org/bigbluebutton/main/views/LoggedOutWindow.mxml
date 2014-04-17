@@ -28,6 +28,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		<![CDATA[
       import mx.core.FlexGlobals;
       import mx.managers.PopUpManager;
+      
       import org.bigbluebutton.common.LogUtil;
       import org.bigbluebutton.core.BBB;
       import org.bigbluebutton.main.model.users.events.ConnectionFailedEvent;
@@ -45,12 +46,14 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
       private function redirect():void { 
        	var pageHost:String = FlexGlobals.topLevelApplication.url.split("/")[0];
        	var pageURL:String = FlexGlobals.topLevelApplication.url.split("/")[2];
-       	var request:URLRequest = new URLRequest(pageHost + "//" + pageURL + "/bigbluebutton/api/signOut");
-				LogUtil.debug("Log out url: " + pageHost + "//" + pageURL + "/bigbluebutton/api/signOut");
-				request.method = URLRequestMethod.GET;
-				urlLoader = new URLLoader();
-				urlLoader.addEventListener(Event.COMPLETE, handleComplete);	
-				urlLoader.load(request);
+		if (!Capabilities.isDebugger) {
+	       	var request:URLRequest = new URLRequest(pageHost + "//" + pageURL + "/bigbluebutton/api/signOut");
+					LogUtil.debug("Log out url: " + pageHost + "//" + pageURL + "/bigbluebutton/api/signOut");
+					request.method = URLRequestMethod.GET;
+					urlLoader = new URLLoader();
+					urlLoader.addEventListener(Event.COMPLETE, handleComplete);	
+					urlLoader.load(request);
+		}
       }
       
       public function getLogoutUrl():String {

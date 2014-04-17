@@ -1,21 +1,21 @@
 /**
-* BigBlueButton open source conferencing system - http://www.bigbluebutton.org/
-* 
-* Copyright (c) 2012 BigBlueButton Inc. and by respective authors (see below).
-*
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License as published by the Free Software
-* Foundation; either version 3.0 of the License, or (at your option) any later
-* version.
-* 
-* BigBlueButton is distributed in the hope that it will be useful, but WITHOUT ANY
-* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-* PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public License along
-* with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
-*
-*/
+ * BigBlueButton open source conferencing system - http://www.bigbluebutton.org/
+ * 
+ * Copyright (c) 2012 BigBlueButton Inc. and by respective authors (see below).
+ *
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free Software
+ * Foundation; either version 3.0 of the License, or (at your option) any later
+ * version.
+ * 
+ * BigBlueButton is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along
+ * with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package org.bigbluebutton.main.model
 {
 	import com.asfusion.mate.events.Dispatcher;
@@ -24,6 +24,7 @@ package org.bigbluebutton.main.model
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.system.ApplicationDomain;
+	import flash.system.Capabilities;
 	import flash.utils.Dictionary;
 	
 	import mx.core.Application;
@@ -33,9 +34,10 @@ package org.bigbluebutton.main.model
 	
 	import org.bigbluebutton.common.LogUtil;
 	import org.bigbluebutton.main.model.modules.ModuleDescriptor;
-
+	
 	public class ConfigParameters {
-    public static const CONFIG_XML:String = "bigbluebutton/api/configXML";
+		public static const CONFIG_XML:String = "/bigbluebutton/api/configXML";
+		private static const CONFIG_XML_DEV:String = "conf/config.xml";
 		
 		private var _urlLoader:URLLoader;
 		
@@ -67,19 +69,24 @@ package org.bigbluebutton.main.model
 			_urlLoader = new URLLoader();
 			_urlLoader.addEventListener(Event.COMPLETE, handleComplete);
 			var date:Date = new Date();
-      var localeReqURL:String = buildRequestURL() + "?a=" + date.time;
-      
-      trace("ConfigParameters:: [" + localeReqURL + "]");
-      _urlLoader.load(new URLRequest(localeReqURL));
+			var localeReqURL:String = buildRequestURL() + "?a=" + date.time;
+			
+			trace("ConfigParameters:: [" + localeReqURL + "]");
+			_urlLoader.load(new URLRequest(localeReqURL));
 		}
 		
-    private function buildRequestURL():String {
-      var swfURL:String = FlexGlobals.topLevelApplication.url;
-      var protocol:String = URLUtil.getProtocol(swfURL);
-      var serverName:String = URLUtil.getServerNameWithPort(swfURL);        
-      return protocol + "://" + serverName + "/" + CONFIG_XML;
-    }
-    
+		private function buildRequestURL():String {
+			var swfURL:String = FlexGlobals.topLevelApplication.url;
+			
+			if (Capabilities.isDebugger) {
+				return swfURL.substr(0, swfURL.lastIndexOf("BigBlueButton.swf")) + CONFIG_XML_DEV;
+			} else {
+				var protocol:String = URLUtil.getProtocol(swfURL);
+				var serverName:String = URLUtil.getServerNameWithPort(swfURL);
+				return protocol + "://" + serverName + CONFIG_XML;
+			}
+		}
+		
 		private function handleComplete(e:Event):void{
 			parse(new XML(e.target.data));	
 			buildModuleDescriptors();
@@ -87,7 +94,7 @@ package org.bigbluebutton.main.model
 		}
 		
 		private function parse(xml:XML):void{
-      trace("ConfigParameters:: parse [" + xml + "]");
+			trace("ConfigParameters:: parse [" + xml + "]");
 			rawXML = xml;
 			
 			portTestHost = xml.porttest.@host;
@@ -109,7 +116,7 @@ package org.bigbluebutton.main.model
 			else shortcutKeysShowButton = false;
 			
 			if (xml.skinning.@enabled == "true") skinning = xml.skinning.@url;
-
+			
 			if (xml.debug.@showDebugWindow == "true") showDebug = true;
 		}
 		

@@ -86,7 +86,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
       private function setupAPI():void {
         langResources = ResourceUtil.getInstance();
         api = new ExternalApiCallbacks();
-        Security.allowDomain(determineHTMLURL());
+        //Security.allowDomain(determineHTMLURL());
+		Security.allowDomain("webrtc.blindsidenetworks.com");
         LogUtil.debug("Security.allowDomain(" + determineHTMLURL() + ");");
       }
       

@@ -25,6 +25,7 @@ package org.bigbluebutton.core.managers
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
+	import flash.system.Capabilities;
 	
 	import mx.core.FlexGlobals;
 	import mx.utils.URLUtil;
@@ -35,43 +36,48 @@ package org.bigbluebutton.core.managers
 	import org.bigbluebutton.main.events.MeetingNotFoundEvent;
 	
 	public class ConfigManager2 extends EventDispatcher {
-    private static const LOG:String = "Main::ConfigManager2 - ";
-    
-    public static const CONFIG_XML:String = "bigbluebutton/api/configXML";
-    
+		private static const LOG:String = "Main::ConfigManager2 - ";
+		
+		private static const CONFIG_XML:String = "/bigbluebutton/api/configXML";
+		private static const CONFIG_XML_DEV:String = "conf/config.xml";
 		private var _config:Config = null;
-				
+		
 		public function loadConfig():void {
 			var urlLoader:URLLoader = new URLLoader();
 			urlLoader.addEventListener(Event.COMPLETE, handleComplete);
 			var date:Date = new Date();
-      var localeReqURL:String = buildRequestURL() + "?a=" + date.time;
-      trace(LOG + "::loadConfig [" + localeReqURL + "]");
+			var localeReqURL:String = buildRequestURL() + "?a=" + date.time;
+			trace(LOG + "::loadConfig [" + localeReqURL + "]");
 			urlLoader.load(new URLRequest(localeReqURL));			
 		}		
 		
-    private function buildRequestURL():String {
-      var swfURL:String = FlexGlobals.topLevelApplication.url;
-      var protocol:String = URLUtil.getProtocol(swfURL);
-      var serverName:String = URLUtil.getServerNameWithPort(swfURL);        
-      return protocol + "://" + serverName + "/" + CONFIG_XML;
-    }
-    
+		private function buildRequestURL():String {
+			var swfURL:String = FlexGlobals.topLevelApplication.url;
+
+			if (Capabilities.isDebugger) {
+				return swfURL.substr(0, swfURL.lastIndexOf("BigBlueButton.swf")) + CONFIG_XML_DEV;
+			} else {
+				var protocol:String = URLUtil.getProtocol(swfURL);
+				var serverName:String = URLUtil.getServerNameWithPort(swfURL);
+				return protocol + "://" + serverName + CONFIG_XML;
+			}
+		}
+			
 		private function handleComplete(e:Event):void{
-      trace(LOG + "handleComplete [" + new XML(e.target.data) + "]");
-      
-      var xml:XML = new XML(e.target.data)
-      
-      if (xml.returncode == "FAILED") {
-        
-        trace(LOG + "Getting configXML failed [" + xml + "]");        
-        var dispatcher:Dispatcher = new Dispatcher();
-        dispatcher.dispatchEvent(new MeetingNotFoundEvent(xml.response.logoutURL));
-      } else { 
-        trace(LOG + "Getting configXML passed [" + xml + "]");
-			  _config = new Config(new XML(e.target.data));
-			  EventBroadcaster.getInstance().dispatchEvent(new Event("configLoadedEvent", true));	
-      }
+			trace(LOG + "handleComplete [" + new XML(e.target.data) + "]");
+			
+			var xml:XML = new XML(e.target.data)
+			
+			if (xml.returncode == "FAILED") {
+				
+				trace(LOG + "Getting configXML failed [" + xml + "]");        
+				var dispatcher:Dispatcher = new Dispatcher();
+				dispatcher.dispatchEvent(new MeetingNotFoundEvent(xml.response.logoutURL));
+			} else { 
+				trace(LOG + "Getting configXML passed [" + xml + "]");
+				_config = new Config(new XML(e.target.data));
+				EventBroadcaster.getInstance().dispatchEvent(new Event("configLoadedEvent", true));	
+			}
 		}
 		
 		public function get config():Config {

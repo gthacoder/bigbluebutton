@@ -24,3 +24,5 @@ Meteor.methods
         Meteor.Presentations.remove(id._id)
         console.log "----removed presentation[" + presentationId + "] from " + meetingId
 
+  sendChangePresenterMessageToServer: (messageObject) ->
+    Meteor.call "publishChangePresentorMessage", messageObject

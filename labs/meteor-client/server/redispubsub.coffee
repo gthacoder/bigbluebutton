@@ -30,6 +30,9 @@ Meteor.methods
 
   publishChatMessage: (meetingId, messageObject) ->
     Meteor.redisPubSub.publishingChatMessage(meetingId, messageObject)
+    
+  publishChangePresentorMessage: (messageObject) ->
+    Meteor.redisPubSub.publishingChangePresenterMessage(messageObject)
 
   publishMuteRequest: (meetingId, userId, requesterId, mutedBoolean) =>
     console.log "publishing a user mute #{mutedBoolean} request for #{userId}"
@@ -377,6 +380,53 @@ class Meteor.RedisPubSub
     console.log "publishing:" + JSON.stringify (message)
     @pubClient.publish(Meteor.config.redis.channels.toBBBApps.chat, JSON.stringify (message))
 
+  publishingChangePresenterMessage: (data) =>
+    makeAttendeeMessage =
+      payload:
+        "status": "presenter"
+        "value": "false"
+        "userid": data.old_presenter_id
+        "meeting_id": data.current_meeting_id
+      header:
+        "timestamp": data.time # supposed to be something else
+        "name": "user_status_changed_message"
+        "current_time": data.time
+        "version": "0.0.1"
+        
+    assignPresenterMessage =
+      payload:
+        "new_presenter_id": data.new_presenter_id
+        "recorded": false
+        "new_presenter_name": data.new_presenter_name
+        "meeting_id": data.current_meeting_id
+        "assigned_by": "1"
+      header:
+        "timestamp": data.time # supposed to be something else
+        "name": "presenter_assigned_message"
+        "current_time": data.time
+        "version": "0.0.1"
+        
+    makePresenterMessage =
+      payload:
+        "status": "presenter"
+        "value": "true"
+        "userid": data.new_presenter_id
+        "meeting_id": data.current_meeting_id
+      header:
+        "timestamp": data.time # supposed to be something else
+        "name": "user_status_changed_message"
+        "current_time": data.time
+        "version": "0.0.1"
+        
+    console.log "publishing:" + JSON.stringify(makeAttendeeMessage)
+    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.chat, JSON.stringify(makeAttendeeMessage))
+    
+    console.log "publishing:" + JSON.stringify(assignPresenterMessage)
+    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.chat, JSON.stringify(assignPresenterMessage))
+    
+    console.log "publishing:" + JSON.stringify(makePresenterMessage)
+    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.chat, JSON.stringify(makePresenterMessage))
+        
   invokeGetAllMeetingsRequest: =>
     #grab data about all active meetings on the server
     message =

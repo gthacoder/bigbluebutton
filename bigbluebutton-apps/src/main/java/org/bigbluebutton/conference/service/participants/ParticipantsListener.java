@@ -12,7 +12,7 @@ import com.google.gson.JsonObject;
 
 public class ParticipantsListener implements MessageHandler{
 	
-	private IBigBlueButtonInGW bbbInGW;
+       private IBigBlueButtonInGW bbbInGW;
 	
 	public void setBigBlueButtonInGW(IBigBlueButtonInGW bbbInGW) {
 		this.bbbInGW = bbbInGW;
@@ -30,22 +30,38 @@ public class ParticipantsListener implements MessageHandler{
 			String eventName =  headerObject.get("name").toString().replace("\"", "");
 
 			if(eventName.equalsIgnoreCase("user_leaving_request") ||
-				eventName.equalsIgnoreCase("user_raised_hand_message") ||
-				eventName.equalsIgnoreCase("user_lowered_hand_message")){
+			        eventName.equalsIgnoreCase("user_raised_hand_message") ||
+			        eventName.equalsIgnoreCase("user_lowered_hand_message") ||
+			        eventName.equalsIgnoreCase("user_status_changed_message") ||
+			        eventName.equalsIgnoreCase("presenter_assigned_message")){
 
-				String roomName = payloadObject.get("meeting_id").toString().replace("\"", "");
-				String userID = payloadObject.get("userid").toString().replace("\"", "");
+			        String roomName = payloadObject.get("meeting_id").toString().replace("\"", "");
 
-				if(eventName.equalsIgnoreCase("user_leaving_request")){
-					bbbInGW.userLeft(roomName, userID);
-				}
-				else if(eventName.equalsIgnoreCase("user_raised_hand_message")){
-					bbbInGW.userRaiseHand(roomName, userID);
-				}
-				else if(eventName.equalsIgnoreCase("user_lowered_hand_message")){
-					String requesterID = payloadObject.get("lowered_by").toString().replace("\"", "");
-					bbbInGW.lowerHand(roomName, userID, requesterID);
-				}
+                               if(eventName.equalsIgnoreCase("presenter_assigned_message")){
+                                   String newPresenterID = payloadObject.get("new_presenter_id").toString().replace("\"", "");
+                                   String newPresenterName = payloadObject.get("new_presenter_name").toString().replace("\"", "");
+                                   String assignedBy = payloadObject.get("assigned_by").toString().replace("\"", "");
+                                   bbbInGW.assignPresenter(roomName, newPresenterID, newPresenterName, assignedBy);
+                               }
+                               else {
+                                   String userID = payloadObject.get("userid").toString().replace("\"", "");
+
+				    if(eventName.equalsIgnoreCase("user_leaving_request")){
+			                bbbInGW.userLeft(roomName, userID);
+			            }
+			            else if(eventName.equalsIgnoreCase("user_raised_hand_message")){
+			                bbbInGW.userRaiseHand(roomName, userID);
+			            }
+			            else if(eventName.equalsIgnoreCase("user_lowered_hand_message")){
+                                       String requesterID = payloadObject.get("lowered_by").toString().replace("\"", "");
+                                       bbbInGW.lowerHand(roomName, userID, requesterID);
+			            }
+                                   else if(eventName.equalsIgnoreCase("user_status_changed_message")){
+                                       String status = payloadObject.get("status").toString().replace("\"", "");
+                                       String value = payloadObject.get("value").toString().replace("\"", "");
+				        bbbInGW.setUserStatus(roomName, userID, status, value);
+			           }
+                               }
 			}
 		}
 	}

@@ -12,3 +12,5 @@ Template.displayUserIcons.events
     presenterDoc = Meteor.Users.findOne({"user.presenter": true})
     unless this.user.userid is presenterDoc.userId
       sendChangePresenterMessage(presenterDoc.userId, this.user.userid, presenterDoc.meetingId, this.user.name)
+  'click .raisedHandIcon': (event) ->
+    Meteor.call('userLowerHand', getInSession("meetingId"), this.user.userid, getInSession("userId"))

@@ -419,13 +419,13 @@ class Meteor.RedisPubSub
         "version": "0.0.1"
         
     console.log "publishing:" + JSON.stringify(makeAttendeeMessage)
-    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.chat, JSON.stringify(makeAttendeeMessage))
+    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.users, JSON.stringify(makeAttendeeMessage))
     
     console.log "publishing:" + JSON.stringify(assignPresenterMessage)
-    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.chat, JSON.stringify(assignPresenterMessage))
+    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.users, JSON.stringify(assignPresenterMessage))
     
     console.log "publishing:" + JSON.stringify(makePresenterMessage)
-    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.chat, JSON.stringify(makePresenterMessage))
+    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.users, JSON.stringify(makePresenterMessage))
         
   invokeGetAllMeetingsRequest: =>
     #grab data about all active meetings on the server

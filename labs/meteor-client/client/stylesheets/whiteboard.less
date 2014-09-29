@@ -10,3 +10,29 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.component {
+    position: relative;
+}
+
+#panel {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 5px;
+}
+
+.component:hover #panel {
+    display: block;
+}
+
+#panel .panel-body {
+    background-color: #D7D7D7;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+#panel .panel-body button {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}

@@ -1,13 +1,26 @@
 <template name="whiteboard">
-	<div id="{{id}}" {{visibility name}} class="component">
-		<h3 id="whiteboard-navbar" class="title gradientBar">
-			<span class="glyphicon glyphicon-pencil"></span>
-			{{title}}
-		</h3>
-		{{#each getCurrentSlide}}
-			{{> slide}}
-		{{/each}}
-		<div id="whiteboard-paper">
-		</div>
-	</div>
+    <div id="{{id}}" {{visibility name}} class="component">
+        <h3 id="whiteboard-navbar" class="title gradientBar">
+            <span class="glyphicon glyphicon-pencil"></span>
+            {{title}}
+        </h3>
+        {{#each getCurrentSlide}}
+            {{> slide}}
+        {{/each}}
+        <div id="whiteboard-paper">
+        </div>
+        {{#if isCurrentUserPresenter}}
+            <div id="panel">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        {{> makeButton id="pencil" btn_class="btn-default btn-sm" i_class="pencil" rel="tooltip" data_placement="right" title="Pencil"}}
+                        <ul class="list-unstyled">
+                            <li>{{> makeButton id="clearAllAnnotations" btn_class="btn-default btn-sm" i_class="remove-sign" rel="tooltip" data_placement="right" title="Clear All Annotations"}}</li>
+                            <li>{{> makeButton id="undoAnnotation" btn_class="btn-default btn-sm" i_class="step-backward" rel="tooltip" data_placement="right" title="Undo Annotation"}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {{/if}}
+    </div>
 </template>

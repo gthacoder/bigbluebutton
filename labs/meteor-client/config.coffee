@@ -31,6 +31,7 @@ config.redis.channels.toBBBApps.meeting = "bigbluebutton:to-bbb-apps:meeting"
 config.redis.channels.toBBBApps.users = "bigbluebutton:to-bbb-apps:users"
 config.redis.channels.toBBBApps.voice = "bigbluebutton:to-bbb-apps:voice"
 config.redis.channels.toBBBApps.whiteboard = "bigbluebutton:to-bbb-apps:whiteboard"
+config.redis.channels.toBBBApps.presentation = "bigbluebutton:to-bbb-apps:presentation"
 
 # Logging
 config.log = {}

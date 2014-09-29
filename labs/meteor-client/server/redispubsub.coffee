@@ -34,6 +34,14 @@ Meteor.methods
   publishChangePresentorMessage: (messageObject) ->
     Meteor.redisPubSub.publishingChangePresenterMessage(messageObject)
 
+  publishWhiteboardClearedMessage: (requesterId) ->
+    # TODO: encapsulate the following code
+    currentPresentation = Meteor.Presentations.findOne({"presentation.current": true})
+    presentationId = currentPresentation?.presentation?.id
+    currentSlideDoc = Meteor.Slides.findOne({"presentationId": presentationId, "slide.current": true})
+
+    Meteor.redisPubSub.publishingWhiteboardClearedMessage(currentPresentation.meetingId, currentSlideDoc.slide.id, requesterId)
+
   publishMuteRequest: (meetingId, userId, requesterId, mutedBoolean) =>
     console.log "publishing a user mute #{mutedBoolean} request for #{userId}"
     message =
@@ -431,6 +439,20 @@ class Meteor.RedisPubSub
     
     console.log "publishing:" + JSON.stringify(makePresenterMessage)
     @pubClient.publish(Meteor.config.redis.channels.toBBBApps.users, JSON.stringify(makePresenterMessage))
+
+  publishingWhiteboardClearedMessage: (meetingId, whiteboardId, requesterId) =>
+    whiteboardClearedMessage =
+      payload:
+        whiteboard_id: whiteboardId
+        meeting_id: meetingId
+        requester_id: requesterId
+      header:
+        timestamp: new Date().getTime()
+        name: 'whiteboard_cleared_message'
+        current_time: new Date().getTime()
+        version: '0.0.1'
+    console.log "publishing:" + JSON.stringify(whiteboardClearedMessage)
+    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.whiteboard, JSON.stringify(whiteboardClearedMessage))
         
   invokeGetAllMeetingsRequest: =>
     #grab data about all active meetings on the server

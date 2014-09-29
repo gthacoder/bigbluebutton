@@ -43,3 +43,7 @@ Template.whiteboard.rendered = ->
       
     pic.src = currentSlide?.slide?.png_uri
   );
+
+Template.whiteboard.events
+  'click #clearAllAnnotations': (event) ->
+    Meteor.call "publishWhiteboardClearedMessage", getCurrentUserFromSession().userId

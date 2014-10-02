@@ -21,6 +21,20 @@
                     </div>
                 </div>
             </div>
+            <div class="text-center">
+                <div class="btn-group">
+                    {{#if isCurrentSlideFirst}}
+                        {{> makeButton id="previousSlide" btn_class="btn-default btn-lg" i_class="arrow-left" rel="tooltip" data_placement="bottom" title="Previous slide" isDisabled="disabled"}}
+                    {{else}}
+                        {{> makeButton id="previousSlide" btn_class="btn-default btn-lg" i_class="arrow-left" rel="tooltip" data_placement="bottom" title="Previous slide"}}
+                    {{/if}}
+                    {{#if isCurrentSlideLast}}
+                        {{> makeButton id="nextSlide" btn_class="btn-default btn-lg" i_class="arrow-right" rel="tooltip" data_placement="bottom" title="Next slide" isDisabled="disabled"}}
+                    {{else}}
+                        {{> makeButton id="nextSlide" btn_class="btn-default btn-lg" i_class="arrow-right" rel="tooltip" data_placement="bottom" title="Next slide"}}
+                    {{/if}}
+                </div>
+            </div>
         {{/if}}
     </div>
 </template>

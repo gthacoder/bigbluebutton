@@ -43,7 +43,29 @@ Template.whiteboard.rendered = ->
       
     pic.src = currentSlide?.slide?.png_uri
   );
-
+    
 Template.whiteboard.events
   'click #clearAllAnnotations': (event) ->
     Meteor.call "publishWhiteboardClearedMessage", getCurrentUserFromSession().userId
+  'click #previousSlide': (event) ->
+    Meteor.call "publishSwitchToPreviousSlideMessage", getInSession("meetingId")
+  'click #nextSlide': (event) ->
+    Meteor.call "publishSwitchToNextSlideMessage", getInSession("meetingId")
+
+Template.whiteboard.helpers
+  isCurrentSlideFirst: ->
+    currentPresentationDoc = Meteor.Presentations.findOne({"meetingId" : getInSession("meetingId"), "presentation.current" : true})
+    currentSlideDoc = Meteor.Slides.findOne({"meetingId" : getInSession("meetingId"), "presentationId": currentPresentationDoc?.presentation.id, "slide.current" : true})
+    if currentSlideDoc?.slide.num is 1
+      return true
+    else
+      return false
+  
+  isCurrentSlideLast: ->
+    currentPresentationDoc = Meteor.Presentations.findOne({"meetingId" : getInSession("meetingId"), "presentation.current" : true})
+    currentSlideDoc = Meteor.Slides.findOne({"meetingId" : getInSession("meetingId"), "presentationId": currentPresentationDoc?.presentation.id, "slide.current" : true})
+    numSlidesAfter = Meteor.Slides.find({"meetingId" : getInSession("meetingId"), "presentationId": currentPresentationDoc?.presentation.id, "slide.num" : { $gt: currentSlideDoc?.slide.num }}).count()
+    if numSlidesAfter is 0
+      return true
+    else
+      return false

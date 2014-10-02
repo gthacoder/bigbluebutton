@@ -19,30 +19,31 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 
 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-			http://www.springframework.org/schema/util 
-			http://www.springframework.org/schema/util/spring-util-2.0.xsd
-			">
-				
-	<bean id="presentationHandler" class="org.bigbluebutton.conference.service.presentation.PresentationHandler">
-	</bean>
-	
-	<bean id="presentationApplication" class="org.bigbluebutton.conference.service.presentation.PresentationApplication">
-		<property name="bigBlueButtonInGW"> <ref bean="bbbInGW"/></property>
-	</bean>
-	
-	<bean id="presentation.service" class="org.bigbluebutton.conference.service.presentation.PresentationService">
-		<property name="presentationApplication"> <ref local="presentationApplication"/></property>
-	</bean>
-
-	<bean id="conversionUpdatesProcessor" class="org.bigbluebutton.conference.service.presentation.ConversionUpdatesProcessor">
-		<property name="presentationApplication"> <ref local="presentationApplication"/></property>
-	</bean>
-
-	<bean id="presentationMessageListener" class="org.bigbluebutton.conference.service.presentation.PresentationMessageListener">
-		<property name="conversionUpdatesProcessor" ref="conversionUpdatesProcessor" />
-	</bean>
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:util="http://www.springframework.org/schema/util"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+                          http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                          http://www.springframework.org/schema/util
+                          http://www.springframework.org/schema/util/spring-util-2.0.xsd
+                          ">
+        
+        <bean id="presentationHandler" class="org.bigbluebutton.conference.service.presentation.PresentationHandler">
+        </bean>
+        
+        <bean id="presentationApplication" class="org.bigbluebutton.conference.service.presentation.PresentationApplication">
+                <property name="bigBlueButtonInGW"> <ref bean="bbbInGW"/></property>
+        </bean>
+        
+        <bean id="presentation.service" class="org.bigbluebutton.conference.service.presentation.PresentationService">
+                <property name="presentationApplication"> <ref local="presentationApplication"/></property>
+        </bean>
+        
+        <bean id="conversionUpdatesProcessor" class="org.bigbluebutton.conference.service.presentation.ConversionUpdatesProcessor">
+                <property name="presentationApplication"> <ref local="presentationApplication"/></property>
+        </bean>
+        
+        <bean id="presentationMessageListener" class="org.bigbluebutton.conference.service.presentation.PresentationMessageListener">
+                <property name="conversionUpdatesProcessor" ref="conversionUpdatesProcessor" />
+                <property name="bigBlueButtonInGW"> <ref bean="bbbInGW"/></property>
+        </bean>
 </beans>

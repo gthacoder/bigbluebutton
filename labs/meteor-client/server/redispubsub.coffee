@@ -41,7 +41,62 @@ Meteor.methods
     currentSlideDoc = Meteor.Slides.findOne({"presentationId": presentationId, "slide.current": true})
 
     Meteor.redisPubSub.publishingWhiteboardClearedMessage(currentPresentation.meetingId, currentSlideDoc.slide.id, requesterId)
-
+  
+  publishSwitchToPreviousSlideMessage: (meetingId) ->
+    currentPresentationDoc = Meteor.Presentations.findOne({"meetingId" : meetingId, "presentation.current" : true})
+    currentSlideDoc = Meteor.Slides.findOne({"meetingId" : meetingId, "presentationId": currentPresentationDoc.presentation.id, "slide.current" : true})
+    Meteor.call "publishPresentationPageChangedResizedMessages", meetingId, currentPresentationDoc.presentation.id, currentSlideDoc.slide.num - 1
+  
+  publishSwitchToNextSlideMessage: (meetingId) ->
+    currentPresentationDoc = Meteor.Presentations.findOne({"meetingId" : meetingId, "presentation.current" : true})
+    currentSlideDoc = Meteor.Slides.findOne({"meetingId" : meetingId, "presentationId": currentPresentationDoc.presentation.id, "slide.current" : true})
+    Meteor.call "publishPresentationPageChangedResizedMessages", meetingId, currentPresentationDoc.presentation.id, currentSlideDoc.slide.num + 1
+  
+  publishPresentationPageChangedResizedMessages: (meetingId, presentationId, newSlideNum) ->
+    newSlideDoc = Meteor.Slides.findOne({"meetingId" : meetingId, "presentationId" : presentationId, "slide.num" : newSlideNum})
+    presentationPageChangedMessage =
+      payload:
+        "page":
+          "height_ratio": newSlideDoc.slide.height_ratio
+          "y_offset": newSlideDoc.slide.y_offset
+          "num": newSlideDoc.slide.num
+          "x_offset": newSlideDoc.slide.x_offset
+          "current": true
+          "png_uri": newSlideDoc.slide.png_uri
+          "txt_uri": newSlideDoc.slide.txt_uri
+          "id": newSlideDoc.slide.id
+          "width_ratio": newSlideDoc.slide.width_ratio
+          "swf_uri": newSlideDoc.slide.swf_uri
+          "thumb_uri": newSlideDoc.slide.thumb_uri
+        "meeting_id": meetingId
+      header:
+          "timestamp": new Date().getTime()
+          "name": "presentation_page_changed_message"
+          "current_time": new Date().getTime()
+          "version": "0.0.1"
+    presentationPageResizedMessage =
+      payload:
+        "page":
+          "height_ratio": newSlideDoc.slide.height_ratio
+          "y_offset": newSlideDoc.slide.y_offset
+          "num": newSlideDoc.slide.num
+          "x_offset": newSlideDoc.slide.x_offset
+          "current": true
+          "png_uri": newSlideDoc.slide.png_uri
+          "txt_uri": newSlideDoc.slide.txt_uri
+          "id": newSlideDoc.slide.id
+          "width_ratio": newSlideDoc.slide.width_ratio
+          "swf_uri": newSlideDoc.slide.swf_uri
+          "thumb_uri": newSlideDoc.slide.thumb_uri
+        "meeting_id": meetingId
+      header:
+          "timestamp": new Date().getTime()
+          "name": "presentation_page_resized_message"
+          "current_time": new Date().getTime()
+          "version": "0.0.1"
+    Meteor.redisPubSub.publishingPresentationPageChangedMessage(presentationPageChangedMessage)
+    Meteor.redisPubSub.publishingPresentationPageResizedMessage(presentationPageResizedMessage)
+  
   publishMuteRequest: (meetingId, userId, requesterId, mutedBoolean) =>
     console.log "publishing a user mute #{mutedBoolean} request for #{userId}"
     message =
@@ -454,6 +509,12 @@ class Meteor.RedisPubSub
     console.log "publishing:" + JSON.stringify(whiteboardClearedMessage)
     @pubClient.publish(Meteor.config.redis.channels.toBBBApps.whiteboard, JSON.stringify(whiteboardClearedMessage))
         
+  publishingPresentationPageChangedMessage: (message) =>
+    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.presentation, JSON.stringify(message))
+  
+  publishingPresentationPageResizedMessage: (message) =>
+    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.presentation, JSON.stringify(message))
+  
   invokeGetAllMeetingsRequest: =>
     #grab data about all active meetings on the server
     message =

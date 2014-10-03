@@ -28,7 +28,8 @@ public class WhiteboardListener implements MessageHandler{
                         String eventName =  headerObject.get("name").toString().replace("\"", "");
 
                         if(eventName.equalsIgnoreCase("get_whiteboard_shapes_request") ||
-                                eventName.equalsIgnoreCase("whiteboard_cleared_message")) {
+                                eventName.equalsIgnoreCase("whiteboard_cleared_message") ||
+                                eventName.equalsIgnoreCase("undo_whiteboard_request")) {
                         //more cases to follow
 
                                 String roomName = payloadObject.get("meeting_id").toString().replace("\"", "");
@@ -45,9 +46,15 @@ public class WhiteboardListener implements MessageHandler{
                                         }
                                         System.out.println("\n\n\n user<" + requesterID + "> requested the shapes.\n\n");
                                 }
-                                else if(eventName.equalsIgnoreCase("whiteboard_cleared_message")) {
+                                else {
                                         String whiteboardID = payloadObject.get("whiteboard_id").toString().replace("\"", "");
-                                        bbbInGW.clearWhiteboard(roomName, requesterID, whiteboardID);
+                                        
+                                        if(eventName.equalsIgnoreCase("whiteboard_cleared_message")) {
+                                                bbbInGW.clearWhiteboard(roomName, requesterID, whiteboardID);
+                                        }
+                                        else if(eventName.equalsIgnoreCase("undo_whiteboard_request")) {
+                                                bbbInGW.undoWhiteboard(roomName, requesterID, whiteboardID);
+                                        }
                                 }
                         }
                 }

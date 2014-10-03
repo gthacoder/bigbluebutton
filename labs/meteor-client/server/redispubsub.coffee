@@ -42,6 +42,14 @@ Meteor.methods
 
     Meteor.redisPubSub.publishingWhiteboardClearedMessage(currentPresentation.meetingId, currentSlideDoc.slide.id, requesterId)
   
+  publishUndoWhiteboardRequest: (meetingId, requesterId) ->
+    currentPresentationDoc = Meteor.Presentations.findOne({"meetingId" : meetingId, "presentation.current" : true})
+    currentSlideDoc = Meteor.Slides.findOne({"meetingId" : meetingId, "presentationId": currentPresentationDoc?.presentation.id, "slide.current" : true})
+    shapesCount = Meteor.Shapes.find({"meetingId" : meetingId, "whiteboardId": currentSlideDoc.slide.id}).count()
+    if shapesCount > 0
+      lastShape = Meteor.Shapes.findOne({"meetingId" : meetingId, "whiteboardId": currentSlideDoc.slide.id}, { skip : shapesCount - 1 })
+      Meteor.redisPubSub.publishingUndoWhiteboardRequest(currentSlideDoc.slide.id, lastShape.shape.id, meetingId, requesterId)
+  
   publishSwitchToPreviousSlideMessage: (meetingId) ->
     currentPresentationDoc = Meteor.Presentations.findOne({"meetingId" : meetingId, "presentation.current" : true})
     currentSlideDoc = Meteor.Slides.findOne({"meetingId" : meetingId, "presentationId": currentPresentationDoc.presentation.id, "slide.current" : true})
@@ -509,6 +517,21 @@ class Meteor.RedisPubSub
     console.log "publishing:" + JSON.stringify(whiteboardClearedMessage)
     @pubClient.publish(Meteor.config.redis.channels.toBBBApps.whiteboard, JSON.stringify(whiteboardClearedMessage))
         
+  publishingUndoWhiteboardRequest: (whiteboardId, shapeId, meetingId, requesterId) =>
+    undoWhiteboardRequest =
+      payload:
+        whiteboard_id: whiteboardId
+        shape_id: shapeId
+        meeting_id: meetingId
+        requester_id: requesterId
+      header:
+        timestamp: new Date().getTime()
+        name: "undo_whiteboard_request"
+        current_time: new Date().getTime()
+        version: "0.0.1"
+    console.log "publishing:" + JSON.stringify(undoWhiteboardRequest)
+    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.whiteboard, JSON.stringify(undoWhiteboardRequest))
+  
   publishingPresentationPageChangedMessage: (message) =>
     @pubClient.publish(Meteor.config.redis.channels.toBBBApps.presentation, JSON.stringify(message))
   

@@ -47,6 +47,8 @@ Template.whiteboard.rendered = ->
 Template.whiteboard.events
   'click #clearAllAnnotations': (event) ->
     Meteor.call "publishWhiteboardClearedMessage", getCurrentUserFromSession().userId
+  'click #undoAnnotation': (event) ->
+    Meteor.call "publishUndoWhiteboardRequest", getInSession("meetingId"), getInSession("userId")
   'click #previousSlide': (event) ->
     Meteor.call "publishSwitchToPreviousSlideMessage", getInSession("meetingId")
   'click #nextSlide': (event) ->

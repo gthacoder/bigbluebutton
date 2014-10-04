@@ -7,7 +7,7 @@
                {{#Layout template="moduleTable" tableClass="table table-hover" tbodyClass="user-entry"}}
                   {{#contentFor region="Contents"}}
                      {{#each getUsersInMeeting}}
-                        <tr>{{>userItem}}</tr>
+                        <tr class="userItemContainer">{{>userItem}}</tr>
                      {{/each}}
                   {{/contentFor}}
                {{/Layout}}

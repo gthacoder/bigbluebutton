@@ -105,6 +105,9 @@ Meteor.methods
     Meteor.redisPubSub.publishingPresentationPageChangedMessage(presentationPageChangedMessage)
     Meteor.redisPubSub.publishingPresentationPageResizedMessage(presentationPageResizedMessage)
   
+  publishKickUserFromMeetingMessage: (meetingId, userId, presenterId) ->
+    Meteor.redisPubSub.publishingKickUserFromMeetingMessage(meetingId, userId, presenterId)
+  
   publishMuteRequest: (meetingId, userId, requesterId, mutedBoolean) =>
     console.log "publishing a user mute #{mutedBoolean} request for #{userId}"
     message =
@@ -537,6 +540,17 @@ class Meteor.RedisPubSub
   
   publishingPresentationPageResizedMessage: (message) =>
     @pubClient.publish(Meteor.config.redis.channels.toBBBApps.presentation, JSON.stringify(message))
+  
+  publishingKickUserFromMeetingMessage: (meetingId, userId, presenterId) =>
+    kickUserFromMeetingMessage =
+      payload:
+        meeting_id: meetingId
+        userid: userId
+        ejected_by: presenterId
+      header:
+        name: "kick_user_from_meeting_message"
+    console.log "publishing:" + JSON.stringify(kickUserFromMeetingMessage)
+    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.users, JSON.stringify(kickUserFromMeetingMessage))
   
   invokeGetAllMeetingsRequest: =>
     #grab data about all active meetings on the server

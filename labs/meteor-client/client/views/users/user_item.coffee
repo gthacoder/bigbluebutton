@@ -14,3 +14,7 @@ Template.displayUserIcons.events
       sendChangePresenterMessage(presenterDoc.userId, this.user.userid, presenterDoc.meetingId, this.user.name)
   'click .raisedHandIcon': (event) ->
     Meteor.call('userLowerHand', getInSession("meetingId"), this.user.userid, getInSession("userId"))
+  'click .kickOutIcon': (event) ->
+    currentUser = Meteor.Users.findOne({ "userId" : getInSession("userId") })
+    if currentUser.user.presenter and currentUser.user.userid isnt this.user.userid
+      Meteor.call "publishKickUserFromMeetingMessage", getInSession("meetingId"), this.user.userid, getInSession("userId")

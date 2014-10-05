@@ -290,3 +290,6 @@ Meteor.methods
   presentationId = currentPresentation?.presentation?.id
   currentSlide = Meteor.Slides.findOne({"presentationId": presentationId, "slide.current": true})
 
+@isCurrentUserPresenter = ->
+  user = Meteor.Users.findOne({ userId: getInSession("userId") })
+  user?.user?.presenter

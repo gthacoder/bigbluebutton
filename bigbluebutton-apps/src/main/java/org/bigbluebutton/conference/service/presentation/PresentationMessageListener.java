@@ -83,20 +83,32 @@ public class PresentationMessageListener implements MessageHandler {
                                 String eventName =  headerObject.get("name").toString().replace("\"", "");
                                 
                                 if(eventName.equalsIgnoreCase("presentation_page_changed_message") ||
-                                        eventName.equalsIgnoreCase("presentation_page_resized_message")) {
+                                        eventName.equalsIgnoreCase("presentation_page_resized_message") ||
+                                        eventName.equalsIgnoreCase("presentation_cursor_updated_message")) {
                                         
-                                        JsonObject pageObject = (JsonObject) payloadObject.get("page");
                                         String roomName = payloadObject.get("meeting_id").toString().replace("\"", "");
                                         
-                                        if(eventName.equalsIgnoreCase("presentation_page_changed_message")) {
-                                                String pageId = pageObject.get("id").toString().replace("\"", "");
-                                                bbbInGW.gotoSlide(roomName, pageId);
-                                        } else if(eventName.equalsIgnoreCase("presentation_page_resized_message")) {
-                                                String xOffset = pageObject.get("x_offset").toString().replace("\"", "");
-                                                String yOffset = pageObject.get("y_offset").toString().replace("\"", "");
-                                                String widthRatio = pageObject.get("width_ratio").toString().replace("\"", "");
-                                                String heightRatio = pageObject.get("height_ratio").toString().replace("\"", "");
-                                                bbbInGW.resizeAndMoveSlide(roomName, Double.parseDouble(xOffset), Double.parseDouble(yOffset), Double.parseDouble(widthRatio), Double.parseDouble(heightRatio));
+                                        if(eventName.equalsIgnoreCase("presentation_cursor_updated_message")) {
+                                                String xPercent = payloadObject.get("x_percent").toString().replace("\"", "");
+                                                String yPercent = payloadObject.get("y_percent").toString().replace("\"", "");
+                                                bbbInGW.sendCursorUpdate(roomName, Double.parseDouble(xPercent), Double.parseDouble(yPercent));
+                                        } else {
+                                                JsonObject pageObject = (JsonObject) payloadObject.get("page");
+
+                                                if(eventName.equalsIgnoreCase("presentation_page_changed_message")) {
+                                                        String pageId = pageObject.get("id").toString().replace("\"", "");
+                                                        bbbInGW.gotoSlide(roomName, pageId);
+                                                } else if(eventName.equalsIgnoreCase("presentation_page_resized_message")) {
+                                                        String xOffset = pageObject.get("x_offset").toString().replace("\"", "");
+                                                        String yOffset = pageObject.get("y_offset").toString().replace("\"", "");
+                                                        String widthRatio = pageObject.get("width_ratio").toString().replace("\"", "");
+                                                        String heightRatio = pageObject.get("height_ratio").toString().replace("\"", "");
+                                                        bbbInGW.resizeAndMoveSlide(roomName,
+                                                                Double.parseDouble(xOffset),
+                                                                Double.parseDouble(yOffset),
+                                                                Double.parseDouble(widthRatio),
+                                                                Double.parseDouble(heightRatio));
+                                                }
                                         }
                                 }
                         }

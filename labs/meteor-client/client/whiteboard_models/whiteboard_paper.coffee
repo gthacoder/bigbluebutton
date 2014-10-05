@@ -176,7 +176,8 @@ class @WhiteboardPaperModel
       img.toBack()
     else
       img.hide()
-    $(@container).on "mousemove", _.bind(@_onMouseMove, @)
+    $("#" + @container).off "mousemove"
+    $("#" + @container).on "mousemove", _.bind(@_onMouseMove, @)
     $(@container).on "mousewheel", _.bind(@_zoomSlide, @)
     # TODO $(img.node).bind "mousewheel", zoomSlide
     #@trigger('paper:image:added', img)
@@ -598,9 +599,11 @@ class @WhiteboardPaperModel
   # @param  {number} y the y value of cursor at the time in relation to the top of the browser
   # TODO: this should only be done if the user is the presenter
   _onMouseMove: (e, x, y) ->
-    [sw, sh] = @_currentSlideDimensions()
-    xLocal = (e.pageX - @containerOffsetLeft) / sw
-    yLocal = (e.pageY - @containerOffsetTop) / sh
+    if isCurrentUserPresenter()
+      [sw, sh] = @_currentSlideDimensions()
+      xLocal = (e.pageX - @containerOffsetLeft) / sw # in percents
+      yLocal = (e.pageY - @containerOffsetTop) / sh # in percents
+      Meteor.call "publishPresentationCursorUpdatedMessage", getInSession("meetingId"), xLocal, yLocal
     #globals.connection.emitMoveCursor xLocal, yLocal
 
   # When the user is dragging the cursor (click + move)

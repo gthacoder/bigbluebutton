@@ -108,6 +108,9 @@ Meteor.methods
   publishKickUserFromMeetingMessage: (meetingId, userId, presenterId) ->
     Meteor.redisPubSub.publishingKickUserFromMeetingMessage(meetingId, userId, presenterId)
   
+  publishPresentationCursorUpdatedMessage: (meetingId, xPercent, yPercent) ->
+    Meteor.redisPubSub.publishingPresentationCursorUpdatedMessage(meetingId, xPercent, yPercent)
+
   publishMuteRequest: (meetingId, userId, requesterId, mutedBoolean) =>
     console.log "publishing a user mute #{mutedBoolean} request for #{userId}"
     message =
@@ -552,6 +555,16 @@ class Meteor.RedisPubSub
     console.log "publishing:" + JSON.stringify(kickUserFromMeetingMessage)
     @pubClient.publish(Meteor.config.redis.channels.toBBBApps.users, JSON.stringify(kickUserFromMeetingMessage))
   
+  publishingPresentationCursorUpdatedMessage: (meetingId, xPercent, yPercent) =>
+    presentationCursorUpdatedMessage =
+      payload:
+        meeting_id: meetingId
+        x_percent: xPercent
+        y_percent: yPercent
+      header:
+        name: "presentation_cursor_updated_message"
+    @pubClient.publish(Meteor.config.redis.channels.toBBBApps.presentation, JSON.stringify(presentationCursorUpdatedMessage))
+
   invokeGetAllMeetingsRequest: =>
     #grab data about all active meetings on the server
     message =

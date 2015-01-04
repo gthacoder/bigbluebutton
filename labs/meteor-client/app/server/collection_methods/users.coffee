@@ -104,6 +104,25 @@ Meteor.methods
       Meteor.log.info "a user is logging out from #{meetingId}:" + userId
       requestUserLeaving meetingId, userId
 
+  assignPresenter: (meetingId, newPresenterUserId, assignedByUserId, assignedByToken) ->
+    if isAllowedTo('assignPresenter', meetingId, assignedByUserId, assignedByToken)
+      currentPresenter = Meteor.Users.findOne({meetingId: meetingId, 'user.presenter': true})
+      newPresenter = Meteor.Users.findOne({meetingId: meetingId, 'user.userid': newPresenterUserId})
+      changeUserStatus meetingId, currentPresenter.user.userid, 'presenter', false
+      message =
+        payload:
+          new_presenter_id: newPresenterUserId
+          #recorded: false
+          new_presenter_name: newPresenter.user.name
+          meeting_id: meetingId
+          assigned_by: '1' # further investigation is required
+        header:
+          timestamp: new Date().getTime()
+          name: 'presenter_assigned_message'
+          version: '0.0.1'
+      publish Meteor.config.redis.channels.toBBBApps.users, message
+      changeUserStatus meetingId, newPresenterUserId, 'presenter', true
+
 # --------------------------------------------------------------------------------------------
 # Private methods on server
 # --------------------------------------------------------------------------------------------
@@ -137,6 +156,20 @@ Meteor.methods
       publish Meteor.config.redis.channels.toBBBApps.users, message
     else
       Meteor.log.info "did not have enough information to send a user_leaving_request"
+
+@changeUserStatus = (meetingId, userId, status, value) ->
+  if Meteor.Users.findOne({meetingId: meetingId, userId: userId})?
+    message =
+      payload:
+        status: status
+        value: value
+        userid: userId
+        meeting_id: meetingId
+      header:
+        timestamp: new Date().getTime()
+        name: 'user_status_changed_message'
+        version: '0.0.1'
+    publish Meteor.config.redis.channels.toBBBApps.users, message
 
 #update a voiceUser - a helper method
 @updateVoiceUser = (meetingId, voiceUserObject) ->

@@ -1,5 +1,3 @@
-
-
 <template name="displayUserIcons">
   {{#if isUserSharingVideo userId}}
     <span class="userListSettingIcon glyphicon glyphicon-facetime-video" rel="tooltip" data-placement="bottom" title="{{user.name}} is sharing their webcam"></span>
@@ -34,10 +32,12 @@
   {{/if}}
 
   {{#if user.presenter}}
-    <span class="userListSettingIcon glyphicon glyphicon-picture" rel="tooltip" data-placement="bottom" title="{{user.name}} is the presenter"></span>
+    <span class="userListSettingIcon userRoleIcon glyphicon glyphicon-picture" rel="tooltip" data-placement="bottom" title="{{user.name}} is the presenter"></span>
   {{else}}
     {{#if equals user.role "MODERATOR"}}
-      <span class="userListSettingIcon glyphicon glyphicon-user" rel="tooltip" data-placement="bottom" title="{{user.name}} is a moderator"></span>
+      <span class="userListSettingIcon userRoleIcon glyphicon glyphicon-user" rel="tooltip" data-placement="bottom" title="{{user.name}} is a moderator"></span>
+    {{else}}
+      <span class="userListSettingIcon userRoleIcon glyphicon" rel="tooltip" data-placement="bottom" title="{{user.name}} is a viewer"></span>
     {{/if}}
   {{/if}}
 

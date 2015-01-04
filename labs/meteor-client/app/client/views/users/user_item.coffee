@@ -9,3 +9,7 @@ Template.displayUserIcons.events
     # the userId of the person who is lowering the hand
     console.log "lower hand- client click handler"
     Meteor.call('userLowerHand', getInSession("meetingId"), @userId, getInSession("userId"), getInSession("authToken"))
+
+  'click .userRoleIcon': (event) ->
+    if $(this).hasClass('glyphicon-picture') is false
+      Meteor.call 'assignPresenter', getInSession('meetingId'), @userId, getInSession('userId'), getInSession('authToken')

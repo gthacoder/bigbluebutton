@@ -1,5 +1,24 @@
+moderator =
+  # raising/lowering hand
+  raiseOwnHand : true
+  lowerOwnHand : true
 
-moderator = null
+  # muting
+  muteSelf : true
+  unmuteSelf : true
+
+  logoutSelf : true
+
+  #subscribing
+  subscribeUsers: true
+  subscribeChat: true
+
+  #chat
+  chatPublic: true #should make this dynamically modifiable later on
+  chatPrivate: true #should make this dynamically modifiable later on
+
+  assignPresenter: true
+
 presenter = null
 viewer =
   # raising/lowering hand
@@ -20,15 +39,19 @@ viewer =
   chatPublic: true #should make this dynamically modifiable later on
   chatPrivate: true #should make this dynamically modifiable later on
 
+  assignPresenter: false
+
 @isAllowedTo = (action, meetingId, userId, authToken) ->
   Meteor.log.info "in isAllowedTo: action-#{action}, userId=#{userId}, authToken=#{authToken}"
 
-  user = Meteor.Users.findOne({meetingId:meetingId, userId: userId})
+  user = Meteor.Users.findOne({meetingId: meetingId, userId: userId})
   if user?
     # we check if the user is who he claims to be
     if authToken is user.authToken
       if user.user?.role is 'VIEWER' or user.user?.role is undefined
         return viewer[action] or false
+      else if user.user?.role is 'MODERATOR'
+        return moderator[action]
     Meteor.log.error "in meetingId=#{meetingId} userId=#{userId} tried to perform #{action} without permission" +
      "\n..while the authToken was #{user.authToken}    and the user's object is #{JSON.stringify user}"
 

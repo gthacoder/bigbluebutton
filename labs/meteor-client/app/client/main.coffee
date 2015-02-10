@@ -39,9 +39,19 @@ Template.header.events
     #toggleSlidingMenu()
     toggleVoiceCall @
     if BBB.amISharingAudio()
-      $('.navbarTitle').css('width', $('#navbar').width() - 358.4)
+      if window.matchMedia('(orientation: landscape)').matches
+        $('.navbarUserButtons').css('width', 256)
+        $('.navbarSettingsButtons').css('width', 256)
+        $('.navbarTitle').css('width', $('#navbar').width() - 512)
+      else
+        $('.navbarTitle').css('width', $('#navbar').width() - 358.4)
     else
-      $('.navbarTitle').css('width', $('#navbar').width() - 409.6)
+      if window.matchMedia('(orientation: landscape)').matches
+        $('.navbarUserButtons').css('width', 307.2)
+        $('.navbarSettingsButtons').css('width', 307.2)
+        $('.navbarTitle').css('width', $('#navbar').width() - 614.4)
+      else
+        $('.navbarTitle').css('width', $('#navbar').width() - 409.6)
 
   "click .chatBarIcon": (event) ->
     $(".tooltip").hide()

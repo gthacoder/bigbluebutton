@@ -269,16 +269,14 @@ Handlebars.registerHelper "visibility", (section) ->
   setTimeout(redrawWhiteboard, 0)
 
 @toggleSlidingMenu = ->
-  if $('#sliding-menu').hasClass('sliding-menu-opened')
+  if $('#shield').css('display') is 'block'
+    $('#sliding-menu').css('left', '')
     DestroyFixedView()
-    setInSession 'display_slidingMenu', false
-    $('#sliding-menu').removeClass('sliding-menu-opened')
     $('#shield').css('display', 'none')
   else
-    CreateFixedView()
-    setInSession 'display_slidingMenu', true
-    $('#sliding-menu').addClass('sliding-menu-opened')
     $('#shield').css('display', 'block')
+    $('#sliding-menu').css('left', '0')
+    CreateFixedView('15%')
 
 @toggleNavbarCollapse = ->
   setInSession 'display_hiddenNavbarSection', !getInSession 'display_hiddenNavbarSection'
@@ -337,6 +335,7 @@ Handlebars.registerHelper "visibility", (section) ->
   setInSession 'display_slidingMenu', false
   setInSession 'display_hiddenNavbarSection', false
   setInSession 'webrtc_notification_is_displayed', false
+  setInSession 'menu_position_on_start_panning', null
 
 @onLoadComplete = ->
   setDefaultSettings()
@@ -415,14 +414,14 @@ Handlebars.registerHelper "visibility", (section) ->
 
 # Makes the position of userlist, whiteboard and chat fixed (to disable scrolling) and
 # positions each element correctly
-@CreateFixedView = () ->
+@CreateFixedView = (left) ->
 
   # positioning the whiteboard
 
   if getInSession 'display_whiteboard'
     whiteboardHeight = $('#whiteboard').height()
     $('#whiteboard').css('position', 'fixed')
-    $('#whiteboard').css('left', '15%')
+    $('#whiteboard').css('left', left)
     $('#whiteboard').css('height', whiteboardHeight + 5 + 'px')
     $('#whiteboard').css('top', '100px')
 
@@ -431,7 +430,7 @@ Handlebars.registerHelper "visibility", (section) ->
   if getInSession 'display_chatbar'
     chatHeight = $('#chat').height()
     $('#chat').css('position', 'fixed')
-    $('#chat').css('left', '15%')
+    $('#chat').css('left', left)
     $('#chat').css('height', chatHeight)
     if getInSession 'display_whiteboard'
       $('#chat').css('top', 110 + $('#whiteboard').height() + 'px')
@@ -446,7 +445,7 @@ Handlebars.registerHelper "visibility", (section) ->
     usersWidth = $('#users').width()
 
     $('#users').css('position', 'fixed')
-    $('#users').css('left', '15%')
+    $('#users').css('left', left)
     $('#users').css('width', usersWidth) # prevents from shrinking
     $('#users').css('height', usersHeight)
 
@@ -465,7 +464,7 @@ Handlebars.registerHelper "visibility", (section) ->
   footerWidth = $('#footer').width()
 
   $('#footer').css('position', 'fixed')
-  $('#footer').css('left', '15%')
+  $('#footer').css('left', left)
   $('#footer').css('height', footerHeight)
   $('#footer').css('width', footerWidth) # prevents from shrinking
 
@@ -482,7 +481,7 @@ Handlebars.registerHelper "visibility", (section) ->
 
   $('#main').css('position', 'fixed')
   $('#main').css('top', '50px')
-  $('#main').css('left', '15%')
+  $('#main').css('left', left)
 
 # determines which browser is being used
 @getBrowserName = () ->
@@ -492,3 +491,7 @@ Handlebars.registerHelper "visibility", (section) ->
     return 'IE'
   else
     return null
+
+# verifies if the pan event is mostly horizontal
+@isPanHorizontal = (event) ->
+  Math.abs(event.deltaX) > Math.abs(event.deltaY)

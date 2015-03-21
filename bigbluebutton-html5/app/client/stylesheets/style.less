@@ -78,6 +78,7 @@ body {
 .myNavbar {
   margin-bottom: 0.5%;
   border-bottom: 0px;
+  z-index: 1032;
   &.gradientBar {
     .linear-gradient(rgb(72,76,85), rgb(65,68,77));
   }
@@ -313,7 +314,6 @@ body {
     max-height: 125%;
   }
   @media @mobile-portrait-with-keyboard, @mobile-portrait {
-    transition: left 0.1s;
     position: relative;
     top: 0;
     left: 0;
@@ -502,7 +502,6 @@ body {
 
 .sliding-menu {
   @media @mobile-portrait-with-keyboard, @mobile-portrait {
-    transition: left 0.1s;
     width: 15%;
     height: 100%;
     position: fixed;

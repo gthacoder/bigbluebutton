@@ -84,7 +84,7 @@ Template.header.events
     toggleSlidingMenu()
     $(".tooltip").hide()
     $('.collapseSlidingMenuButton').blur()
-    $('.myNavbar').css('z-index', 1032)
+    #$('.myNavbar').css('z-index', 1032)
 
   'click .collapseNavbarButton': (event) ->
     $(".tooltip").hide()
@@ -253,3 +253,53 @@ Template.makeButton.rendered = ->
 
 Template.recordingStatus.rendered = ->
   $('button[rel=tooltip]').tooltip()
+
+Template.main.gestures
+  "panright #main": (event, template) ->
+    if isPortraitMobile()
+      if isPanHorizontal(event)
+        start = getInSession('menu_position_on_start_panning')
+        if start is null
+          start = parseInt($('#sliding-menu').css('left'), 10)
+          setInSession 'menu_position_on_start_panning', start
+        if event.deltaX + start <= 0 and event.deltaX + start >= - $('.sliding-menu').width()
+          $('#sliding-menu').css('left', event.deltaX + start)
+          $('#whiteboard').css('left', event.deltaX + $('.sliding-menu').width() + start)
+          $('#chat').css('left', event.deltaX + $('.sliding-menu').width() + start)
+          $('#users').css('left', event.deltaX + $('.sliding-menu').width() + start)
+          $('#footer').css('left', event.deltaX + $('.sliding-menu').width() + start)
+
+  "panleft #main": (event, template) ->
+    if isPortraitMobile()
+      if isPanHorizontal(event)
+        start = getInSession('menu_position_on_start_panning')
+        if start is null
+          start = parseInt($('#sliding-menu').css('left'), 10)
+          setInSession 'menu_position_on_start_panning', start
+        if event.deltaX + start >= - $('.sliding-menu').width() and event.deltaX + start <= 0
+          $('#sliding-menu').css('left', event.deltaX + start)
+          $('#whiteboard').css('left', $('.sliding-menu').width() + event.deltaX + start)
+          $('#chat').css('left', $('.sliding-menu').width() + event.deltaX + start)
+          $('#users').css('left', $('.sliding-menu').width() + event.deltaX + start)
+          $('#footer').css('left', $('.sliding-menu').width() + event.deltaX + start)
+
+  "panstart #main": (event, template) ->
+    if isPortraitMobile()
+      if isPanHorizontal(event) and $('#shield').css('display') isnt 'block'
+        $('#shield').css('display', 'block')
+        CreateFixedView(event.deltaX)
+
+  "panend #main": (event, template) ->
+    if isPortraitMobile()
+      if isPanHorizontal(event)
+        setInSession 'menu_position_on_start_panning', null
+        if parseInt($('#sliding-menu').css('left'), 10) >= - $('.sliding-menu').width() / 2
+          $('#sliding-menu').css('left', 0)
+          $('#whiteboard').css('left', $('.sliding-menu').width())
+          $('#chat').css('left', $('.sliding-menu').width())
+          $('#users').css('left', $('.sliding-menu').width())
+          $('#footer').css('left', $('.sliding-menu').width())
+        else
+          $('#sliding-menu').css('left', '')
+          DestroyFixedView()
+          $('#shield').css('display', 'none')

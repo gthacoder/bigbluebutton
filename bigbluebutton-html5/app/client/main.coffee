@@ -285,7 +285,9 @@ Template.main.gestures
 
   "panstart #main": (event, template) ->
     if isPortraitMobile()
-      if isPanHorizontal(event) and $('#shield').css('display') isnt 'block'
+      if isPanHorizontal(event) and
+      $('#shield').css('display') isnt 'block' and
+      (event.deltaX >= 0 or (event.deltaX < 0 and $('#main').css('position') isnt 'relative'))
         $('#shield').css('display', 'block')
         CreateFixedView(event.deltaX)
 

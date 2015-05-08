@@ -332,3 +332,18 @@ Template.makeButton.rendered = ->
 
 Template.recordingStatus.rendered = ->
   $('button[rel=tooltip]').tooltip()
+
+Template.main.gestures
+  "panright #container": (event, template) ->
+    if isPortraitMobile()
+      if isPanHorizontal(event)
+        if $('#container').css('position') isnt 'fixed'
+          $('#container').css('position', 'fixed')
+        $('#container').css('left', event.deltaX)
+
+  "panleft #container": (event, template) ->
+    if isPortraitMobile()
+      if isPanHorizontal(event)
+        if $('#container').css('position') isnt 'fixed'
+          $('#container').css('position', 'fixed')
+        $('#container').css('left', 500 + event.deltaX)

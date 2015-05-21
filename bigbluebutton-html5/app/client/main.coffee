@@ -83,10 +83,6 @@ Template.menu.events
     toggleMenu()
 
 Template.main.rendered = ->
-  $('#users').resizable
-    handles: 'e' # only east handle can be used
-    minWidth: 200
-
   $("#dialog").dialog(
     modal: true
     draggable: false

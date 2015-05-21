@@ -8,3 +8,8 @@ Template.usersList.helpers
 Template.usersList.events
   "click .closeUserlistIcon": (event, template) ->
     toggleUsersList()
+
+Template.usersList.rendered = ->
+  $('#users').resizable
+    handles: 'e' # only east handle can be used
+    minWidth: 200

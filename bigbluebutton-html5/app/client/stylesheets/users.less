@@ -36,6 +36,7 @@
     width: 500px;
     height: 100%;
   }
+  order: 0;
 }
 
 #user-contents {
@@ -76,4 +77,7 @@
 .closeUserlistIcon {
   float: right;
   margin-right: 5px;
+  @media @mobile-portrait-with-keyboard, @desktop-portrait, @mobile-portrait {
+    display: none;
+  }
 }

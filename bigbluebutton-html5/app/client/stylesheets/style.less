@@ -194,6 +194,7 @@ body {
         background-color: black;
         opacity: 0.5;
         z-index: 1;
+        cursor: pointer;
         @media @landscape, @desktop-portrait {
           top: 50px;
         }
@@ -369,6 +370,12 @@ body {
   }
 }
 
+.pressedButton {
+  i {
+    color: extract(@azure, 2);
+  }
+}
+
 .toggleUserlist {
   width: 57px;
   margin-right: 10px;
@@ -389,8 +396,10 @@ body {
 
 #notificationArea {
   bottom:0;
+  height: 50%;
   left:0;
   margin: auto;
+  margin-top: 0px;
   @media @landscape {
     width: 50%;
   }

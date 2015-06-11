@@ -329,19 +329,6 @@ body {
 }
 
 #panels {
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: -webkit-flex;
-  display: flex;
-  @media @landscape {
-    -webkit-flex-flow: row;
-    flex-flow: row;
-  }
-  @media @mobile-portrait-with-keyboard, @desktop-portrait, @mobile-portrait {
-    -webkit-flex-flow: column;
-    flex-flow: column;
-  }
   width: 100%;
   height: calc(~'100% - 50px'); // 50px for narbar height
 }

@@ -46,3 +46,13 @@ Template.whiteboard.events
 
   'click .lowerHand': (event) ->
     BBB.lowerHand(BBB.getMeetingId(), getInSession('userId'), getInSession('userId'), getInSession('authToken'))
+
+Template.whiteboard.rendered = ->
+  $('#whiteboard').resizable
+    handles: 'e' # only east handle can be used
+    minWidth: 50
+    maxWidth: 1000
+    alsoResize: "#chat"
+    stop: (event, ui) ->
+      $('#whiteboard').css('width', ($('#whiteboard').width() * 100) / $('#panels').width() + '%')
+      $('#chat').css('width', 99 - (($('#whiteboard').width() * 100) / $('#panels').width()) + '%')

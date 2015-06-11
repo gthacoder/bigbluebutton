@@ -33,6 +33,10 @@ body {
   margin-left:5px
 }
 
+#navbar {
+  width: 100%;
+}
+
 .myNavbar {
   border-bottom: 0px;
   &.gradientBar {
@@ -155,15 +159,6 @@ body {
 }
 
 #container {
-  @media @landscape {
-    display: -moz-flex;
-    display: -ms-flexbox;
-    display: -ms-flex;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-flow: row;
-    flex-flow: row;
-  }
   width: 100%;
   height: 100%;
   background-color: extract(@white, 3);
@@ -317,11 +312,9 @@ body {
 
 #main {
   @media @landscape {
-    -webkit-flex: 4 4 80%;
-    -moz-flex: 4 4 80%;
-    -ms-flex: 4 4 80%;
-    flex: 4 4 80%;
+    width: 80%;
     height: 100%;
+    display: inline-block;
   }
   @media @mobile-portrait-with-keyboard, @desktop-portrait, @mobile-portrait {
     height: 100%;
@@ -329,6 +322,13 @@ body {
 }
 
 #panels {
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row;
+  flex-flow: row;
   width: 100%;
   height: calc(~'100% - 50px'); // 50px for narbar height
 }

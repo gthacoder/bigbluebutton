@@ -397,10 +397,21 @@ function WebRtcPeer(mode, options, callback) {
             if (constraints === undefined) {
                 constraints = MEDIA_CONSTRAINTS;
             }
-            navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-                videoStream = stream;
-                start();
-            }).catch(callback);
+            navigator.mediaDevices.enumerateDevices().then(function(devices) {
+                devices.forEach(function(device) {
+                  alert('iteration');
+                  alert(device.label);
+
+                  // choose the back camera if it's available
+                  if(device.label === 'camera 0, facing back') {
+                    constraints.video.deviceId = device.deviceId;
+                  }
+                  navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+                    videoStream = stream;
+                    start();
+                  }).catch(callback);
+                });
+            })
         }
         if (sendSource === 'webcam') {
             getMedia(mediaConstraints);

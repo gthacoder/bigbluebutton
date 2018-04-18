@@ -5,6 +5,8 @@ import { EventEmitter2 } from 'eventemitter2';
 import { check } from 'meteor/check';
 import Logger from './logger';
 
+import addAnnotations from '/imports/api/annotations/server/modifiers/addAnnotation';
+
 // Fake meetingId used for messages that have no meetingId
 const NO_MEETING_ID = '_';
 
@@ -129,6 +131,13 @@ class RedisPubSub {
     });
 
     this.debug(`Subscribed to '${channelsToSubscribe}'`);
+
+    let _this = this;
+    setInterval(Meteor.bindEnvironment(function() {
+      console.log('RELEASING');
+      let bulk = _this.annotationsBulk;
+      if(bulk && bulk.length > 0) addAnnotations(bulk);
+    }), 200);
   }
 
   updateConfig(config) {

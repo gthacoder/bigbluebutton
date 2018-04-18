@@ -4,6 +4,7 @@ import clearAnnotations from '../modifiers/clearAnnotations';
 import addAnnotation from '../modifiers/addAnnotation';
 
 export default function handleWhiteboardAnnotations({ body }, meetingId) {
+  console.log('HANDLE_WHITEBOARD_ANNOTATIONS');
   check(meetingId, String);
   check(body, Object);
 

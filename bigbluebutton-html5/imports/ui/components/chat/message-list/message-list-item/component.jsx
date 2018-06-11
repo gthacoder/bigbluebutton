@@ -54,7 +54,8 @@ export default class MessageListItem extends Component {
   }
 
   componentDidMount() {
-    const { scrollArea } = this.props;
+    //const { scrollArea } = this.props;
+    const scrollArea = this.props.getScrollAreaRef();
 
     if (scrollArea) {
       eventsToBeBound.forEach(
@@ -66,7 +67,8 @@ export default class MessageListItem extends Component {
   }
 
   componentWillUnmount() {
-    const { scrollArea } = this.props;
+    //const { scrollArea } = this.props;
+    const scrollArea = this.props.getScrollAreaRef();
 
     if (scrollArea) {
       eventsToBeBound.forEach(
@@ -155,7 +157,7 @@ export default class MessageListItem extends Component {
               </time>
             </div>
             <div className={styles.messages}>
-              {messages.map(message => (
+              {messages.map(message => { /*console.log(this.props.scrollArea);*/ return (
                 <Message
                   className={styles.message}
                   key={message.id}
@@ -164,9 +166,9 @@ export default class MessageListItem extends Component {
                   chatAreaId={this.props.chatAreaId}
                   lastReadMessageTime={this.props.lastReadMessageTime}
                   handleReadMessage={this.props.handleReadMessage}
-                  scrollArea={this.props.scrollArea}
+                  scrollArea={this.props.getScrollAreaRef()}
                 />
-              ))}
+              ) } )}
             </div>
           </div>
         </div>

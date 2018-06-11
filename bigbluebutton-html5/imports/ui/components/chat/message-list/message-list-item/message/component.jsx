@@ -23,7 +23,7 @@ const isElementInViewport = (el) => {
   return (
     rect.top >= 0 &&
     rect.left >= 0 &&
-    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.bottom <= ((window.innerHeight || document.documentElement.clientHeight) - 62) &&
     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
   );
 };
@@ -47,6 +47,7 @@ export default class MessageListItem extends Component {
           this.props.handleReadMessage(this.props.time);
           eventsToBeBound.forEach(
             e => scrollArea.removeEventListener(e, this.handleMessageInViewport),
+            //e => document.getElementById(this.props.chatAreaId).removeEventListener(e, this.handleMessageInViewport),
           );
         }
 

@@ -30,10 +30,13 @@ class MessageList extends Component {
     this.ticking = false;
     this.handleScrollChange = _.debounce(this.handleScrollChange.bind(this), 150);
     this.handleScrollUpdate = _.debounce(this.handleScrollUpdate.bind(this), 150);
+
+    this.getScrollAreaRef = this.getScrollAreaRef.bind(this);
   }
 
 
   componentDidMount() {
+console.log('MESSAGE_LIST, ComponentDidMount');
     const { scrollArea } = this;
 
     this.scrollTo(this.props.scrollPosition);
@@ -155,6 +158,12 @@ class MessageList extends Component {
     return null;
   }
 
+  getScrollAreaRef() {
+    console.log('getScrollAreaRef');
+    console.log(this.scrollArea);
+    return this.scrollArea;
+  }
+
   render() {
     const { messages, intl } = this.props;
     const isEmpty = messages.length === 0;
@@ -162,7 +171,7 @@ class MessageList extends Component {
       <div className={styles.messageListWrapper}>
         <div
           role="log"
-          ref={(ref) => { this.scrollArea = ref; }}
+          ref={(ref) => { if (ref != null) { this.scrollArea = ref; } }}
           id={this.props.id}
           className={styles.messageList}
           aria-live="polite"
@@ -170,7 +179,7 @@ class MessageList extends Component {
           aria-relevant="additions"
           aria-label={isEmpty ? intl.formatMessage(intlMessages.emptyLogLabel) : ''}
         >
-          {messages.map(message => (
+          {messages.map(message => { console.log('EACH'); return (
             <MessageListItem
               handleReadMessage={this.props.handleReadMessage}
               className={styles.messageListItem}
@@ -180,9 +189,9 @@ class MessageList extends Component {
               time={message.time}
               chatAreaId={this.props.id}
               lastReadMessageTime={this.props.lastReadMessageTime}
-              scrollArea={this.scrollArea}
+              getScrollAreaRef={this.getScrollAreaRef}
             />
-          ))}
+          ) } )}
         </div>
         {this.renderUnreadNotification()}
       </div>
@@ -191,5 +200,6 @@ class MessageList extends Component {
 }
 
 MessageList.propTypes = propTypes;
+
 
 export default injectIntl(MessageList);

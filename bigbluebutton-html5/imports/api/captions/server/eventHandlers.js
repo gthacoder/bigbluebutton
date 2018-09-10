@@ -8,3 +8,4 @@ import handleCaptionOwnerUpdate from './handlers/captionOwnerUpdate';
 RedisPubSub.on('SendCaptionHistoryRespMsg', processForHTML5ServerOnly(handleCaptionHistory));
 RedisPubSub.on('EditCaptionHistoryEvtMsg', handleCaptionUpdate);
 RedisPubSub.on('UpdateCaptionOwnerEvtMsg', handleCaptionOwnerUpdate);
+

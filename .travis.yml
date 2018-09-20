@@ -1,6 +1,7 @@
 language: node_js
 
 install:
+  - curl https://install.meteor.com/ | sh
   - cd bigbluebutton-html5
   - meteor npm install
 

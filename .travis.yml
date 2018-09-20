@@ -1,5 +1,7 @@
 language: node_js
 
+sudo: required
+
 install:
   - curl https://install.meteor.com/ | sh
   - cd bigbluebutton-html5

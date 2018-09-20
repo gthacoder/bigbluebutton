@@ -2,7 +2,7 @@ language: node_js
 
 install:
   - cd bigbluebutton-html5
-  - npm install
+  - meteor npm install
 
 script:
   - npm run lint

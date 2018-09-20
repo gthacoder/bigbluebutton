@@ -1,6 +1,9 @@
 language: node_js
 
-script:
+install:
   - cd bigbluebutton-html5
+  - npm install
+
+script:
   - npm run lint
 

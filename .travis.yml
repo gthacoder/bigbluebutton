@@ -20,12 +20,9 @@ env:
   global:
     - BBB_SERVER_URL=http://localhost/bigbluebutton/api
 
-matrix:
-  - env: COMMAND="node html5-check.js"
-  - env: COMMAND="npm run lint"
-
 script:
-  - $COMMAND
+  - node html5-check.js
+  - npm run lint
 
 after_script:
   - docker stop $docker

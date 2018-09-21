@@ -15,7 +15,9 @@ env:
 
 script:
   - node html5-check.js
+  - curl https://install.meteor.com/ | sh
   - cd ../..
+  - meteor npm install
   - npm run lint
 
 after_script:

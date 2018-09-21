@@ -8,9 +8,6 @@ install:
   - echo $docker
   - cd tests/puppeteer
   - npm install
-  - conf=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
-  - secret=$(echo $conf | cut -d' ' -f2)
-  - export BBB_SHARED_SECRET=$secret
   
 env:
   global:
@@ -18,7 +15,6 @@ env:
 
 script:
   - node html5-check.js
-  - npm test
 
 after_script:
   - docker stop $docker

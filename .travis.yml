@@ -8,9 +8,9 @@ node_js:
 install:
   # - git clone git@github.com:browniecab/bigbluebutton-tests.git tests
   - cd bigbluebutton-html5
-  - docker build -t b2 .
-  - docker=$(docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost)
-  - echo $docker
+#  - docker build -t b2 .
+#  - docker=$(docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost)
+#  - echo $docker
   - curl https://install.meteor.com/ | sh
   - meteor npm install
   - cd tests/puppeteer
@@ -20,19 +20,19 @@ env:
   global:
     - BBB_SERVER_URL=http://localhost/bigbluebutton/api
 
-jobs:
-  include:
-    stage: html5
-    script: node html5-check.js
-    stage: linter
-    script:
-      - cd ../..
-      - npm run lint
+#jobs:
+#  include:
+#    stage: html5
+#    script: node html5-check.js
+#    stage: linter
+#    script:
+#      - cd ../..
+#      - npm run lint
 
-#script:
+script:
 #  - node html5-check.js
-#  - cd ../..
-#  - npm run lint
+  - cd ../..
+  - npm run lint
 
 after_script:
   - docker stop $docker

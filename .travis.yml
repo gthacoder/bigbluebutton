@@ -5,6 +5,9 @@ language: node_js
 node_js:
 - "8"
 
+before_install:
+  - bash ./check_if_html5.sh
+
 install:
   # - git clone git@github.com:browniecab/bigbluebutton-tests.git tests
   - cd bigbluebutton-html5

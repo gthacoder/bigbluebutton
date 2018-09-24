@@ -12,4 +12,6 @@
 
 echo $TRAVIS_PULL_REQUEST_BRANCH
 echo $TRAVIS_BRANCH
-echo `git diff --name-only $TRAVIS_BRANCH..$TRAVIS_PULL_REQUEST_BRANCH`
+echo `git branch`
+echo `git remote -v`
+#echo `git diff --name-only $TRAVIS_BRANCH..$TRAVIS_PULL_REQUEST_BRANCH`

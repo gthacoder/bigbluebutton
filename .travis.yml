@@ -5,6 +5,8 @@ language: node_js
 node_js:
 - "8"
 
+if: type = pull_request
+
 before_install:
   - bash ./check_if_html5.sh
 

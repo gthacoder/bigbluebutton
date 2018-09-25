@@ -37,6 +37,8 @@ env:
 script:
 #  - node html5-check.js
   - cd ../..
+  - echo 'files:'
+  - echo `git diff --name-only HEAD...$TRAVIS_BRANCH`
   - npm run lint
 
 after_script:

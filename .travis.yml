@@ -38,8 +38,13 @@ script:
 #  - node html5-check.js
   - cd ../..
   - echo 'files:'
-  - git fetch origin testing-base
-  - echo `git diff --name-only origin/testing-base...$TRAVIS_PULL_REQUEST_BRANCH`
+  - git fetch origin $TRAVIS_PULL_REQUEST_BRANCH
+  - git checkout origin/$TRAVIS_PULL_REQUEST_BRANCH
+  - git checkout -b $TRAVIS_PULL_REQUEST_BRANCH
+  - git fetch origin $TRAVIS_BRANCH
+  - git checkout origin/$TRAVIS_BRANCH
+  - git checkout -b $TRAVIS_BRANCH
+  - echo `git diff --name-only $TRAVIS_BRANCH...$TRAVIS_PULL_REQUEST_BRANCH`
   - npm run lint
 
 after_script:

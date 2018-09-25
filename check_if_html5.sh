@@ -17,5 +17,5 @@ echo `git branch`
 echo '\n'
 echo `git remote -v`
 echo '\n'
-echo `git diff --name-only origin/$TRAVIS_BRANCH`
+echo `git rev-parse --abbrev-ref HEAD`
 #echo `git diff --name-only $TRAVIS_BRANCH..$TRAVIS_PULL_REQUEST_BRANCH`

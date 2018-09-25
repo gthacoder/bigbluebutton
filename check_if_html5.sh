@@ -18,4 +18,3 @@ echo '\n'
 echo `git remote -v`
 echo '\n'
 echo `git diff --name-only HEAD...$TRAVIS_BRANCH`
-#echo `git diff --name-only $TRAVIS_BRANCH..$TRAVIS_PULL_REQUEST_BRANCH`

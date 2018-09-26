@@ -43,6 +43,7 @@ script:
   - git checkout origin/$TRAVIS_PULL_REQUEST_BRANCH
   - git checkout -b $TRAVIS_PULL_REQUEST_BRANCH
   - git log | head -20
+  - git reset HEAD~ --hard
   - git fetch origin $TRAVIS_BRANCH
   - git checkout origin/$TRAVIS_BRANCH
   - git checkout -b $TRAVIS_BRANCH

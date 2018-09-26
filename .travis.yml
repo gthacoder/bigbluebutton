@@ -41,9 +41,11 @@ script:
   - git fetch origin $TRAVIS_PULL_REQUEST_BRANCH
   - git checkout origin/$TRAVIS_PULL_REQUEST_BRANCH
   - git checkout -b $TRAVIS_PULL_REQUEST_BRANCH
+  - git log
   - git fetch origin $TRAVIS_BRANCH
   - git checkout origin/$TRAVIS_BRANCH
   - git checkout -b $TRAVIS_BRANCH
+  - git log
 #  - echo `git diff --name-only ${TRAVIS_BRANCH}...${TRAVIS_PULL_REQUEST_BRANCH}`
   - echo `git diff --name-only testing-base..testing-1`
   - npm run lint

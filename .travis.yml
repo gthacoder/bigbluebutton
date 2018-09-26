@@ -38,6 +38,7 @@ script:
 #  - node html5-check.js
   - cd ../..
   - echo 'files:'
+  - git log | head -20
   - git fetch origin $TRAVIS_PULL_REQUEST_BRANCH
   - git checkout origin/$TRAVIS_PULL_REQUEST_BRANCH
   - git checkout -b $TRAVIS_PULL_REQUEST_BRANCH

@@ -59,8 +59,8 @@ script:
 #  - npm run lint -- $FILES
 #  - eslint $FILES --ext .jsx,.js
   - FILES=`git diff --name-only HEAD..testing-base`
-  - if [[ $FILES = *"bigbluebutton-html5"* ]]; then
-  - echo "It's there!"
+  - if [[ $FILES = *"bigbluebutton-html5"* ]]; then\
+  - echo "It's there!"\
   - fi
 #  - echo `$(git diff --name-only HEAD..testing-base) = *"bigbluebutton-html5"*`
   - bigbluebutton-html5/node_modules/.bin/eslint --ext .jsx,.js $(git diff --name-only HEAD..testing-base)

@@ -40,7 +40,7 @@ script:
 #  - git branch
 #  - git log testing-base | head -50
 #  - git log HEAD | head -50
-  - FILES=`git diff --name-only HEAD..$TRAVIS_PULL_REQUEST_BRANCH`
+  - FILES=`git diff --name-only HEAD..$TRAVIS_BRANCH`
 #  - echo 'files:'
 #  - git log | head -20
 #  - git fetch origin $TRAVIS_PULL_REQUEST_BRANCH

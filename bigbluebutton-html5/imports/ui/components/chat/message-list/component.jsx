@@ -18,18 +18,18 @@ const intlMessages = defineMessages({
   emptyLogLabel: {
     id: 'app.chat.emptyLogLabel',
     description: 'aria-label used when chat log is empty',
-  },
+  }
 });
 
 class MessageList extends Component {
-  constructor(props) {
+  constructor (props){
     super(props);
 
     this.shouldScrollBottom = false;
     this.lastKnowScrollPosition = 0;
     this.ticking = false;
-    this.handleScrollChange = _.debounce(this.handleScrollChange.bind(this), 150);
-    this.handleScrollUpdate = _.debounce(this.handleScrollUpdate.bind(this), 150);
+    this.handleScrollChange = _.debounce( this.handleScrollChange.bind(this), 150 );
+    this.handleScrollUpdate = _.debounce( this.handleScrollUpdate.bind(this), 150 );
 
     this.state = {};
   }

@@ -7,59 +7,25 @@ node_js:
 
 if: type = pull_request
 
-before_install:
-  - bash ./check_if_html5.sh
+#before_install:
+#  - bash ./check_if_html5.sh
 
-install:
-  # - git clone git@github.com:browniecab/bigbluebutton-tests.git tests
-  - cd bigbluebutton-html5
-#  - docker build -t b2 .
-#  - docker=$(docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost)
-#  - echo $docker
-  - curl https://install.meteor.com/ | sh
-  - meteor npm install
-  - cd tests/puppeteer
-  - npm install
+#install:
+#  - cd bigbluebutton-html5
+#  - curl https://install.meteor.com/ | sh
+#  - meteor npm install
+#  - cd tests/puppeteer
+#  - npm install
   
 env:
   global:
     - BBB_SERVER_URL=http://localhost/bigbluebutton/api
 
-#jobs:
-#  include:
-#    stage: html5
-#    script: node html5-check.js
-#    stage: linter
-#    script:
-#      - cd ../..
-#      - npm run lint
-
 script:
-#  - node html5-check.js
-  - cd ../../..
-#  - git branch
-#  - git log testing-base | head -50
-#  - git log HEAD | head -50
-  - FILES=`git diff --name-only HEAD..$TRAVIS_BRANCH`
-#  - echo 'files:'
-#  - git log | head -20
-#  - git fetch origin $TRAVIS_PULL_REQUEST_BRANCH
-#  - git checkout origin/$TRAVIS_PULL_REQUEST_BRANCH
-#  - git checkout -b $TRAVIS_PULL_REQUEST_BRANCH
-#  - git checkout $TRAVIS_PULL_REQUEST_BRANCH
-#  - git log | head -20
-#  - git reset HEAD~ --hard
-#  - git fetch origin $TRAVIS_BRANCH
-#  - git checkout origin/$TRAVIS_BRANCH
-#  - git checkout -b $TRAVIS_BRANCH
-#  - git checkout $TRAVIS_BRANCH
-#  - git log | head -20
-#  - echo `git diff --name-only ${TRAVIS_BRANCH}...${TRAVIS_PULL_REQUEST_BRANCH}`
-#  - echo `git diff --name-only testing-base..testing-1`
-#  - npm run lint -- $FILES
-#  - eslint $FILES --ext .jsx,.js
-#  - [[ $(git diff --name-only HEAD..testing-base) = *"bigbluebutton-html5"* ]] && echo "yes"
-  - bigbluebutton-html5/node_modules/.bin/eslint --ext .jsx,.js $(git diff --name-only HEAD..testing-base)
+#  - cd ../../..
+#  - FILES=`git diff --name-only HEAD..$TRAVIS_BRANCH`
+#  - bigbluebutton-html5/node_modules/.bin/eslint --ext .jsx,.js $(git diff --name-only HEAD..testing-base)
+  - bash ./check_if_html5.sh
 
 after_script:
   - docker stop $docker

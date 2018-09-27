@@ -56,7 +56,8 @@ script:
 #  - git log | head -20
 #  - echo `git diff --name-only ${TRAVIS_BRANCH}...${TRAVIS_PULL_REQUEST_BRANCH}`
 #  - echo `git diff --name-only testing-base..testing-1`
-  - npm run lint -- $FILES
+#  - npm run lint -- $FILES
+  - eslint . --ext .jsx,.js $FILES
 
 after_script:
   - docker stop $docker

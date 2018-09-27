@@ -58,7 +58,7 @@ script:
 #  - echo `git diff --name-only testing-base..testing-1`
 #  - npm run lint -- $FILES
 #  - eslint $FILES --ext .jsx,.js
-  - echo `$(git diff --name-only HEAD..testing-base) = *"bigbluebutton-html5"*`
+  - [[ $(git diff --name-only HEAD..testing-base) = *"bigbluebutton-html5"* ]] && echo "yes"
   - bigbluebutton-html5/node_modules/.bin/eslint --ext .jsx,.js $(git diff --name-only HEAD..testing-base)
 
 after_script:

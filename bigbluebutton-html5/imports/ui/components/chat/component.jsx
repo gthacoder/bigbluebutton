@@ -20,7 +20,7 @@ const intlMessages = defineMessages({
   hideChatLabel: {
     id: 'app.chat.hideChatLabel',
     description: 'aria-label for hiding chat button',
-  },
+  }
 });
 
 const SHORTCUTS_CONFIG = Meteor.settings.public.app.shortcuts;

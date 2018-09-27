@@ -20,7 +20,7 @@ const intlMessages = defineMessages({
   hideChatLabel: {
     id: 'app.chat.hideChatLabel',
     description: 'aria-label for hiding chat button',
-  },
+  }
 });
 
 const SHORTCUTS_CONFIG = Meteor.settings.public.app.shortcuts;
@@ -108,7 +108,7 @@ const Chat = (props) => {
   );
 };
 
-export default injectWbResizeEvent(injectIntl(Chat));
+export default injectWbResizeEvent ( injectIntl( Chat ) );
 
 const propTypes = {
   chatID: PropTypes.string.isRequired,
@@ -139,7 +139,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  scrollPosition: 0,
+  scrollPosition: 0
 };
 
 Chat.propTypes = propTypes;

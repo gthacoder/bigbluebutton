@@ -37,26 +37,26 @@ env:
 script:
 #  - node html5-check.js
   - cd ../..
-  - git branch
-  - git log testing-base | head -50
-  - git log HEAD | head -50
-  - git diff --name-only HEAD..testing-base
-  - echo 'files:'
-  - git log | head -20
+#  - git branch
+#  - git log testing-base | head -50
+#  - git log HEAD | head -50
+  - FILES=`git diff --name-only HEAD..$TRAVIS_PULL_REQUEST_BRANCH`
+#  - echo 'files:'
+#  - git log | head -20
 #  - git fetch origin $TRAVIS_PULL_REQUEST_BRANCH
 #  - git checkout origin/$TRAVIS_PULL_REQUEST_BRANCH
 #  - git checkout -b $TRAVIS_PULL_REQUEST_BRANCH
-  - git checkout $TRAVIS_PULL_REQUEST_BRANCH
-  - git log | head -20
+#  - git checkout $TRAVIS_PULL_REQUEST_BRANCH
+#  - git log | head -20
 #  - git reset HEAD~ --hard
 #  - git fetch origin $TRAVIS_BRANCH
 #  - git checkout origin/$TRAVIS_BRANCH
 #  - git checkout -b $TRAVIS_BRANCH
-  - git checkout $TRAVIS_BRANCH
-  - git log | head -20
+#  - git checkout $TRAVIS_BRANCH
+#  - git log | head -20
 #  - echo `git diff --name-only ${TRAVIS_BRANCH}...${TRAVIS_PULL_REQUEST_BRANCH}`
-  - echo `git diff --name-only testing-base..testing-1`
-  - npm run lint
+#  - echo `git diff --name-only testing-base..testing-1`
+  - npm run lint -- $FILES
 
 after_script:
   - docker stop $docker

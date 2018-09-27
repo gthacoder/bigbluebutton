@@ -18,7 +18,7 @@ const intlMessages = defineMessages({
   emptyLogLabel: {
     id: 'app.chat.emptyLogLabel',
     description: 'aria-label used when chat log is empty',
-  },
+  }
 });
 
 class MessageList extends Component {

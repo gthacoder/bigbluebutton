@@ -39,7 +39,7 @@ script:
   - cd ../..
   - echo `git branch`
   - echo `git log testing-base | head -20`
-  - echo `git log HEAD | head - 20`
+  - echo `git log HEAD | head -20`
   - echo 'files:'
   - git log | head -20
 #  - git fetch origin $TRAVIS_PULL_REQUEST_BRANCH

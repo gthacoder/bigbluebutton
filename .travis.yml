@@ -37,6 +37,7 @@ env:
 script:
 #  - node html5-check.js
   - cd ../..
+  - echo `git branch`
   - echo 'files:'
   - git log | head -20
 #  - git fetch origin $TRAVIS_PULL_REQUEST_BRANCH

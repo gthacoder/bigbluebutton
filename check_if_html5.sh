@@ -4,6 +4,7 @@ set -ev
 if [[ $(git diff --name-only HEAD..testing-base) = *"bigbluebutton-html5"* ]]; then
   echo "HTML5"
 
+  cd bigbluebutton-html5
   docker build -t b2 .
   docker=$(docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost)
   echo $docker

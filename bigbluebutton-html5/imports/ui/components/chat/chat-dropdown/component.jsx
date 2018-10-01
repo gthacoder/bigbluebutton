@@ -31,8 +31,9 @@ const intlMessages = defineMessages({
   options: {
     id: 'app.chat.dropdown.options',
     description: 'Chat Options',
-  }
+  },
 });
+
 
 class ChatDropdown extends Component {
   constructor(props) {

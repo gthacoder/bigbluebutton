@@ -34,6 +34,7 @@ const intlMessages = defineMessages({
   },
 });
 
+
 class ChatDropdown extends Component {
   constructor(props) {
     super(props);

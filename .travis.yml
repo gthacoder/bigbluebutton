@@ -13,3 +13,8 @@ env:
 
 script:
   - bash ./build_script.sh
+
+after_script:
+  - docker stop $docker
+  - docker rm $docker
+  - docker rmi b2

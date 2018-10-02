@@ -20,8 +20,4 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
   npm install
   cd ../../..
   bigbluebutton-html5/node_modules/.bin/eslint --ext .jsx,.js $files
-
-  docker stop $docker
-  docker rm $docker
-  docker rmi b2
 fi

@@ -7,25 +7,12 @@ node_js:
 
 if: type = pull_request
 
-#before_install:
-#  - bash ./check_if_html5.sh
-
-#install:
-#  - cd bigbluebutton-html5
-#  - curl https://install.meteor.com/ | sh
-#  - meteor npm install
-#  - cd tests/puppeteer
-#  - npm install
-  
 env:
   global:
     - BBB_SERVER_URL=http://localhost/bigbluebutton/api
 
 script:
-#  - cd ../../..
-#  - FILES=`git diff --name-only HEAD..$TRAVIS_BRANCH`
-#  - bigbluebutton-html5/node_modules/.bin/eslint --ext .jsx,.js $(git diff --name-only HEAD..testing-base)
-  - bash ./check_if_html5.sh
+  - bash ./build_script.sh
 
 after_script:
   - docker stop $docker

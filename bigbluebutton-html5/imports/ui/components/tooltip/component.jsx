@@ -9,7 +9,7 @@ const propTypes = {
   title: PropTypes.string.isRequired,
   position: PropTypes.oneOf(['bottom']),
   children: PropTypes.element.isRequired,
-  className: PropTypes.string,
+  className: PropTypes.string
 };
 
 const defaultProps = {

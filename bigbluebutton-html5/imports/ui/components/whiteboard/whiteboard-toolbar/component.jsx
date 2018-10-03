@@ -18,6 +18,8 @@ const THICKNESS_RADIUSES = TOOLBAR_CONFIG.thickness;
 const FONT_SIZES = TOOLBAR_CONFIG.font_sizes;
 const ANNOTATION_TOOLS = TOOLBAR_CONFIG.tools;
 
+// testing
+
 const intlMessages = defineMessages({
   toolbarTools: {
     id: 'app.whiteboard.toolbar.tools',

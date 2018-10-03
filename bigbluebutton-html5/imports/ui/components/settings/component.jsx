@@ -56,7 +56,7 @@ const intlMessages = defineMessages({
   dataSavingLabel: {
     id: 'app.settings.dataSavingTab.label',
     description: 'label for data savings tab',
-  },
+  }
 });
 
 const propTypes = {

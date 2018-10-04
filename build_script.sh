@@ -4,6 +4,10 @@ set -ev
 files=`git diff --name-only HEAD..$TRAVIS_BRANCH`
 if [[ $files = *"bigbluebutton-html5"* ]]; then
   cd bigbluebutton-html5
+  echo "cloning:"
+  git clone https://github.com/bigbluebutton/docker.git
+  echo "ls:"
+  ls docker
   docker build -t b2 -f Dockerfile.test .
   docker=$(docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost)
   echo $docker

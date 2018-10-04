@@ -61,7 +61,7 @@ ADD mod/external.xml          /opt/freeswitch/conf/sip_profiles/external.xml
 
 # -- Install latest HTML5 client from source
 RUN supervisorctl stop bbb-html5
-ADD . /bigbluebutton-html5
+ADD .. /bigbluebutton-html5
 WORKDIR /bigbluebutton-html5
 RUN meteor npm install
 WORKDIR /

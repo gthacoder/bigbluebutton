@@ -10,15 +10,12 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
   ls
   echo "ls there:"
   ls docker
-  rm docker/Dockerfile
-  cp Dockerfile.test docker/Dockerfile
-  cd docker
-  docker build -t b2 .
-  #docker build -t b2 -f Dockerfile.test .
+  cp docker/mod .
+  cp docker/supervisord.conf .
+  docker build -t b2 -f Dockerfile.test .
   docker=$(docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost)
   echo $docker
-  cd ../test/puppeteer
-  #cd tests/puppeteer
+  cd tests/puppeteer
   npm install
   conf=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
   secret=$(echo $conf | cut -d' ' -f2)

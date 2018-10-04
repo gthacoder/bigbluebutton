@@ -7,7 +7,7 @@ const propTypes = {
   overlayClassName: PropTypes.string.isRequired,
   portalClassName: PropTypes.string.isRequired,
   contentLabel: PropTypes.string.isRequired,
-  isOpen: PropTypes.bool.isRequired,
+  isOpen: PropTypes.bool.isRequired
 };
 
 const defaultProps = {

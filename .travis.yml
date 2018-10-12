@@ -18,3 +18,7 @@ after_script:
   - docker stop $docker
   - docker rm $docker
   - docker rmi b2
+
+cache:
+  directories:
+    - bigbluebutton-html5/node_modules

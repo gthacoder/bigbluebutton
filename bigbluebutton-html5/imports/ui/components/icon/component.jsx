@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 const propTypes = {
   iconName: PropTypes.string.isRequired,
-  prependIconName: PropTypes.string,
+  prependIconName: PropTypes.string
 };
 
 const defaultProps = {

@@ -8,7 +8,7 @@ import { styles } from './styles';
 const propTypes = {
   icon: PropTypes.string,
   message: PropTypes.node.isRequired,
-  type: PropTypes.oneOf(Object.values(toast.TYPE)).isRequired,
+  type: PropTypes.oneOf(Object.values(toast.TYPE)).isRequired
 };
 
 const defaultProps = {

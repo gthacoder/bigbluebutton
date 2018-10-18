@@ -243,7 +243,7 @@ class WhiteboardToolbar extends Component {
     const obj = {
       annotationSelected: annotation,
       onBlurEnabled: true,
-      currentSubmenuOpen: '',
+      currentSubmenuOpen: ''
     };
 
     // to animate thickness icon properly when you switch the tool back from Text

@@ -10,7 +10,8 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     meteor npm install
     echo "FILES:"
     echo $files
-    node_modules/.bin/eslint --ext .jsx,.js $files
+    cd ..
+    bigbluebutton-html5/node_modules/.bin/eslint --ext .jsx,.js $files
   else
     echo "Testing"
   fi

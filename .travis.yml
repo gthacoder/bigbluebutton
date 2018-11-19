@@ -10,6 +10,8 @@ node_js:
 - "8"
 
 jobs:
+  allow_failures:
+  - env: JOB_TYPE=linter
   include:
   - stage: "Linter"
     name: "ESLint"
@@ -17,8 +19,6 @@ jobs:
   - stage: "Tests"
     name: "Acceptance Tests"
     env: JOB_TYPE=acceptance_tests
-  - allow_failures:
-    - env: JOB_TYPE=linter
 
 if: type = pull_request
 

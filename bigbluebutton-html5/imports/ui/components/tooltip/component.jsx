@@ -17,6 +17,8 @@ const defaultProps = {
   className: null,
 };
 
+// test
+
 class Tooltip extends Component {
   static wait(show, event) {
     const tooltipTarget = event.target;

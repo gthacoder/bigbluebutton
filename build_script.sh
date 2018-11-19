@@ -11,6 +11,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     cd ..
     bigbluebutton-html5/node_modules/.bin/eslint --ext .jsx,.js $files
   elif [ $1 = acceptance_tests ]
+  then
     {
       git clone --single-branch -b update-html5 https://github.com/bigbluebutton/docker.git
       cp -r docker/{mod,restart.sh,setup.sh,supervisord.conf} .

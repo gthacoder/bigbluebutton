@@ -2,6 +2,9 @@ dist: trusty
 
 language: node_js
 
+node_js:
+- "8"
+
 jobs:
   include:
   - stage: "Linter"
@@ -12,9 +15,6 @@ jobs:
     env: JOB_TYPE=acceptance_tests
   - allow_failures:
     - env: JOB_TYPE=linter
-
-node_js:
-- "8"
 
 if: type = pull_request
 

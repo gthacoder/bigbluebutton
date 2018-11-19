@@ -2,6 +2,13 @@ dist: trusty
 
 language: node_js
 
+matrix:
+  include:
+  - name: "Linter"
+    env: JOB_TYPE=linter
+  - name: "Tests"
+    env: JOB_TYPE=tests
+
 node_js:
 - "8"
 
@@ -12,7 +19,7 @@ env:
     - BBB_SERVER_URL=http://localhost/bigbluebutton/api
 
 script:
-  - travis_wait bash ./build_script.sh
+  - travis_wait bash ./build_script.sh $JOB_TYPE
 
 after_script:
   - docker stop $docker

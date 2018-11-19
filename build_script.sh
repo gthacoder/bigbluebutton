@@ -1,6 +1,10 @@
 #!/bin/bash
 set -ev
 
+echo "INSIDE A SCRIPT"
+echo "JOB_TYPE:"
+echo $1
+
 files=`git diff --name-only HEAD..$TRAVIS_BRANCH`
 if [[ $files = *"bigbluebutton-html5"* ]]; then
   {

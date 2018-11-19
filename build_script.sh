@@ -3,14 +3,15 @@ set -ev
 
 files=`git diff --name-only HEAD..$TRAVIS_BRANCH`
 if [[ $files = *"bigbluebutton-html5"* ]]; then
-if [ $1 = linter ]
-then
-  cd bigbluebutton-html5
-  curl https://install.meteor.com/ | sh
-  meteor npm install
-  node_modules/.bin/eslint --ext .jsx,.js $files
-else
-  echo "Testing"
+  if [ $1 = linter ]
+  then
+    cd bigbluebutton-html5
+    curl https://install.meteor.com/ | sh
+    meteor npm install
+    node_modules/.bin/eslint --ext .jsx,.js $files
+  else
+    echo "Testing"
+  fi
 fi
 #  {
 #    cd bigbluebutton-html5

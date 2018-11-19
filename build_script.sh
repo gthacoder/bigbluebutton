@@ -19,13 +19,13 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
   secret=$(echo $conf | cut -d' ' -f2)
   export BBB_SHARED_SECRET=$secret
   cd ../..
+  curl https://install.meteor.com/ | sh
+  meteor npm install
 
   if [ $1 = linter ]
   then
     node_modules/.bin/eslint --ext .jsx,.js $files
   else
-    curl https://install.meteor.com/ | sh
-    meteor npm install
     cd tests/puppeteer
     npm install
     node html5-check.js

@@ -8,6 +8,8 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     cd bigbluebutton-html5
     curl https://install.meteor.com/ | sh
     meteor npm install
+    echo "FILES:"
+    echo $files
     node_modules/.bin/eslint --ext .jsx,.js $files
   else
     echo "Testing"

@@ -2,6 +2,10 @@ dist: trusty
 
 language: node_js
 
+env:
+  - JOB_TYPE=linter
+  - JOB_TYPE=acceptance_tests
+
 node_js:
 - "8"
 

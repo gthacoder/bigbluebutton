@@ -17,6 +17,8 @@ import Button from '../button/component';
 import RecordingIndicator from './recording-indicator/component';
 import SettingsDropdownContainer from './settings-dropdown/container';
 
+// test
+
 const intlMessages = defineMessages({
   toggleUserListLabel: {
     id: 'app.navBar.userListToggleBtnLabel',

@@ -2,12 +2,16 @@ dist: trusty
 
 language: node_js
 
-matrix:
+jobs:
   include:
-  - name: "Linter"
+  - stage: "Linter"
+    name: "ESLint"
     env: JOB_TYPE=linter
-  - name: "Tests"
-    env: JOB_TYPE=tests
+  - stage: "Tests"
+    name: "Acceptance Tests"
+    env: JOB_TYPE=acceptance_tests
+  - allow_failures:
+    - env: JOB_TYPE=linter
 
 node_js:
 - "8"

@@ -6,6 +6,8 @@ import ActionsDropdown from './actions-dropdown/component';
 import AudioControlsContainer from '../audio/audio-controls/container';
 import JoinVideoOptionsContainer from '../video-provider/video-menu/container';
 
+// test
+
 class ActionsBar extends React.PureComponent {
   render() {
     const {

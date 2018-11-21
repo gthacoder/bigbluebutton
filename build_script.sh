@@ -10,10 +10,10 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
   then
     html5_files=""
     list=$(echo $files | tr " " "\n")
-    for $f in $list
+    for file in $list
     do
-      if [[ $f = bigbluebutton-html5* ]] ; then
-        html5_files+=" $f"
+      if [[ $file = bigbluebutton-html5* ]] ; then
+        html5_files+=" $file"
       fi
     done
 

@@ -8,6 +8,8 @@ import Application from '/imports/ui/components/settings/submenus/application/co
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
+// test
+
 import { withModalMounter } from '../modal/service';
 import Icon from '../icon/component';
 import { styles } from './styles';

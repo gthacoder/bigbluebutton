@@ -12,6 +12,8 @@ import { withModalMounter } from '../modal/service';
 import Icon from '../icon/component';
 import { styles } from './styles';
 
+// test
+
 const intlMessages = defineMessages({
   appTabLabel: {
     id: 'app.settings.applicationTab.label',

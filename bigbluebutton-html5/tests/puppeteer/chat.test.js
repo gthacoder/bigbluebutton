@@ -17,7 +17,7 @@ describe('Chat', () => {
       await test.close();
     }
     expect(response).toBe(true);
-  });
+  }, 25000);
 
   test('Clear chat', async () => {
     const test = new Clear();
@@ -31,7 +31,7 @@ describe('Chat', () => {
       await test.close();
     }
     expect(response).toBe(true);
-  });
+  }, 25000);
 
   test('Copy chat', async () => {
     const test = new Copy();
@@ -45,7 +45,7 @@ describe('Chat', () => {
       await test.close();
     }
     expect(response).toBe(true);
-  });
+  }, 25000);
 
   test('Save chat', async () => {
     const test = new Save();
@@ -59,5 +59,5 @@ describe('Chat', () => {
       await test.close();
     }
     expect(response).toBe(true);
-  });
+  }, 25000);
 });

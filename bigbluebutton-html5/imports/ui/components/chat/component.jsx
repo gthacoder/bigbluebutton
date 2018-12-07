@@ -10,6 +10,8 @@ import MessageForm from './message-form/component';
 import MessageList from './message-list/component';
 import ChatDropdown from './chat-dropdown/component';
 
+// test
+
 const ELEMENT_ID = 'chat-messages';
 
 const intlMessages = defineMessages({

@@ -36,6 +36,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     export BBB_SHARED_SECRET=$secret
     node html5-check.js
     cd ..
+    npm install
     npm test
   fi
 fi

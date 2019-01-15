@@ -10,9 +10,13 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
   then
     html5_files=""
     list=$(echo $files | tr " " "\n")
+    echo "ITERATING"
     for file in $list
     do
-      if [[ $file = bigbluebutton-html5* ]] ; then
+      if [[ $file = bigbluebutton-html5* ]] && [[ -e $file ]]
+      then
+        echo "yes:"
+        echo $file
         html5_files+=" $file"
       fi
     done

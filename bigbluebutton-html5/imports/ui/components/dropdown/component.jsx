@@ -9,6 +9,8 @@ import { styles } from './styles';
 import DropdownTrigger from './trigger/component';
 import DropdownContent from './content/component';
 
+// test
+
 const intlMessages = defineMessages({
   close: {
     id: 'app.dropdown.close',

@@ -13,7 +13,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     echo "ITERATING"
     for file in $list
     do
-      if [[ $file = bigbluebutton-html5* ]] && [[ -e $file ]]
+      if [[ $file = bigbluebutton-html5* ]]
       then
         echo "yes:"
         echo $file

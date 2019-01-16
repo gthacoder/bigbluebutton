@@ -15,9 +15,11 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     do
       if [[ $file = bigbluebutton-html5* ]]
       then
-        echo "yes:"
-        echo $file
-        html5_files+=" $file"
+        if [ -e $file ]
+          echo "yes:"
+          echo $file
+          html5_files+=" $file"
+        fi
       fi
     done
 

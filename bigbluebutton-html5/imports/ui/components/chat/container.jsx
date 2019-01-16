@@ -6,6 +6,8 @@ import Auth from '/imports/ui/services/auth';
 import Chat from './component';
 import ChatService from './service';
 
+// test
+
 const CHAT_CONFIG = Meteor.settings.public.chat;
 const PUBLIC_CHAT_KEY = CHAT_CONFIG.public_id;
 const CHAT_CLEAR = CHAT_CONFIG.system_messages_keys.chat_clear;

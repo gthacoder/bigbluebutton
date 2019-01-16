@@ -5,6 +5,8 @@ import cx from 'classnames';
 import Icon from '../icon/component';
 import { styles } from './styles';
 
+// test
+
 const propTypes = {
   icon: PropTypes.string,
   message: PropTypes.node.isRequired,

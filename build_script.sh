@@ -6,6 +6,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
   cd bigbluebutton-html5
   curl https://install.meteor.com/ | sh
   meteor npm install
+  cd ..
   if [ $1 = linter ]
   then
     html5_files=""
@@ -13,20 +14,14 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     echo "ITERATING"
     for file in $list
     do
-      if [[ $file = bigbluebutton-html5* ]]
+      if [[ $file = bigbluebutton-html5* ]] && [[ -e $file ]]
       then
-        echo "IF"
+        echo "YES"
         echo $file
-        if [ -e $file ]
-        then
-          echo "yes:"
-          #echo $file
-          html5_files+=" $file"
-        fi
+        html5_files+=" $file"
       fi
     done
 
-    cd ..
     bigbluebutton-html5/node_modules/.bin/eslint --ext .jsx,.js $html5_files
   elif [ $1 = acceptance_tests ]
   then

@@ -6,6 +6,8 @@ import { styles } from './styles';
 import CustomLogo from './custom-logo/component';
 import UserContentContainer from './user-list-content/container';
 
+// test
+
 const propTypes = {
   openChats: PropTypes.arrayOf(String).isRequired,
   compact: PropTypes.bool,

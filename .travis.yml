@@ -18,7 +18,7 @@ jobs:
     env: JOB_TYPE=linter
   - stage: "Tests"
     name: "Acceptance Tests"
-#    env: JOB_TYPE=acceptance_tests
+    env: JOB_TYPE=disabled_acceptance_tests
 
 if: type = pull_request
 

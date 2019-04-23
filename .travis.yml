@@ -16,8 +16,8 @@ jobs:
   - stage: "Linter"
     name: "ESLint"
     env: JOB_TYPE=linter
-#  - stage: "Tests"
-#    name: "Acceptance Tests"
+  - stage: "Tests"
+    name: "Acceptance Tests"
 #    env: JOB_TYPE=acceptance_tests
 
 if: type = pull_request

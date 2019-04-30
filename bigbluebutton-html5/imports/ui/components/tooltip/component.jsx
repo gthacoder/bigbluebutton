@@ -6,6 +6,8 @@ import cx from 'classnames';
 import { ESCAPE } from '/imports/utils/keyCodes';
 import Settings from '/imports/ui/services/settings';
 
+// test
+
 const DEFAULT_ANIMATION = 'shift-away';
 const ANIMATION_NONE = 'none';
 const ANIMATION_DURATION = 350;

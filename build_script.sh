@@ -33,6 +33,8 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     echo "here 3"
 
+    ls
+    echo "here 4"
     cd tests/puppeteer/core
     conf=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
     secret=$(echo $conf | cut -d' ' -f2)

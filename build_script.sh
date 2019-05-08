@@ -31,6 +31,19 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     #cd bigbluebutton-html5/tests/puppeteer/core
     #conf=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
 
+    wget -qO- https://ubuntu.bigbluebutton.org/bbb-install.sh | bash -s -- -v xenial-220-beta
+    echo 'location /html5client {
+      proxy_pass http://127.0.0.1:3000;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "Upgrade";
+    }
+
+    location /_timesync {
+      proxy_pass http://127.0.0.1:3000;
+    }' >> /etc/bigbluebutton/nginx/bbb-html5.nginx
+    sudo /etc/init.d/nginx reload
+    sudo nginx -t
     cd bigbluebutton-html5
     npm install
     npm start &

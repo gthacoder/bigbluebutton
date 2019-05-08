@@ -11,7 +11,7 @@ const http = require(httpPath);
   const bbb = url.parse(process.env.BBB_SERVER_URL);
   const check = `${bbb.protocol}//${bbb.hostname}/html5client/check`;
   console.log(`HTML5 check URL: ${check}`);
-  const maxRetries = 20;
+  const maxRetries = 40;
   const retryDelay = 10000;
   let retryCount = 0;
   while (true) {

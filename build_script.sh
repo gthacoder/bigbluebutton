@@ -42,5 +42,8 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     node html5-check.js
     #cd ../../..
     #npm test
+    docker stop $docker
+    docker rm $docker
+    docker rmi b2
   fi
 fi

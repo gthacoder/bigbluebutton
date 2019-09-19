@@ -33,13 +33,15 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     ls
 
+    dpkg -l | grep systemd
+    apt-get install systemd
+
     systemctl status bbb-html5
     systemctl stop bbb-html5
     systemctl status bbb-html5
 
     cd bigbluebutton-html5
     npm start &
-    echo "FINISH"
 
     #cd bigbluebutton-html5/tests/puppeteer/core
     #conf=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
@@ -49,5 +51,15 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     #node html5-check.js
     #cd ../../..
     #npm test
+
+    url=$(docker exec $(docker ps -q) bbb-conf --secret | grep "URL:" | cut -d' ' -f2)
+    url+="api/"
+    echo "URL:"
+    echo $url
+    secret=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:" | cut -d' ' -f2)
+    echo "Secret:"
+    echo $secret
+
+    echo "FINISH"
   fi
 fi

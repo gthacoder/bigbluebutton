@@ -33,10 +33,17 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     ls
 
-    #cd tests/puppeteer/core
-    conf=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
-    secret=$(echo $conf | cut -d' ' -f2)
-    echo $secret
+    systemctl status bbb-html5
+    systemctl stop bbb-html5
+    systemctl status bbb-html5
+
+    cd bigbluebutton-html5
+    npm start
+
+    #cd bigbluebutton-html5/tests/puppeteer/core
+    #conf=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
+    #secret=$(echo $conf | cut -d' ' -f2)
+    #echo $secret
     #export BBB_SHARED_SECRET=$secret
     #node html5-check.js
     #cd ../../..

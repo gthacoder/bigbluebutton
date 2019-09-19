@@ -33,12 +33,12 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     ls
 
-    dpkg -l | grep systemd
-    apt-get install systemd
+    #dpkg -l | grep systemd
+    #apt-get install systemd
 
-    systemctl status bbb-html5
-    systemctl stop bbb-html5
-    systemctl status bbb-html5
+    sudo systemctl status bbb-html5
+    sudo systemctl stop bbb-html5
+    sudo systemctl status bbb-html5
 
     cd bigbluebutton-html5
     npm start &

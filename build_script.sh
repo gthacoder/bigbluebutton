@@ -41,7 +41,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     sudo apt-get install xvfb
 
     cd bigbluebutton-html5
-    ./node_modules/.bin/webdriver-manager update
+    ./node_modules/.bin/webdriver-manager update --gecko=false
     xvfb-run ./node_modules/.bin/webdriver-manager start &
 
     #dpkg -l | grep systemd

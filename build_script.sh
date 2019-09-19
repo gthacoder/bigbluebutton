@@ -33,14 +33,24 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     ls
 
+    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+    sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+    sudo apt-get update
+    sudo apt-get install google-chrome-stable
+
+    sudo apt-get install xvfb
+
+    cd bigbluebutton-html5
+    ./node_modules/.bin/webdriver-manager update
+    xvfb-run ./node_modules/.bin/webdriver-manager start &
+
     #dpkg -l | grep systemd
     #apt-get install systemd
 
-    sudo systemctl status bbb-html5
-    sudo systemctl stop bbb-html5
-    sudo systemctl status bbb-html5
+    #sudo systemctl status bbb-html5
+    #sudo systemctl stop bbb-html5
+    #sudo systemctl status bbb-html5
 
-    cd bigbluebutton-html5
     npm start &
 
     #cd bigbluebutton-html5/tests/puppeteer/core

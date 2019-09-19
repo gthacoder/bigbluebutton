@@ -38,7 +38,8 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     systemctl status bbb-html5
 
     cd bigbluebutton-html5
-    npm start
+    npm start &
+    echo "FINISH"
 
     #cd bigbluebutton-html5/tests/puppeteer/core
     #conf=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")

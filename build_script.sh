@@ -61,6 +61,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     cd bigbluebutton-html5
     ./node_modules/.bin/webdriver-manager update --gecko=false --versions.chrome=v77.0.3865.90-1
     xvfb-run ./node_modules/.bin/webdriver-manager start --versions.chrome=v77.0.3865.90-1 &
+    sleep 5
 
     #dpkg -l | grep systemd
     #apt-get install systemd
@@ -70,6 +71,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     #sudo systemctl status bbb-html5
 
     npm start &
+    sleep 5
 
     #cd bigbluebutton-html5/tests/puppeteer/core
     #conf=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")

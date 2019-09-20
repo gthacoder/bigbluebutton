@@ -45,7 +45,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     cat .testing-env
     > .testing-env
     echo "TESTING_SERVER='$url'" > .testing-env
-    echo "TESTING_SECRET='$secret'" > .testing-env
+    echo "TESTING_SECRET='$secret'" >> .testing-env
     cat .testing-env
     cd ../../..
 

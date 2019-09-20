@@ -80,6 +80,10 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     #cd ../../..
     #npm test
 
+    cat tests/webdriverio/.testing-env
+
+    npm test -- --spec ./tests/webdriverio/specs/chat.spec.js
+
     echo "FINISH"
   fi
 fi

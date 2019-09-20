@@ -41,6 +41,14 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     echo "url:"
     echo $url
 
+    cd tests/webdriverio
+    cat .testing-env
+    > .testing-env
+    echo "TESTING_SERVER='$url'" > .testing-env
+    echo "TESTING_SECRET='$secret'" > .testing-env
+    cat .testing-env
+    cd ../..
+
     ls
 
     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
@@ -71,14 +79,6 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     #node html5-check.js
     #cd ../../..
     #npm test
-
-    cd tests/webdriverio
-    cat .testing-env
-    > .testing-env
-    echo "TESTING_SERVER='$url'" > .testing-env
-    echo "TESTING_SECRET='$secret'" > .testing-env
-
-    cat .testing-env
 
     echo "FINISH"
   fi

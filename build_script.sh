@@ -75,6 +75,12 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     echo "Secret:"
     echo $secret
 
+    cd tests/webdriverio
+    cat .testing-env
+    > .testing-env
+    echo "TESTING_SERVER='$url'" > .testing-env
+    echo "TESTING_SECRET='$secret'" > .testing-env
+
     echo "FINISH"
   fi
 fi

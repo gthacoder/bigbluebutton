@@ -32,9 +32,14 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     } > /dev/null
 
     conf1=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
-    secret1=$(echo $conf1 | cut -d' ' -f2)
-    echo "secret1:"
-    echo $secret1
+    secret=$(echo $conf1 | cut -d' ' -f2)
+    echo "secret:"
+    echo $secret
+    conf2=$(docker exec $(docker ps -q) bbb-conf --secret | grep "URL:")
+    url=$(echo $conf1 | cut -d' ' -f2)
+    url+="api/"
+    echo "url:"
+    echo $url
 
     ls
 
@@ -66,14 +71,6 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     #node html5-check.js
     #cd ../../..
     #npm test
-
-    url=$(docker exec $(docker ps -q) bbb-conf --secret | grep "URL:" | cut -d' ' -f2)
-    url+="api/"
-    echo "URL:"
-    echo $url
-    secret=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:" | cut -d' ' -f2)
-    echo "Secret:"
-    echo $secret
 
     cd tests/webdriverio
     cat .testing-env

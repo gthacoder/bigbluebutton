@@ -36,7 +36,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     echo "secret:"
     echo $secret
     conf2=$(docker exec $(docker ps -q) bbb-conf --secret | grep "URL:")
-    url=$(echo $conf1 | cut -d' ' -f2)
+    url=$(echo $conf2 | cut -d' ' -f2)
     url+="api/"
     echo "url:"
     echo $url
@@ -77,6 +77,8 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     > .testing-env
     echo "TESTING_SERVER='$url'" > .testing-env
     echo "TESTING_SECRET='$secret'" > .testing-env
+
+    cat .testing-env
 
     echo "FINISH"
   fi

@@ -41,13 +41,13 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     echo "url:"
     echo $url
 
-    cd tests/webdriverio
+    cd bigbluebutton-html5/tests/webdriverio
     cat .testing-env
     > .testing-env
     echo "TESTING_SERVER='$url'" > .testing-env
     echo "TESTING_SECRET='$secret'" > .testing-env
     cat .testing-env
-    cd ../..
+    cd ../../..
 
     ls
 

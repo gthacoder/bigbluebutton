@@ -31,6 +31,11 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
       echo $docker
     } > /dev/null
 
+    conf1=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
+    secret1=$(echo $conf1 | cut -d' ' -f2)
+    echo "secret1:"
+    echo $secret1
+
     ls
 
     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -

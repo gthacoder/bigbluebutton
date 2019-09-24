@@ -44,7 +44,8 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     cd bigbluebutton-html5/tests/webdriverio
     cat .testing-env
     > .testing-env
-    echo "TESTING_SERVER='$url'" > .testing-env
+    #echo "TESTING_SERVER='$url'" > .testing-env
+    echo "TESTING_SERVER='http://localhost/bigbluebutton/api/'" > .testing-env
     echo "TESTING_SECRET='$secret'" >> .testing-env
     cat .testing-env
     cd ../../..
@@ -84,6 +85,9 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     #npm test
 
     cat tests/webdriverio/.testing-env
+
+    check=$(wget http://localhost/html5client/check -q -O -)
+    echo $content
 
     npm test -- --spec ./tests/webdriverio/specs/chat.spec.js
 

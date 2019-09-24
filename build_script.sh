@@ -86,8 +86,10 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     cat tests/webdriverio/.testing-env
 
-    check=$(wget http://localhost/html5client/check -q -O -)
-    echo $content
+    sudo apt-get install wget
+    #check=$(wget http://localhost/bigbluebutton/api -q -O -)
+    #echo $content
+    wget http://localhost/bigbluebutton/api
 
     npm test -- --spec ./tests/webdriverio/specs/chat.spec.js
 

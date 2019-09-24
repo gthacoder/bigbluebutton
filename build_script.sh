@@ -66,7 +66,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     #dpkg -l | grep systemd
     #apt-get install systemd
 
-    #sudo systemctl status bbb-html5
+    sudo systemctl status bbb-html5
     #sudo systemctl stop bbb-html5
     #sudo systemctl status bbb-html5
 

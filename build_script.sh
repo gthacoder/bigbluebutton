@@ -75,7 +75,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     npm install
     npm start &
-    sleep 60
+    sleep 180
 
     #cd bigbluebutton-html5/tests/puppeteer/core
     #conf=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")

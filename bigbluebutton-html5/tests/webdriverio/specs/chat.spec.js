@@ -6,7 +6,7 @@ const ModalPage = require('../pageobjects/modal.page');
 const ChatPage = require('../pageobjects/chat.page');
 const Utils = require('../utils');
 
-const WAIT_TIME = 10000;
+const WAIT_TIME = 20000;
 const message = 'Hello';
 
 const loginWithoutAudio = function (username) {

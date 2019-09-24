@@ -31,6 +31,8 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
       echo $docker
     } > /dev/null
 
+    sleep 300
+
     conf1=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
     secret=$(echo $conf1 | cut -d' ' -f2)
     echo "secret:"
@@ -86,10 +88,10 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     cat tests/webdriverio/.testing-env
 
-    sudo apt-get install wget
+    #sudo apt-get install wget
     #check=$(wget http://localhost/bigbluebutton/api -q -O -)
     #echo $content
-    wget http://localhost/bigbluebutton/api
+    #wget http://localhost/bigbluebutton/api
 
     npm test -- --spec ./tests/webdriverio/specs/chat.spec.js
 

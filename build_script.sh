@@ -73,6 +73,9 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     #sudo systemctl stop bbb-html5
     #sudo systemctl status bbb-html5
 
+    sudo bbb-conf --check
+    sudo bbb-conf --status
+
     npm install
     npm start &
     sleep 180

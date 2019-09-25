@@ -27,9 +27,9 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
       cp -r docker/{mod,setup.sh,supervisord.conf} .
       cp -r docker/Dockerfile Dockerfile.test
       docker build -t b2 -f Dockerfile.test .
-      docker=$(docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost)
-      echo $docker
+      #docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost bash
     } > /dev/null
+    docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost bash
 
     sleep 300
 
@@ -46,7 +46,6 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     cd bigbluebutton-html5/tests/webdriverio
     cat .testing-env
     > .testing-env
-    #echo "TESTING_SERVER='$url'" > .testing-env
     echo "TESTING_SERVER='http://localhost/bigbluebutton/api/'" > .testing-env
     echo "TESTING_SECRET='$secret'" >> .testing-env
     cat .testing-env
@@ -66,13 +65,6 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     xvfb-run ./node_modules/.bin/webdriver-manager start --versions.chrome=v77.0.3865.90-1 &
     sleep 5
 
-    #dpkg -l | grep systemd
-    #apt-get install systemd
-
-    #sudo systemctl status bbb-html5
-    #sudo systemctl stop bbb-html5
-    #sudo systemctl status bbb-html5
-
     sudo bbb-conf --check
     sudo bbb-conf --status
 
@@ -80,21 +72,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     npm start &
     sleep 180
 
-    #cd bigbluebutton-html5/tests/puppeteer/core
-    #conf=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
-    #secret=$(echo $conf | cut -d' ' -f2)
-    #echo $secret
-    #export BBB_SHARED_SECRET=$secret
-    #node html5-check.js
-    #cd ../../..
-    #npm test
-
     cat tests/webdriverio/.testing-env
-
-    #sudo apt-get install wget
-    #check=$(wget http://localhost/bigbluebutton/api -q -O -)
-    #echo $content
-    #wget http://localhost/bigbluebutton/api
 
     npm test -- --spec ./tests/webdriverio/specs/chat.spec.js
 

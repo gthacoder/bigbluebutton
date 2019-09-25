@@ -33,7 +33,8 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     sleep 300
 
-    docker exec -i $(docker ps -q) bash
+    docker exec $(docker ps -q) bash
+    ls
 
     #conf1=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
     #secret=$(echo $conf1 | cut -d' ' -f2)
@@ -67,12 +68,12 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     #xvfb-run ./node_modules/.bin/webdriver-manager start --versions.chrome=v77.0.3865.90-1 &
     #sleep 5
 
-    #sudo bbb-conf --check
-    #sudo bbb-conf --status
+    sudo bbb-conf --check
+    sudo bbb-conf --status
 
-    npm install
-    npm start &
-    sleep 180
+    #npm install
+    #npm start &
+    #sleep 180
 
     #cat tests/webdriverio/.testing-env
 

@@ -65,8 +65,8 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     xvfb-run ./node_modules/.bin/webdriver-manager start --versions.chrome=v77.0.3865.90-1 &
     #sleep 5
 
-    #sudo bbb-conf --check
-    #sudo bbb-conf --status
+    sudo bbb-conf --check
+    sudo bbb-conf --status
 
     npm install
     npm start &
@@ -74,7 +74,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     cat tests/webdriverio/.testing-env
 
-    npm test -- --spec ./tests/webdriverio/specs/chat.spec.js
+    #npm test -- --spec ./tests/webdriverio/specs/chat.spec.js
 
     echo "FINISH"
   fi

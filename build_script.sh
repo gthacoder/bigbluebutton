@@ -33,7 +33,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     sleep 300
 
-    docker exec -it $(docker ps -q) bash
+    docker exec -i $(docker ps -q) bash
 
     #conf1=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
     #secret=$(echo $conf1 | cut -d' ' -f2)

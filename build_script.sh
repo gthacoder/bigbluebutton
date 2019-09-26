@@ -29,15 +29,19 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
       docker build -t b2 -f Dockerfile.test .
       #docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost bash
     } > /dev/null
-    docker run -i -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost /bin/bash
+    docker run -i -d -p --privileged=true 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost /bin/bash
     #docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost bash
 
     #sleep 300
 
+    echo "----------"
+    echo "container"
     container=$(docker ps -q)
     echo "CONTAINER:"
     echo $container
 
+    echo "----------"
+    echo "status"
     status=$(docker exec $container bbb-conf --status)
     echo "STATUS:"
     echo $status

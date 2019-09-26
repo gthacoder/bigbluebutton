@@ -31,10 +31,12 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     } > /dev/null
     #docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost bash
 
-    sleep 300
+    #sleep 300
 
-    docker exec $(docker ps -q) bash
-    ls
+    $(docker ps -q)
+
+    docker exec $(docker ps -q) sudo bbb-conf --status
+    #ls
 
     #conf1=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
     #secret=$(echo $conf1 | cut -d' ' -f2)
@@ -63,13 +65,13 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     #sudo apt-get install xvfb
 
-    cd bigbluebutton-html5
+    #cd bigbluebutton-html5
     #./node_modules/.bin/webdriver-manager update --gecko=false --versions.chrome=v77.0.3865.90-1
     #xvfb-run ./node_modules/.bin/webdriver-manager start --versions.chrome=v77.0.3865.90-1 &
     #sleep 5
 
-    sudo bbb-conf --check
-    sudo bbb-conf --status
+    #sudo bbb-conf --check
+    #sudo bbb-conf --status
 
     #npm install
     #npm start &

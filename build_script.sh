@@ -34,7 +34,11 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     #sleep 300
 
-    status=$(docker exec $(docker ps -q) bbb-conf --status)
+    container=$(docker ps -q)
+    echo "CONTAINER:"
+    echo $container
+
+    status=$(docker exec $container bbb-conf --status)
     echo "STATUS:"
     echo $status
     #ls

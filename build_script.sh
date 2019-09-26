@@ -27,15 +27,15 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
       cp -r docker/{mod,setup.sh,supervisord.conf} .
       cp -r docker/Dockerfile Dockerfile.test
       docker build -t b2 -f Dockerfile.test .
-      docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost
+      docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost bash
     } > /dev/null
     #docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost bash
 
     #sleep 300
 
-    $(docker ps -q)
-
-    docker exec $(docker ps -q) sudo bbb-conf --status
+    status=$(docker exec $(docker ps -q) bbb-conf --status)
+    echo "STATUS:"
+    echo $status
     #ls
 
     #conf1=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")

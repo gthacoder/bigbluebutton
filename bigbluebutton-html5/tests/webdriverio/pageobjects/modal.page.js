@@ -1,9 +1,5 @@
-
-
 const Page = require('./page');
 
-const pageObject = new Page();
-const chai = require('chai');
 
 class ModalPage extends Page {
   get modalCloseSelector() {

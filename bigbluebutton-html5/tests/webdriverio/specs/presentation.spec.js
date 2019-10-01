@@ -1,4 +1,3 @@
-const LandingPage = require('../pageobjects/landing.page');
 const ModalPage = require('../pageobjects/modal.page');
 const ChatPage = require('../pageobjects/chat.page');
 const Utils = require('../utils');
@@ -8,8 +7,9 @@ const WAIT_TIME = 10000;
 const checkFullscreen = () => document.fullscreen;
 
 const loginWithoutAudio = function (username) {
-  LandingPage.joinClient(username);
+  const meetingId = Utils.createMeeting();
 
+  Utils.joinMeeting(meetingId, username, 'mp', false);
   // close audio modal
   browser.waitForExist(ModalPage.modalCloseSelector, WAIT_TIME);
   ModalPage.closeAudioModal();
@@ -26,7 +26,7 @@ describe('Presentation', () => {
       const username = 'presentationUser';
       loginWithoutAudio(username);
 
-      browser.waitForExist(ChatPage.publicChatSelector, WAIT_TIME);
+      browser.waitForExist(ChatPage.chatMessageInputSelector, WAIT_TIME);
       browser.waitForExist('[data-test="presentationFullscreenButton"]', WAIT_TIME);
       $('[data-test="presentationFullscreenButton"]').click();
       browser.pause(2000);

@@ -1,22 +1,57 @@
-
-
 const Page = require('./page');
 
-const pageObject = new Page();
-const chai = require('chai');
-
 class ChatPage extends Page {
-  get publicChatSelector() {
+  get chatMessageInputSelector() {
     return '#message-input';
+  }
+
+  get chatMessageInputElement() {
+    return $(this.chatMessageInputSelector);
+  }
+
+  sendChatMessage(message) {
+    this.chatMessageInputElement.setValue(message);
+    this.sendMessageButtonElement.click();
+  }
+
+  // ////////
+
+  get publicChatSelector() {
+    return '[data-test=publicChat]';
   }
 
   get publicChatElement() {
     return $(this.publicChatSelector);
   }
 
-  sendPublicChatMessage(message) {
-    this.publicChatElement.setValue(message);
-    this.sendMessageButtonElement.click();
+  // ////////
+
+  get userListItemNotCurrentSelector() {
+    return '[data-test=userListItemNotCurrent]';
+  }
+
+  get userListItemNotCurrentElement() {
+    return $(this.userListItemNotCurrentSelector);
+  }
+
+  // ////////
+
+  get startPrivateChatSelector() {
+    return '[data-test=activeChat]';
+  }
+
+  get startPrivateChatElement() {
+    return $(this.startPrivateChatSelector);
+  }
+
+  // ////////
+
+  get chatTitleSelector() {
+    return '[data-test=chatTitle]';
+  }
+
+  get chatTitleElement() {
+    return $(this.chatTitleSelector);
   }
 
   // ////////

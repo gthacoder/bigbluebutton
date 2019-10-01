@@ -1,9 +1,6 @@
-
-
+const chai = require('chai');
 const Page = require('./page');
 
-const pageObject = new Page();
-const chai = require('chai');
 
 class SettingsPage extends Page {
   // open the settings dropdown

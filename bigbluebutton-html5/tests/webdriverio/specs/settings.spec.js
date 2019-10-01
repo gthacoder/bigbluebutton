@@ -1,7 +1,6 @@
 
 
 const chai = require('chai');
-const LandingPage = require('../pageobjects/landing.page');
 const ModalPage = require('../pageobjects/modal.page');
 const SettingsPage = require('../pageobjects/settings.page');
 const Utils = require('../utils');
@@ -31,8 +30,12 @@ describe('Settings', () => {
   });
 
   beforeEach(() => {
-    LandingPage.joinClient('settingsUser');
-    closeAudioModal();
+    const meetingId = Utils.createMeeting();
+
+    Utils.joinMeeting(meetingId, 'moderator', 'mp', false);
+    // close audio modal
+    browser.waitForExist(ModalPage.modalCloseSelector, WAIT_TIME);
+    ModalPage.closeAudioModal();
   });
 
   it('should be able to use all locales',

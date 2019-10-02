@@ -27,7 +27,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
       cp -r docker/{mod,setup.sh,supervisord.conf} .
       cp -r docker/Dockerfile Dockerfile.test
       docker build -t b2 -f Dockerfile.test .
-      docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost
+      docker run -d --privileged=true -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost
     } > /dev/null
 
     #sleep 300

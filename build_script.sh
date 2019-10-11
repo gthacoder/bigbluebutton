@@ -23,39 +23,62 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
   elif [ $1 = acceptance_tests ]
   then
     {
-      git clone --single-branch -b update-html5 https://github.com/bigbluebutton/docker.git
+      git clone --single-branch -b update-html5 https://github.com/MaximKhlobystov/docker.git
       cp -r docker/{mod,setup.sh,supervisord.conf} .
       cp -r docker/Dockerfile Dockerfile.test
-      docker build -t b2 -f Dockerfile.test .
-      docker run -d --privileged=true -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp b2 -h localhost
+      docker build -t bbb -f Dockerfile.test .
+      docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp bbb -h localhost
     } > /dev/null
 
     #sleep 300
 
     #echo "----------"
     #echo "container"
-    container=$(docker ps -q)
+    #container=$(docker ps -q)
     #echo "CONTAINER:"
     #echo $container
 
-    docker exec $(docker ps -q) bbb-conf --status
+    #docker exec $(docker ps -q) bbb-conf --status
 
+    #docker exec -it $container bash
+    #bbb-conf --status
+
+    echo "----------"
+    echo "secret"
+    conf1=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
+    secret=$(echo $conf1 | cut -d' ' -f2)
+    echo "SECRET:"
+    echo $secret
+
+    cd bigbluebutton-html5/tests/webdriverio
+    cat .testing-env
+    > .testing-env
+    echo "TESTING_SERVER='http://localhost/bigbluebutton/api/'" > .testing-env
+    echo "TESTING_SECRET='$secret'" >> .testing-env
+    cat .testing-env
+    cd ../../..
+    ls
+
+    container=$(docker ps -q)
     docker exec -it $container bash
-    bbb-conf --status
 
-    #echo "----------"
-    #echo "secret"
-    #conf1=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
-    #secret=$(echo $conf1 | cut -d' ' -f2)
-    #echo "SECRET:"
-    #echo $secret
+    supervisorctl status
+    echo "STOPPING HTML5 CLIENT"
+    supervisorctl stop bbb-html5
+    supervisorctl status
 
-    #cd bigbluebutton-html5/tests/webdriverio
-    #cat .testing-env
-    #> .testing-env
-    #echo "TESTING_SERVER='http://localhost/bigbluebutton/api/'" > .testing-env
-    #echo "TESTING_SECRET='$secret'" >> .testing-env
-    #cat .testing-env
+    git clone https://github.com/bigbluebutton/bigbluebutton.git
+    cd bigbluebutton/bigbluebutton-html5
+    curl https://install.meteor.com/ | sh
+    meteor npm install
+    npm start &
+    exit
+
+    echo "OUTSIDE CONTAINER"
+    cat .testing-env
+
+    echo "check:"
+    wget localhost/html5client/check -q -O -
 
     #echo "localhost:"
     #wget localhost -q -O -

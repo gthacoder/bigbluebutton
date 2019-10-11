@@ -23,7 +23,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
   elif [ $1 = acceptance_tests ]
   then
     {
-      git clone --single-branch -b update-html5 https://github.com/MaximKhlobystov/docker.git
+      git clone --single-branch -b bbb-2-2 https://github.com/MaximKhlobystov/docker.git
       cp -r docker/{mod,setup.sh,supervisord.conf} .
       cp -r docker/Dockerfile Dockerfile.test
       docker build -t bbb -f Dockerfile.test .

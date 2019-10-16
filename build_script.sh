@@ -23,29 +23,29 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
   elif [ $1 = acceptance_tests ]
   then
     {
-      git clone --single-branch -b bbb-2-2 https://github.com/MaximKhlobystov/docker.git
+      git clone --single-branch -b bbb22 https://github.com/MaximKhlobystov/docker.git
       cp -r docker/{mod,setup.sh,supervisord.conf} .
       cp -r docker/Dockerfile Dockerfile.test
       docker build -t bbb -f Dockerfile.test .
       #docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp bbb -h localhost
-      docker run -d --privileged=true -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp bbb -h localhost
+      docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp bbb -h localhost
     } > /dev/null
 
-    echo "----------"
-    echo "secret"
-    conf1=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
-    secret=$(echo $conf1 | cut -d' ' -f2)
-    echo "SECRET:"
-    echo $secret
+    #echo "----------"
+    #echo "secret"
+    #conf1=$(docker exec $(docker ps -q) bbb-conf --secret | grep "Secret:")
+    #secret=$(echo $conf1 | cut -d' ' -f2)
+    #echo "SECRET:"
+    #echo $secret
 
-    cd bigbluebutton-html5/tests/webdriverio
-    cat .testing-env
-    > .testing-env
-    echo "TESTING_SERVER='http://localhost/bigbluebutton/api/'" > .testing-env
-    echo "TESTING_SECRET='$secret'" >> .testing-env
-    cat .testing-env
-    cd ../../..
-    ls
+    #cd bigbluebutton-html5/tests/webdriverio
+    #cat .testing-env
+    #> .testing-env
+    #echo "TESTING_SERVER='http://localhost/bigbluebutton/api/'" > .testing-env
+    #echo "TESTING_SECRET='$secret'" >> .testing-env
+    #cat .testing-env
+    #cd ../../..
+    #ls
 
     container=$(docker ps -q)
     echo $container
@@ -60,11 +60,12 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     cd bigbluebutton/bigbluebutton-html5
     curl https://install.meteor.com/ | sh
     meteor npm install
-    npm start &
+    #npm start &
+    ROOT_URL=http://127.0.0.1/html5client NODE_ENV=development METEOR_ALLOW_SUPERUSER=true meteor &
     exit
 
-    echo "OUTSIDE CONTAINER"
-    cat .testing-env
+    #echo "OUTSIDE CONTAINER"
+    #cat .testing-env
 
     echo "check:"
     wget localhost/html5client/check -q -O -

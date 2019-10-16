@@ -49,7 +49,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     container=$(docker ps -q)
     echo $container
-    docker exec -it $container bash
+    docker exec $container bash
 
     supervisorctl status
     echo "STOPPING HTML5 CLIENT"

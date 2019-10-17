@@ -49,6 +49,11 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     container=$(docker ps -q)
     echo $container
+
+    echo "SINGLE COMMAND:"
+    docker exec $container supervisorctl status
+
+    echo "LOGIN"
     docker exec $container bash
 
     supervisorctl status

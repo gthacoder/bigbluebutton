@@ -58,9 +58,10 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     docker exec $container ls /etc/supervisor/supervisord.conf
     echo "3"
     docker exec $container ls /etc/supervisor/conf.d/
-    echo "before start"
-    docker exec $container service supervisor start
-    echo "after start"
+    #echo "before start"
+    #docker exec $container service supervisor start
+    #echo "after start"
+    docker exec $container ln -s  /etc/supervisor/supervisord.conf /etc/supervisord.conf
     docker exec $container supervisorctl status
 
     echo "LOGIN"

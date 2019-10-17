@@ -50,36 +50,33 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     container=$(docker ps -q)
     echo $container
 
-    echo "SINGLE COMMAND:"
-    docker exec $container supervisorctl status
     #echo "1"
     #docker exec $container ls /etc/supervisord.conf
-    echo "2"
-    docker exec $container ls /etc/supervisor/supervisord.conf
-    echo "3"
-    docker exec $container ls /etc/supervisor/conf.d/
-    docker exec $container ln -s  /etc/supervisor/supervisord.conf /etc/supervisord.conf
+    #echo "2"
+    #docker exec $container ls /etc/supervisor/supervisord.conf
+    #echo "3"
+    #docker exec $container ls /etc/supervisor/conf.d/
+    #docker exec $container ln -s  /etc/supervisor/supervisord.conf /etc/supervisord.conf
     echo "before start"
     docker exec $container service supervisor status
     docker exec $container service supervisor start
     echo "after start"
-    docker exec $container supervisorctl status
+    #docker exec $container supervisorctl status
 
-    echo "LOGIN"
-    docker exec $container bash
+    #echo "LOGIN"
+    #docker exec $container bash
 
-    supervisorctl status
-    echo "STOPPING HTML5 CLIENT"
-    supervisorctl stop bbb-html5
-    supervisorctl status
+    #supervisorctl status
+    #echo "STOPPING HTML5 CLIENT"
+    #supervisorctl stop bbb-html5
+    #supervisorctl status
 
-    git clone https://github.com/bigbluebutton/bigbluebutton.git
-    cd bigbluebutton/bigbluebutton-html5
-    curl https://install.meteor.com/ | sh
-    meteor npm install
-    #npm start &
-    ROOT_URL=http://127.0.0.1/html5client NODE_ENV=development METEOR_ALLOW_SUPERUSER=true meteor &
-    exit
+    #git clone https://github.com/bigbluebutton/bigbluebutton.git
+    #cd bigbluebutton/bigbluebutton-html5
+    #curl https://install.meteor.com/ | sh
+    #meteor npm install
+    #ROOT_URL=http://127.0.0.1/html5client NODE_ENV=development METEOR_ALLOW_SUPERUSER=true meteor &
+    #exit
 
     #echo "OUTSIDE CONTAINER"
     #cat .testing-env

@@ -52,8 +52,8 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
 
     echo "SINGLE COMMAND:"
     docker exec $container supervisorctl status
-    echo "1"
-    docker exec $container ls /etc/supervisord.conf
+    #echo "1"
+    #docker exec $container ls /etc/supervisord.conf
     echo "2"
     docker exec $container ls /etc/supervisor/supervisord.conf
     echo "3"

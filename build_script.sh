@@ -51,6 +51,8 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     echo $container
 
     echo "SINGLE COMMAND:"
+    docker exec $container service supervisor start
+    sleep 5
     docker exec $container supervisorctl status
 
     echo "LOGIN"

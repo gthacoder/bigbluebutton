@@ -84,7 +84,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     #cat .testing-env
 
     echo "check:"
-    wget localhost/html5client/check -q -O -
+    #wget localhost/html5client/check -q -O -
 
     echo "FINISH"
   fi

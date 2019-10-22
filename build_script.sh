@@ -60,7 +60,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     echo "before start"
     #docker exec $container bash
     docker exec $container supervisorctl status
-    docker exec $container service supervisor start
+    #docker exec $container service supervisor start
     #service supervisor start
     echo "after start"
     #docker exec $container supervisorctl status

@@ -2,6 +2,8 @@ import React from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 import Modal from '/imports/ui/components/modal/simple/component';
 
+// test
+
 const intlMessages = defineMessages({
   title: {
     id: 'app.about.title',
@@ -42,7 +44,9 @@ const AboutComponent = ({ intl, clientBuild, copyright }) => (
       description: intl.formatMessage(intlMessages.dismissDesc),
     }}
   >
-    {`${intl.formatMessage(intlMessages.copyright)} ${copyright}`} <br />
+    {`${intl.formatMessage(intlMessages.copyright)} ${copyright}`}
+    {' '}
+    <br />
     {`${intl.formatMessage(intlMessages.version)} ${clientBuild}`}
   </Modal>
 );

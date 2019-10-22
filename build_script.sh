@@ -23,7 +23,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
   elif [ $1 = acceptance_tests ]
   then
     {
-      git clone --single-branch -b bbb22 https://github.com/MaximKhlobystov/docker.git
+      git clone --single-branch -b bbb-22 https://github.com/MaximKhlobystov/docker.git
       cp -r docker/{mod,setup.sh,supervisord.conf} .
       cp -r docker/Dockerfile Dockerfile.test
       docker build -t bbb -f Dockerfile.test .
@@ -47,6 +47,8 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     #cd ../../..
     #ls
 
+    docker --version
+
     container=$(docker ps -q)
     echo $container
 
@@ -57,12 +59,12 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     #echo "3"
     #docker exec $container ls /etc/supervisor/conf.d/
     #docker exec $container ln -s  /etc/supervisor/supervisord.conf /etc/supervisord.conf
-    echo "before start"
+    #echo "before start"
     #docker exec $container bash
     docker exec $container supervisorctl status
     #docker exec $container service supervisor start
     #service supervisor start
-    echo "after start"
+    #echo "after start"
     #docker exec $container supervisorctl status
 
     #echo "LOGIN"
@@ -83,7 +85,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     #echo "OUTSIDE CONTAINER"
     #cat .testing-env
 
-    echo "check:"
+    #echo "check:"
     #wget localhost/html5client/check -q -O -
 
     echo "FINISH"

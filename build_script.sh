@@ -34,7 +34,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     docker exec $container supervisorctl status bbb-html5
     docker exec $container cat /var/log/supervisord.log
     docker exec $container service supervisor status
-    docker exec $container service supervisor restart
+    docker exec $container service supervisor start
     docker exec $container service supervisor status
     docker exec $container supervisorctl status bbb-html5
 

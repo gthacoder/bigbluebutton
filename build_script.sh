@@ -31,12 +31,12 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     container=$(docker ps -q)
     echo $container
 
-    docker exec $container supervisorctl bbb-html5 status
+    docker exec $container supervisorctl status bbb-html5
     docker exec $container cat /var/log/supervisord.log
     docker exec $container service supervisor status
     docker exec $container service supervisor restart
     docker exec $container service supervisor status
-    docker exec $container supervisorctl bbb-html5 status
+    docker exec $container supervisorctl status bbb-html5
 
     echo "FINISH"
   fi

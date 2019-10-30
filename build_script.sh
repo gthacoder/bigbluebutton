@@ -4,7 +4,6 @@ set -ev
 files=`git diff --name-only HEAD..$TRAVIS_BRANCH`
 if [[ $files = *"bigbluebutton-html5"* ]]; then
   cd bigbluebutton-html5
-  curl https://install.meteor.com/ | sh
   meteor npm install
   cd ..
   if [ $1 = linter ]
@@ -22,6 +21,8 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     bigbluebutton-html5/node_modules/.bin/eslint --ext .jsx,.js $html5_files
   elif [ $1 = acceptance_tests ]
   then
+    echo "START"
+    df -h
     git clone --single-branch -b bbb-22 https://github.com/MaximKhlobystov/docker.git
     cp -r docker/{mod,setup.sh,supervisord.conf} .
     cp -r docker/Dockerfile Dockerfile.test

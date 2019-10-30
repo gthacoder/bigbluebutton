@@ -3,9 +3,6 @@ set -ev
 
 files=`git diff --name-only HEAD..$TRAVIS_BRANCH`
 if [[ $files = *"bigbluebutton-html5"* ]]; then
-  cd bigbluebutton-html5
-  meteor npm install
-  cd ..
   if [ $1 = linter ]
   then
     html5_files=""

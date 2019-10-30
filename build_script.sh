@@ -32,7 +32,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     echo $container
 
     docker exec $container supervisorctl status
-    docker exec $container supervisorctl start
+    docker exec $container cat /var/log/supervisord.log
 
     echo "FINISH"
   fi

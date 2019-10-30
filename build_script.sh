@@ -1,5 +1,4 @@
 #!/bin/bash
-set -ev
 
 files=`git diff --name-only HEAD..$TRAVIS_BRANCH`
 if [[ $files = *"bigbluebutton-html5"* ]]; then

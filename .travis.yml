@@ -1,6 +1,6 @@
 dist: bionic
 
-language: node_js
+language: minimal
 
 env:
   - JOB_TYPE=linter

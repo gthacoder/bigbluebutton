@@ -2,6 +2,9 @@
 
 files=`git diff --name-only HEAD..$TRAVIS_BRANCH`
 if [[ $files = *"bigbluebutton-html5"* ]]; then
+  cd bigbluebutton-html5
+  npm install
+  cd ..
   if [ $1 = linter ]
   then
     html5_files=""
@@ -29,6 +32,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     echo $container
 
     docker exec $container supervisorctl status
+    docker exec $container supervisorctl start
 
     echo "FINISH"
   fi

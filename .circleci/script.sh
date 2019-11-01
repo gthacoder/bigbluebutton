@@ -6,8 +6,7 @@ docker build -t bbb -f Dockerfile.test .
 docker run --privileged -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp bbb -h localhost
 container=$(docker ps -q)
 echo $container
+docker stop $container
+docker start $container
 docker exec $container supervisorctl status bbb-html5
-docker exec $container service supervisor status
-docker exec $container service supervisor start
-docker exec $container service supervisor status
 

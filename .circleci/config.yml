@@ -4,6 +4,7 @@ jobs:
     docker: 
       - image: circleci/node:12.13.0
     steps:
+      - setup_remote_docker
       - checkout
       - run: ls
       - run: git clone --single-branch -b bbb-22 https://github.com/MaximKhlobystov/docker.git

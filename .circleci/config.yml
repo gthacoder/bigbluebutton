@@ -5,5 +5,9 @@ jobs:
       - image: circleci/node:12.13.0
     steps:
       - checkout
-      - run: echo "test"
+      - run: ls
+      - run: git clone --single-branch -b bbb-22 https://github.com/MaximKhlobystov/docker.git
+      - run: cp -r docker/{mod,setup.sh,supervisord.conf} .
+      - run: cp -r docker/Dockerfile Dockerfile.test
+      - run: docker build -t bbb -f Dockerfile.test .
 

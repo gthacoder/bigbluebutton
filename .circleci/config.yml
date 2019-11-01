@@ -5,18 +5,6 @@ jobs:
       - image: circleci/node:12.13.0
     steps:
       - setup_remote_docker
-      - run: ls
       - checkout
-      - run: ls
-      - run: git clone --single-branch -b bbb-22 https://github.com/MaximKhlobystov/docker.git
-      - run: cp -r docker/{mod,setup.sh,supervisord.conf} .
-      - run: cp -r docker/Dockerfile Dockerfile.test
-      - run: docker build -t bbb -f Dockerfile.test .
-      - run: docker run --privileged -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478 -p 3478:3478/udp bbb -h localhost
-      - run: container=$(docker ps -q)
-      - run: echo $container
-      - run: docker exec $container supervisorctl status bbb-html5
-      - run: docker exec $container service supervisor status
-      - run: docker exec $container service supervisor start
-      - run: docker exec $container service supervisor status
+      - run: ./.circleci/script.sh
 

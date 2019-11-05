@@ -12,4 +12,6 @@ echo $container
 #docker exec $container service supervisor status
 #docker exec $container unlink /var/run/supervisor.sock
 docker exec $container service supervisor start
+docker exec $container service supervisor status
+docker exec $container supervisorctl status bbb-html5
 echo "FINISHED"

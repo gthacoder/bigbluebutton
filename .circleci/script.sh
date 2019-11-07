@@ -9,6 +9,8 @@ echo $container
 docker ps --all
 sleep 10
 docker ps --all
+sleep 30
+docker ps --all
 #docker stop $container
 #docker start $container
 #docker exec $container supervisorctl status bbb-html5

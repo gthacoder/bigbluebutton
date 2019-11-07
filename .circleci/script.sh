@@ -11,6 +11,10 @@ sleep 10
 docker ps --all
 sleep 30
 docker ps --all
+echo "docker exec"
+docker exec $container exec /usr/bin/supervisord
+sleep 60
+docker ps --all
 #docker stop $container
 #docker start $container
 #docker exec $container supervisorctl status bbb-html5

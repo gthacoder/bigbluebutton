@@ -14,9 +14,8 @@ docker ps --all
 #docker exec $container service supervisor status
 #sleep 120
 #docker ps --all
-docker exec $container bash
-service supervisor status
-ls
+docker exec $container service supervisor status
+docker exec $container ls
 #docker stop $container
 #docker start $container
 #docker exec $container supervisorctl status bbb-html5

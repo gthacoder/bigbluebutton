@@ -7,13 +7,13 @@ docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478
 container=$(docker ps -q)
 echo $container
 docker ps --all
-sleep 10
-docker ps --all
 sleep 30
 docker ps --all
-echo "docker exec"
-docker exec $container exec /usr/bin/supervisord
 sleep 60
+docker ps --all
+echo "docker exec"
+docker exec $container service supervisor status
+sleep 90
 docker ps --all
 #docker stop $container
 #docker start $container

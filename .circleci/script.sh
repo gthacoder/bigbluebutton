@@ -1,5 +1,5 @@
 ls
-git clone --single-branch -b bbb-22 https://github.com/MaximKhlobystov/docker.git
+git clone --single-branch -b bbb-22-1 https://github.com/MaximKhlobystov/docker.git
 cp -r docker/{mod,setup.sh,supervisord.conf} .
 cp -r docker/Dockerfile Dockerfile.test
 docker build -t bbb -f Dockerfile.test .

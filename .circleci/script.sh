@@ -11,10 +11,10 @@ sleep 30
 docker ps --all
 sleep 60
 docker ps --all
-echo "docker exec"
 docker exec $container service supervisor status
-sleep 90
+sleep 120
 docker ps --all
+docker exec $container service supervisor status
 #docker stop $container
 #docker start $container
 #docker exec $container supervisorctl status bbb-html5

@@ -14,7 +14,7 @@ docker ps --all
 #docker exec $container service supervisor status
 #sleep 120
 #docker ps --all
-docker exec $container #!/usr/bin/env bash
+docker exec $container bash
 service supervisor status
 ls
 #docker stop $container

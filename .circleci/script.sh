@@ -16,6 +16,7 @@ docker ps --all
 #docker ps --all
 docker exec $container service supervisor status
 docker exec $container ls
+docker exec $container echo $CIRCLE_SHA1
 #docker stop $container
 #docker start $container
 #docker exec $container supervisorctl status bbb-html5

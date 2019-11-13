@@ -30,7 +30,7 @@ echo $CIRCLE_WORKING_DIRECTORY
 ls -a
 cd .circleci
 ls
-docker exec $container $CIRCLE_WORKING_DIRECTORY/.circleci/inside_script.sh
+docker exec $container $CIRCLE_WORKING_DIRECTORY/bigbluebutton/.circleci/inside_script.sh
 
 #docker exec $container service supervisor status
 #docker exec $container supervisorctl status bbb-html5

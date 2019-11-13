@@ -28,8 +28,7 @@ docker exec $container echo $CIRCLE_SHA1
 #docker start $container
 docker ps --all
 
-docker exec $container bash
-service supervisor status
+docker exec $container ./inside_script.sh
 
 #docker exec $container service supervisor status
 #docker exec $container supervisorctl status bbb-html5

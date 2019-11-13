@@ -25,7 +25,7 @@ docker exec $container echo $CIRCLE_SHA1
 #docker exec $container service supervisor start
 #docker ps --all
 #docker start $container
-#docker ps --all
+docker ps --all
 #docker exec $container service supervisor status
 #docker exec $container supervisorctl status bbb-html5
 echo "FINISHED"

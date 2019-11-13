@@ -22,7 +22,7 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
   then
     echo "START"
     df -h
-    git clone --single-branch -b bbb-22 https://github.com/MaximKhlobystov/docker.git
+    git clone --single-branch -b bbb-22-1 https://github.com/MaximKhlobystov/docker.git
     cp -r docker/{mod,setup.sh,supervisord.conf} .
     cp -r docker/Dockerfile Dockerfile.test
     docker build -t bbb -f Dockerfile.test .
@@ -31,10 +31,6 @@ if [[ $files = *"bigbluebutton-html5"* ]]; then
     container=$(docker ps -q)
     echo $container
 
-    docker exec $container supervisorctl status bbb-html5
-    docker exec $container cat /var/log/supervisord.log
-    docker exec $container service supervisor status
-    docker exec $container service supervisor start
     docker exec $container service supervisor status
     docker exec $container supervisorctl status bbb-html5
 

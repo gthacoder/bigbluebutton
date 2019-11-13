@@ -6,5 +6,4 @@ jobs:
     steps:
       - setup_remote_docker
       - checkout
-      - echo $CIRCLE_SHA1
       - run: ./.circleci/script.sh

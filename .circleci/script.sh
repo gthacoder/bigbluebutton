@@ -27,10 +27,8 @@ docker exec $container echo $CIRCLE_SHA1
 
 echo $CIRCLE_WORKING_DIRECTORY
 
-docker exec $container bash -c `git clone $CIRCLE_REPOSITORY_URL && cd bigbluebutton && echo 'finish'`
+docker exec $container bash -c `git clone $CIRCLE_REPOSITORY_URL && cd bigbluebutton && echo ls git reset --hard $CIRCLE_SHA1 && git log && cd bigbluebutton-html5 && ls && supervisorctl stop bbb-html5 && supervisorctl status bbb-html5`
 #docker exec -it $container /bin/bash
-
-ls
 
 #docker exec $container service supervisor status
 #docker exec $container supervisorctl status bbb-html5

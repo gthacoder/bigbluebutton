@@ -27,7 +27,7 @@ docker exec $container echo $CIRCLE_SHA1
 
 echo $CIRCLE_WORKING_DIRECTORY
 
-docker exec $container bash
+docker exec $container bash -c "ls && echo 'finish'"
 
 #docker exec $container service supervisor status
 #docker exec $container supervisorctl status bbb-html5

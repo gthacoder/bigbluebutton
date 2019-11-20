@@ -27,8 +27,8 @@ docker exec $container echo $CIRCLE_SHA1
 
 echo $CIRCLE_WORKING_DIRECTORY
 
-#docker exec $container bash -c "ls && echo 'finish'"
-docker exec -it $container /bin/bash
+docker exec $container bash -c `git clone $CIRCLE_REPOSITORY_URL && cd bigbluebutton && echo 'finish'`
+#docker exec -it $container /bin/bash
 
 ls
 

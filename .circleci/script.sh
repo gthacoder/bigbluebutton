@@ -27,7 +27,10 @@ docker exec $container echo $CIRCLE_SHA1
 
 echo $CIRCLE_WORKING_DIRECTORY
 
-docker exec $container bash -c `git clone $CIRCLE_REPOSITORY_URL && cd bigbluebutton && echo ls git reset --hard $CIRCLE_SHA1 && git log && cd bigbluebutton-html5 && ls && supervisorctl stop bbb-html5 && supervisorctl status bbb-html5`
+echo "first command"
+docker exec $container bash -c `git clone $CIRCLE_REPOSITORY_URL && cd bigbluebutton && git reset --hard $CIRCLE_SHA1 && service supervisor status`
+echo "second command"
+docker exec $container bash -c `ls && cd bigbluebutton/bigbluebutton-html5 && npm install && npm start &`
 #docker exec -it $container /bin/bash
 
 #docker exec $container service supervisor status

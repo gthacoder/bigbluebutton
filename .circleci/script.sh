@@ -27,7 +27,7 @@ docker exec $container echo $CIRCLE_SHA1
 
 echo $CIRCLE_WORKING_DIRECTORY
 
-docker exec $container git clone $CIRCLE_REPOSITORY_URL
+docker exec $container git clone https://github.com/MaximKhlobystov/bigbluebutton.git
 #docker exec -it $container /bin/bash
 
 #docker exec $container service supervisor status

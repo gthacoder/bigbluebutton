@@ -30,7 +30,8 @@ echo $CIRCLE_WORKING_DIRECTORY
 docker exec $container ls
 docker exec $container git clone https://github.com/MaximKhlobystov/bigbluebutton.git
 docker exec $container ls
-docker exec $container bash -c "cd bigbluebutton && npm install"
+docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && npm install"
+docker exec $container supervisorctl status bbb-html5
 #docker exec -it $container /bin/bash
 
 #docker exec $container service supervisor status

@@ -32,6 +32,9 @@ docker exec $container git clone https://github.com/MaximKhlobystov/bigbluebutto
 docker exec $container ls
 docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && npm install"
 docker exec $container supervisorctl status bbb-html5
+docker exec $container supervisorctl stop bbb-html5
+docker exec $container supervisorctl status bbb-html5
+docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && npm start &"
 #docker exec -it $container /bin/bash
 
 #docker exec $container service supervisor status

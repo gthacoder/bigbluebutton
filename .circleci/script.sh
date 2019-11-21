@@ -34,6 +34,7 @@ docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && npm inst
 docker exec $container supervisorctl status bbb-html5
 docker exec $container supervisorctl stop bbb-html5
 docker exec $container supervisorctl status bbb-html5
+docker exec $container curl https://install.meteor.com/ | sh
 docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && npm start &"
 #docker exec -it $container /bin/bash
 

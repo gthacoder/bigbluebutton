@@ -35,7 +35,7 @@ docker exec $container supervisorctl status bbb-html5
 docker exec $container supervisorctl stop bbb-html5
 docker exec $container supervisorctl status bbb-html5
 docker exec $container bash -c "curl https://install.meteor.com/ | sh"
-docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && nohup ROOT_URL=http://127.0.0.1/html5client NODE_ENV=development METEOR_ALLOW_SUPERUSER=true meteor"
+docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && npm install forever -g && forever ROOT_URL=http://127.0.0.1/html5client NODE_ENV=development METEOR_ALLOW_SUPERUSER=true meteor"
 #docker exec -it $container /bin/bash
 
 sleep 60s

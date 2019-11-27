@@ -38,7 +38,6 @@ docker exec $container bash -c "curl https://install.meteor.com/ | sh"
 #docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && npm install forever -g && ROOT_URL=http://127.0.0.1/html5client NODE_ENV=development METEOR_ALLOW_SUPERUSER=true forever meteor"
 #docker exec -it $container /bin/bash
 
-docker exec -it $container bash
 echo "test"
 
 sleep 60s

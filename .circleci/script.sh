@@ -9,21 +9,10 @@ echo $container
 docker ps --all
 sleep 10
 docker ps --all
-#docker exec $container service supervisor status
-#sleep 120
-#docker ps --all
 docker exec $container service supervisor status
 docker exec $container ls
 docker exec $container echo $CIRCLE_REPOSITORY_URL
 docker exec $container echo $CIRCLE_SHA1
-#docker stop $container
-#docker start $container
-#docker exec $container supervisorctl status bbb-html5
-#docker exec $container service supervisor status
-#docker exec $container unlink /var/run/supervisor.sock
-#docker exec $container service supervisor start
-#docker ps --all
-#docker start $container
 
 echo $CIRCLE_WORKING_DIRECTORY
 
@@ -51,8 +40,10 @@ docker exec -it $container curl -I localhost/html5client/check
 
 echo "TESTING"
 
+docker exec $container bash -c "wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -"
+docker exec $container bash -c `sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'`
+docker exec $container bash -c "sudo apt-get update && sudo apt-get install -y google-chrome-stable"
+
 docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && npm test -- --spec ./tests/webdriverio/specs/chat.spec.js"
 
-#docker exec $container service supervisor status
-#docker exec $container supervisorctl status bbb-html5
 echo "FINISHED"

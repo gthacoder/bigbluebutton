@@ -12,9 +12,9 @@ docker ps --all
 #docker exec $container service supervisor status
 #docker exec $container ls
 #docker exec $container echo $CIRCLE_REPOSITORY_URL
+docker exec $container echo $CIRCLE_PR_REPONAME
+docker exec $container echo $CIRCLE_PR_USERNAME
 docker exec $container echo $CIRCLE_SHA1
-
-#echo $CIRCLE_WORKING_DIRECTORY
 
 #docker exec $container ls
 docker exec $container bash -c "git clone https://github.com/MaximKhlobystov/bigbluebutton.git && cd bigbluebutton && git reset --hard $CIRCLE_SHA1 && git log -1 --stat"

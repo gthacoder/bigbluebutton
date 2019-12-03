@@ -44,7 +44,7 @@ docker exec -it $container curl -I localhost/html5client/check
 
 echo "TESTING"
 
-docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5/test/pptr && node test.js"
+docker exec $container bash -c "ls && ls bigbluebutton/bigbluebutton-html5/test && cd bigbluebutton/bigbluebutton-html5/test/pptr && node test.js"
 
 #docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && npm test -- --spec ./tests/webdriverio/specs/chat.spec.js"
 

@@ -12,12 +12,12 @@ docker ps --all
 #docker exec $container service supervisor status
 #docker exec $container ls
 #docker exec $container echo $CIRCLE_REPOSITORY_URL
-#docker exec $container echo $CIRCLE_SHA1
+docker exec $container echo $CIRCLE_SHA1
 
 #echo $CIRCLE_WORKING_DIRECTORY
 
 #docker exec $container ls
-docker exec $container git clone https://github.com/MaximKhlobystov/bigbluebutton.git
+docker exec $container bash -c "git clone https://github.com/MaximKhlobystov/bigbluebutton.git && cd bigbluebutton && git reset --hard $CIRCLE_SHA1 && git log -1 --stat"
 #docker exec $container ls
 docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && npm install"
 #docker exec $container supervisorctl status bbb-html5

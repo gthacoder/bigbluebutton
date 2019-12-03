@@ -38,7 +38,7 @@ docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && xvfb-run
 
 echo "test"
 
-sleep 300s
+sleep 250s
 
 docker exec -it $container curl -I localhost/html5client/check
 

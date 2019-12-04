@@ -29,7 +29,7 @@ docker exec -it $container curl -I localhost/html5client/check
 
 echo "TESTING"
 
-docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5/tests/pptr && mocha test.js"
+docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5/tests/pptr && npm install -g mocha && mocha test.js"
 
 #docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && npm test -- --spec ./tests/webdriverio/specs/chat.spec.js"
 

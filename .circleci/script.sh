@@ -7,34 +7,19 @@ docker run -d -p 80:80/tcp -p 443:443/tcp -p 1935:1935 -p 5066:5066 -p 3478:3478
 container=$(docker ps -q)
 echo $container
 docker ps --all
-#sleep 10
-#docker ps --all
-#docker exec $container service supervisor status
-#docker exec $container ls
-#docker exec $container echo $CIRCLE_REPOSITORY_URL
 docker exec $container echo $CIRCLE_PR_REPONAME
 docker exec $container echo $CIRCLE_PR_USERNAME
 docker exec $container echo $CIRCLE_SHA1
 
-#docker exec $container ls
 docker exec $container bash -c "git clone https://github.com/MaximKhlobystov/bigbluebutton.git && cd bigbluebutton && git reset --hard $CIRCLE_SHA1 && git log -1 --stat"
-#docker exec $container ls
 docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && npm install"
-#docker exec $container supervisorctl status bbb-html5
 docker exec $container supervisorctl stop bbb-html5
-#docker exec $container supervisorctl status bbb-html5
 docker exec $container bash -c "curl https://install.meteor.com/ | sh"
 
 docker exec -it $container curl -I localhost/html5client/check
 
 docker exec $container bash -c "sudo apt-get install -y firefox && sudo apt-get install -y xvfb"
 docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && curl https://install.meteor.com/ | sh && ROOT_URL=http://127.0.0.1/html5client NODE_ENV=development METEOR_ALLOW_SUPERUSER=true meteor" &
-
-#docker exec $container bash -c "wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - && echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list && sudo apt-get update"
-#docker exec $container bash -c "sudo apt-get install -y google-chrome-stable"
-
-#docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && ./node_modules/.bin/webdriver-manager update"
-#docker exec $container bash -c "cd bigbluebutton/bigbluebutton-html5 && xvfb-run ./node_modules/.bin/webdriver-manager start" &
 
 echo "test"
 

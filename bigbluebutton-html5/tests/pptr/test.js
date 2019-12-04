@@ -5,7 +5,7 @@ const puppeteer = require('puppeteer');
     args: ['--no-sandbox'],
   });
   const page = await browser.newPage();
-  await page.goto('localhost');
+  await page.goto('https://localhost');
   await page.screenshot({ path: 'localhost.png' });
 
   await browser.close();

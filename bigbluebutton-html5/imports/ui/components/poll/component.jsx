@@ -174,7 +174,7 @@ class Poll extends Component {
     this.input = [];
     _.range(0, MAX_CUSTOM_FIELDS).map(() => this.input.push(React.createRef()));
 
-    //this.toggleCustomFields = this.toggleCustomFields.bind(this);
+    // this.toggleCustomFields = this.toggleCustomFields.bind(this);
     this.renderQuickPollBtns = this.renderQuickPollBtns.bind(this);
     this.renderCustomView = this.renderCustomView.bind(this);
     this.renderInputFields = this.renderInputFields.bind(this);
@@ -212,16 +212,16 @@ class Poll extends Component {
   }
 
   handleInputTextChange(index, text) {
-    const { customPollValues } = this.state;
+    const { optList } = this.state;
     // This regex will replace any instance of 2 or more consecutive white spaces
     // with a single white space character.
     const option = text.replace(/\s{2,}/g, ' ').trim();
 
-    customPollValues[index] = option === '' ? '' : option;
+    if (index < optList.length) optList[index].val = option === '' ? '' : option;
 
-    this.input[index].current.value = customPollValues[index];
+    // this.input[index].current.value = optList[index];
 
-    this.setState({ customPollValues });
+    this.setState({ optList });
   }
 
   handleBackClick() {
@@ -235,7 +235,7 @@ class Poll extends Component {
     }, document.activeElement.blur());
   }
 
-  /*handleBackClick() {
+  /* handleBackClick() {
     const { stopPoll } = this.props;
     this.setState({
       isPolling: false,
@@ -245,7 +245,7 @@ class Poll extends Component {
       Session.set('resetPollPanel', false);
       document.activeElement.blur();
     });
-  }*/
+  } */
 
   handleInputChange(e, index) {
     const { optList, type, error } = this.state;
@@ -426,7 +426,7 @@ class Poll extends Component {
           )}
         </span>
 
-    /*
+      /*
     // const { customPollValues } = this.state;
     let items = [];
 
@@ -660,6 +660,9 @@ class Poll extends Component {
                           });
                         }}
                       />
+                      {
+                        this.renderDragDrop()
+                      }
                     </div>
                     )
               }
